@@ -4,7 +4,6 @@ import (
 	"JD/dao"
 	"JD/model"
 	"fmt"
-	"log"
 	"math/rand"
 	"net/smtp"
 	"strings"
@@ -15,14 +14,14 @@ func SearchUserByPhone(phone string) (model.User, error) {
 	return dao.SearchUserByPhone(phone)
 }
 
-// RegisterSendSMS 发送验证码
+// RegisterSendSMS 发送短信验证码
 func RegisterSendSMS(phone string) error {
-
+	return dao.SavePhoneVerifyCode(phone, "2022119")
 }
 
 // VerifyCodeByPhone 核对验证码是否正确
 func VerifyCodeByPhone(u model.RegisterUser) (bool, error) {
-	return dao.CheckVerifyCodeByEmail(u)
+	return dao.CheckVerifyCodeByPhone(u)
 }
 
 // SearchUserByEmail 通过email查找User
@@ -50,7 +49,7 @@ func RegisterSendEmail(email string) error {
 	</body>
 	</html>
 	`
-	fmt.Println("发送中 请稍等...")
+	fmt.Println("正在给" + email + "发送短信，请稍等...")
 
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth("", user, password, hp[0])
@@ -59,10 +58,6 @@ func RegisterSendEmail(email string) error {
 	err := smtp.SendMail(host, auth, user, to, msg)
 
 	err = dao.SaveEmailVerifyCode(email, code)
-	if err != nil {
-		log.Fatal(err)
-		return err
-	}
 
 	if err != nil {
 		fmt.Println("发送错误！")
@@ -76,5 +71,12 @@ func RegisterSendEmail(email string) error {
 
 func CheckVerifyCodeByEmail(u model.RegisterUser) (bool, error) {
 	return dao.CheckVerifyCodeByEmail(u)
+}
 
+func SaveUser(u model.RegisterUser) error {
+	return dao.SaveUser(u)
+}
+
+func SearchUserByUserName(userName string) (model.User, error) {
+	return dao.SearchUserByUserName(userName)
 }
