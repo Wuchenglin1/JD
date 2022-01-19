@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	api.InitRouter()
 	dao.InitMySql()
+	api.InitRouter()
 }
