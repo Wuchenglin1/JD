@@ -4,7 +4,12 @@ import (
 	"JD/dao"
 	"JD/model"
 	"JD/tool"
+	"encoding/json"
 	"fmt"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"
 	"net/smtp"
@@ -18,7 +23,35 @@ func SearchUserByPhone(phone string) (model.User, error) {
 
 // RegisterSendSMS 发送短信验证码
 func RegisterSendSMS(phone string) error {
-	return dao.SavePhoneVerifyCode(phone, "2022119")
+	//验证码
+	code := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
+	smsCfg := tool.GetConfig().Sms
+	credential := common.NewCredential(
+		smsCfg.SecretId,
+		smsCfg.SecretKey,
+	)
+	cpf := profile.NewClientProfile()
+	client, _ := sms.NewClient(credential, "ap-guangzhou", cpf)
+	request := sms.NewSendSmsRequest()
+	request.SmsSdkAppId = common.StringPtr(smsCfg.AppId)
+	request.SignName = common.StringPtr(smsCfg.Sign)
+	request.SenderId = common.StringPtr("")
+	request.ExtendCode = common.StringPtr("")
+	request.TemplateParamSet = common.StringPtrs([]string{code})
+	request.TemplateId = common.StringPtr(smsCfg.TemplateId)
+	request.PhoneNumberSet = common.StringPtrs([]string{"+86" + phone})
+	response, err := client.SendSms(request)
+	if _, ok := err.(*errors.TencentCloudSDKError); ok {
+		fmt.Println(err)
+		return err
+	}
+	if err != nil {
+		panic(err)
+	}
+	b, _ := json.Marshal(response.Response)
+	fmt.Printf("%s", b)
+
+	return dao.SavePhoneVerifyCode(phone, code)
 }
 
 // VerifyCodeByPhone 核对验证码是否正确
