@@ -33,7 +33,7 @@ func RegisterSendSMS(c *gin.Context) {
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-	tool.RespErrWithData(c, true, "")
+	tool.RespSuccess(c)
 }
 
 // CheckRegisterSMS 检查短信验证码是否正确
@@ -55,7 +55,7 @@ func CheckRegisterSMS(c *gin.Context) {
 		tool.RespErrWithData(c, false, "验证码错误")
 		return
 	}
-	tool.RespErrWithData(c, true, "")
+	tool.RespSuccess(c)
 }
 
 // RegisterSendEmail 发送邮箱验证码
@@ -149,5 +149,52 @@ func Register(c *gin.Context) {
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-	tool.RespErrWithData(c, true, "注册成功！")
+	tool.RespSuccess(c)
+}
+
+func Login(c *gin.Context) {
+	u := model.User{}
+	u.UserName = c.PostForm("account")
+	u.Password = c.PostForm("password")
+	if u.UserName == "" && u.Password == "" {
+		tool.RespErrWithData(c, false, "请输入账户名和密码")
+		return
+	}
+	if u.UserName == "" {
+		tool.RespErrWithData(c, false, "请输入账户名")
+		return
+	}
+	if u.Password == "" {
+		tool.RespErrWithData(c, false, "请输入密码")
+		return
+	}
+	is, err := service.CheckUserByAccount(u)
+	if err != nil {
+		tool.RespErrWithData(c, false, "账号不存在")
+		return
+	}
+	if !is {
+		tool.RespErrWithData(c, false, "账户名与密码不匹配，请重新输入")
+		return
+	}
+	//创建一个存在一天的refreshToken
+	rt, err := service.CreateToken(u, 86400, "refreshToken")
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	//创建一个存在5min的token
+	t, err := service.CreateToken(u, 300, "token")
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	c.JSON(200, gin.H{
+		"status":       true,
+		"data":         "登录成功",
+		"token":        t,
+		"refreshToken": rt,
+	})
 }

@@ -20,6 +20,7 @@ func InitRouter() {
 
 	User := Engine.Group("/user")
 	{
+		User.POST("/login/normal", Login)
 		User.POST("/register/email", Register)
 	}
 	_ = Engine.Run(":8090")
