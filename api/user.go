@@ -23,8 +23,7 @@ func RegisterSendSMS(c *gin.Context) {
 		return
 	}
 	fmt.Println(u.Phone)
-	iU, err := service.SearchUserByPhone(u.Phone)
-	fmt.Println("iU:", iU, "err:", err)
+	_, err := service.SearchUserByPhone(u.Phone)
 	if err == nil {
 		tool.RespErrWithData(c, false, "手机号已被注册")
 		return
