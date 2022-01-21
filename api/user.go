@@ -6,6 +6,7 @@ import (
 	"JD/tool"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"strings"
 )
 
@@ -109,6 +110,8 @@ func Register(c *gin.Context) {
 		tool.RespErrWithData(c, false, "密码不能大于16个字符")
 		return
 	}
+	hashPassword, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	u.Password = string(hashPassword)
 	if u.Email == "" {
 		tool.RespErrWithData(c, false, "邮箱不能为空")
 		return
@@ -129,9 +132,9 @@ func Register(c *gin.Context) {
 		tool.RespErrWithData(c, false, "请输入验证码")
 		return
 	}
-	IsCorrect, err1 := service.CheckVerifyCodeByEmail(u)
-	if err1 != nil {
-		fmt.Println("err1", err1)
+	IsCorrect, err2 := service.CheckVerifyCodeByEmail(u)
+	if err2 != nil {
+		fmt.Println("err2", err2)
 		tool.RespErrWithData(c, false, "未发送验证码")
 		return
 	}
@@ -141,11 +144,7 @@ func Register(c *gin.Context) {
 	}
 	err = service.SaveUser(u)
 	if err != nil {
-		tool.RespErrWithData(c, false, "服务器错误")
-		return
-	}
-	err = service.SaveUser(u)
-	if err != nil {
+		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}

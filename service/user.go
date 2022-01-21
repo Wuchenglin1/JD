@@ -5,6 +5,7 @@ import (
 	"JD/model"
 	"JD/tool"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"math/rand"
 	"net/smtp"
 	"strings"
@@ -95,7 +96,8 @@ func CheckUserByAccount(u model.User) (bool, error) {
 	iu, err := dao.SearchUserByUserName(u.UserName)
 	if err == nil {
 		//密码错误
-		if iu.Password != u.Password {
+		isDirect := CheckPassword(u.Password, iu.Password)
+		if !isDirect {
 			return false, nil
 		}
 		return true, nil
@@ -103,18 +105,29 @@ func CheckUserByAccount(u model.User) (bool, error) {
 	iu, err = dao.SearchUserByEmail(u.UserName)
 	if err == nil {
 		//密码错误
-		if iu.Password != u.Password {
+		isDirect := CheckPassword(u.Password, iu.Password)
+		if !isDirect {
 			return false, nil
 		}
 		return true, nil
 	}
 	iu, err = dao.SearchUserByPhone(u.UserName)
+	fmt.Println(iu)
 	if err == nil {
 		//密码错误
-		if iu.Password != u.Password {
+		isDirect := CheckPassword(u.Password, iu.Password)
+		if !isDirect {
 			return false, nil
 		}
 		return true, nil
 	}
 	return false, err
+}
+
+func CheckPassword(inputPassword, userPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(userPassword), []byte(inputPassword))
+	if err != nil {
+		return false
+	}
+	return true
 }

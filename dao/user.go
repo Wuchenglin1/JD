@@ -6,7 +6,7 @@ import (
 
 func SearchUserByPhone(phone string) (model.User, error) {
 	u := model.User{}
-	err := dB.QueryRow("select id,name,email,money from User where phone = ?", phone).Scan(&u.Id, &u.UserName, &u.Email, &u.Money)
+	err := dB.QueryRow("select uid,name,email,money,password from User where phone = ?", phone).Scan(&u.Id, &u.UserName, &u.Email, &u.Money, &u.Password)
 	u.Phone = phone
 	return u, err
 }
@@ -28,7 +28,7 @@ func SearchUserByEmail(email string) (model.User, error) {
 
 func SearchUserByUserName(userName string) (model.User, error) {
 	u := model.User{}
-	err := dB.QueryRow("select uid,name,phone,email,money from User where name = ?", userName).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money)
+	err := dB.QueryRow("select uid,name,phone,email,money,password from User where name = ?", userName).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money, &u.Password)
 	return u, err
 }
 
