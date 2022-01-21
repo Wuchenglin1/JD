@@ -20,15 +20,15 @@ func SavePhoneVerifyCode(phone, code string) error {
 	return err
 }
 
-func SearchUserByEmail(email string) (model.RegisterUser, error) {
-	u := model.RegisterUser{}
-	err := dB.QueryRow("select id,name,phone,email,money from User where email = ?", email).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money)
+func SearchUserByEmail(email string) (model.User, error) {
+	u := model.User{}
+	err := dB.QueryRow("select uid,name,phone,email,money,password from User where email = ?", email).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money, &u.Password)
 	return u, err
 }
 
 func SearchUserByUserName(userName string) (model.User, error) {
 	u := model.User{}
-	err := dB.QueryRow("select id,name,phone,email,money from User where name = ?", userName).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money)
+	err := dB.QueryRow("select uid,name,phone,email,money from User where name = ?", userName).Scan(&u.Id, &u.UserName, &u.Phone, &u.Email, &u.Money)
 	return u, err
 }
 
@@ -66,6 +66,6 @@ func CheckVerifyCodeByPhone(u model.RegisterUser) (bool, error) {
 }
 
 func SaveUser(u model.RegisterUser) error {
-	_, err := dB.Exec("insert into User(name, phone, email) values (?,?,?)", u.UserName, u.Phone, u.Email)
+	_, err := dB.Exec("insert into User(name, phone, email,password) values (?,?,?,?)", u.UserName, u.Phone, u.Email, u.Password)
 	return err
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"JD/dao"
 	"JD/model"
+	"JD/tool"
 	"fmt"
 	"math/rand"
 	"net/smtp"
@@ -26,17 +27,26 @@ func VerifyCodeByPhone(u model.RegisterUser) (bool, error) {
 
 // SearchUserByEmail 通过email查找User
 func SearchUserByEmail(email string) (model.RegisterUser, error) {
-	return dao.SearchUserByEmail(email)
+	iu, err := dao.SearchUserByEmail(email)
+	u := model.RegisterUser{
+		Id:       iu.Id,
+		UserName: iu.UserName,
+		Password: iu.Password,
+		Phone:    iu.Phone,
+		Email:    iu.Email,
+	}
+	return u, err
 }
 
 // RegisterSendEmail 发送注册时的邮箱验证码
 func RegisterSendEmail(email string) error {
 	code := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
+	config := tool.GetConfig()
 
-	user := "1336636739@wuchenglin.plus" //控制台创建的发信地址
-	password := "WUchenglin2021214174"   //控制台设置的SMTP密码
-	host := "smtpdm.aliyun.com:25"       //smtpdm.aliyun.com:25
-	to := []string{email}                //收件人地址（可以用,隔开添加多个账号群发消息）
+	user := config.Email.User         //控制台创建的发信地址
+	password := config.Email.Password //控制台设置的SMTP密码
+	host := config.Email.Host         //smtpdm.aliyun.com:25
+	to := []string{email}             //收件人地址（可以用,隔开添加多个账号群发消息）
 	toAddress := strings.Join(to, ";")
 	subject := "破小站发送的验证码" //标题
 	mailType := "html"     //发送类型
@@ -79,4 +89,32 @@ func SaveUser(u model.RegisterUser) error {
 
 func SearchUserByUserName(userName string) (model.User, error) {
 	return dao.SearchUserByUserName(userName)
+}
+
+func CheckUserByAccount(u model.User) (bool, error) {
+	iu, err := dao.SearchUserByUserName(u.UserName)
+	if err == nil {
+		//密码错误
+		if iu.Password != u.Password {
+			return false, nil
+		}
+		return true, nil
+	}
+	iu, err = dao.SearchUserByEmail(u.UserName)
+	if err == nil {
+		//密码错误
+		if iu.Password != u.Password {
+			return false, nil
+		}
+		return true, nil
+	}
+	iu, err = dao.SearchUserByPhone(u.UserName)
+	if err == nil {
+		//密码错误
+		if iu.Password != u.Password {
+			return false, nil
+		}
+		return true, nil
+	}
+	return false, err
 }
