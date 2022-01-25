@@ -196,3 +196,13 @@ func Login(c *gin.Context) {
 		"refreshToken": rt,
 	})
 }
+
+func GetToken(c *gin.Context) {
+	claim, err := service.ParseRefreshToken(c.PostForm("refreshToken"))
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+	tool.RespSuccess(c)
+}

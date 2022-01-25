@@ -5,7 +5,7 @@ import "github.com/gin-gonic/gin"
 func RespErrWithData(c *gin.Context, status bool, data interface{}) {
 	c.JSON(200, gin.H{
 		"status": status,
-		"date":   data,
+		"data":   data,
 	})
 }
 

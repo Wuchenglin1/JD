@@ -1,11 +1,20 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() {
+
 	Engine := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://127.0.0.1:8080"}
+	Engine.Use(cors.New(config))
+	Engine.Static("./static", "./static")
+	Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
 
 	VerifyCode := Engine.Group("/verify")
 	{
@@ -22,6 +31,16 @@ func InitRouter() {
 	{
 		User.POST("/login/normal", Login)
 		User.POST("/register/email", Register)
+	}
+
+	Goods := Engine.Group("/goods")
+	{
+		Goods.POST("/Blouse", Blouse)
+	}
+
+	token := Engine.Group("/token")
+	{
+		token.POST("/get", GetToken)
 	}
 	_ = Engine.Run()
 }

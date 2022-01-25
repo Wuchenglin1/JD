@@ -15,9 +15,29 @@
 
 
 
+# 用户属性
+
+`用户的属性json格式如下`
+
+```json
+{
+    "uid":"",//每个用户唯一的uid
+    "name":"",//昵称
+    "password":"",//密码
+    "headPic":"",//用户的头像
+    "phone":"",//手机号
+    "email":"",//邮箱号
+    "money":"",//钱
+    "isBan":"",//是否被封禁
+    "admin":"",//是否是管理员
+}
+```
+
+
+
 # 用户注册
 
-#### **`/verify/sms/register`**
+#### **`/verify/sms/register`** `POST`
 
 `注册先检测手机号是否被注册过和是否能够正常通信,并发送验证码`
 
@@ -126,4 +146,114 @@
 | `false` | `账号不存在`                     | `account`未被注册             |
 | `false` | `账户名与密码不匹配，请重新输入` | `account`和`password`对不上   |
 | `true`  | `"登录成功！"`                   | 参数合法                      |
+
+# 用户获取通过获取token
+
+#### `/token/get` `POST`
+
+`通过refreshToken获取token` 
+
+| 请求参数       | 说明                 | 必选 |
+| -------------- | -------------------- | ---- |
+| `refreshToken` | 用户的`refreshToken` | 是   |
+
+| 返回参数 | 说明            |
+| -------- | --------------- |
+| `status` | 状态码          |
+| `data`   | 说明            |
+| `token`  | 用户的新`token` |
+
+| status  | data              |                                   |
+| ------- | ----------------- | --------------------------------- |
+| `false` | `parseTokenError` | `refreshToken`无效                |
+| `false` | `errToken`        | `refreshToken`错误                |
+| `false` | `expiredToken`    | `refreshToken`已过期              |
+| `true`  | `""`              | `refreshToken`正常，分发新的token |
+
+
+
+
+
+# 商品详情页
+
+| 请求参数        | 说明                                             | 必选 |
+| --------------- | ------------------------------------------------ | ---- |
+| `type`          | 商品类别                                         | 是   |
+| `name`          | 商品名称                                         | 是   |
+| `token`         | 用户的token                                      | 是   |
+| `cover`         | 商品封面（二进制文件流）这里是单文件             | 是   |
+| `describePhoto` | 商品展示的图片（二进制文件流）这里可以是多个文件 | 是   |
+| `describeVideo` | 商品展示的视频（二进制文件流）这里可以是多个文件 | 是   |
+| `detailPhoto`   | 商品的介绍（二进制文件流）这里可以是多个文件     | 是   |
+
+`女士衬衫` `0520101`
+
+| 请求参数         | 说明                                                         | 必选 |
+| ---------------- | ------------------------------------------------------------ | ---- |
+| `price`          | 价格                                                         | 是   |
+| `brand`          | 品牌                                                         | 否   |
+| `womenClothing`  | 女装                                                         | 否   |
+| `size`           | 尺码                                                         | 否   |
+| `color`          | 颜色                                                         | 否   |
+| `version`        | 版型                                                         | 否   |
+| `length`         | 衣长                                                         | 否   |
+| `sleeveLength`   | 袖长                                                         | 否   |
+| `suitableAge`    | 适用年龄(18-24周岁请求参数为`1`,25-29周岁返回`2`,30-34周岁返回`3`,35-39周岁返回`4`,40-49周岁返回`5`) | 否   |
+| `getModel`       | 领型                                                         | 否   |
+| `style`          | 风格                                                         | 否   |
+| `material`       | 材质                                                         | 否   |
+| `pattern`        | 图案                                                         | 否   |
+| `wearingWay`     | 穿着方式                                                     | 否   |
+| `popularElement` | 流行元素                                                     | 否   |
+| `sleeveType`     | 袖型                                                         | 否   |
+| `clothesPlacket` | 衣门襟                                                       | 否   |
+| `marketTime`     | 上市时间                                                     | 否   |
+| `fabric`         | 面料                                                         | 否   |
+| `other`          | 其他分类                                                     | 否   |
+
+`牛仔长裤` `0520201`
+
+| 请求参数         | 说明     | 必选 |
+| ---------------- | -------- | ---- |
+| `brand`          | 品牌     | 否   |
+| `size`           | 尺码     | 否   |
+| `color`          | 颜色     | 否   |
+| `waistType`      | 腰型     | 否   |
+| `height`         | 裤长     | 否   |
+| `pants`          | 裤型     | 否   |
+| `thick`          | 厚度     | 否   |
+| `stretch`        | 弹力     | 否   |
+| `material`       | 材质     | 否   |
+| `suitableAge`    | 适用年龄 | 否   |
+| `markeTime`      | 上市时间 | 否   |
+| `popularElement` | 流行元素 | 否   |
+| `fabric`         | 面料     | 否   |
+| `frontPants`     | 裤门襟   | 否   |
+
+
+| 返回参数 | 说明   |
+| -------- | ------ |
+| `status` | 状态码 |
+| `data`   | 信息   |
+
+| `status` | `data`                   | 说明                           |
+| -------- | ------------------------ | ------------------------------ |
+| `false`  | `expiredToken`           | `token`过期                    |
+| `false`  | `parseTokenError`        | `token`错误                    |
+| `false`  | `errToken`               | `token`无效                    |
+| `false`  | `类型不正确`             | `type`不能为空或不存在         |
+| `false`  | `商品名称不能为空`       | `name`为空                     |
+| `false`  | `商品名称太长啦`         | `name`大于30字节               |
+| `false`  | `属性名称太长啦`         | 女士衬衫某一属性长度大于30字节 |
+| `false`  | `价格填写不正确`         | `price`为空或为负数            |
+| `false`  | `请正确填写适用年龄`     | `suitableAge`填写不规范        |
+| `false`  | `cover上传失败`          | 服务器错误                     |
+| `false`  | `封面文件不能为空的啦！` | `cover`大小为0                 |
+| `false`  | `封面文件太大的啦`       | `cover`大小大于10mb            |
+| `false`  | `商品展示图不能为空呀！` | `describePhoto`为空            |
+| `false`  | `商品展示图太大啦！`     | `describePhoto`大于30mb        |
+| `false`  | `商品展示视频不能为空`   | `describeVideo`为空            |
+| `false`  | `商品展示视频太大啦`     | `describeVideo`大于1个g        |
+| `false`  | `商品介绍不能为空`       | `detailPhoto`为空              |
+| `false`  | `商品介绍图片太大`       | `detailPhoto`大于10mb          |
 
