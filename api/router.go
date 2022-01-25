@@ -35,7 +35,7 @@ func InitRouter() {
 
 	Goods := Engine.Group("/goods")
 	{
-		Goods.POST("/Blouse", Blouse)
+		Goods.POST("/blouse", Blouse)
 	}
 
 	token := Engine.Group("/token")
