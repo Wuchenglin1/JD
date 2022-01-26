@@ -6,20 +6,16 @@ import (
 	"time"
 )
 
-func InsertBlouse(bl model.Blouse, g model.Goods) (int64, error) {
-	stmt, err := dB.Prepare("insert into Blouse(fGid, brand, womenClothing, size, color, version, length, sleeveLength, suitableAge, getModel, style, material, pattern, wearingWay, popularElement, sleeveType, clothesPlacket, marketTime, fabric, other, time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+func InsertBlouse(bl model.Blouse, fGid int64) error {
+	stmt, err := dB.Prepare("insert into Blouse(gid, brand, womenClothing, version, length, sleeveLength, suitableAge, getModel, style, material, pattern, wearingWay, popularElement, sleeveType, clothesPlacket, marketTime, fabric, other, time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	if err != nil {
-		return 0, err
+		return err
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(g.GId, bl.Brand, bl.WomenClothing, bl.Size, bl.Color, bl.Version, bl.Length, bl.SleeveLength, bl.SuitableAge, bl.GetModel, bl.Style, bl.Material, bl.Pattern, bl.WearingWay, bl.PopularElement, bl.SleeveType, bl.ClothesPlacket, bl.MarketTime, bl.Fabric, bl.Other, bl.NowTime)
+	_, err = stmt.Exec(fGid, bl.Brand, bl.WomenClothing, bl.Version, bl.Length, bl.SleeveLength, bl.SuitableAge, bl.GetModel, bl.Style, bl.Material, bl.Pattern, bl.WearingWay, bl.PopularElement, bl.SleeveType, bl.ClothesPlacket, bl.MarketTime, bl.Fabric, bl.Other, bl.NowTime)
 
-	id, err := result.LastInsertId()
-	if err != nil {
-		return 0, err
-	}
-	return id, nil
+	return err
 }
 
 func InsertGoods(g model.Goods, u model.User) (model.Goods, error) {
@@ -52,13 +48,13 @@ func InsertCover(g model.Goods, url string) error {
 }
 
 func InsertDescribe(g model.Goods, url string) error {
-	stmt, err := dB.Prepare("insert into photo values(type,id,time,url)")
+	stmt, err := dB.Prepare("insert into photo values(gid,time,url)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(g.Type, g.GId, time.Now(), url)
+	_, err = stmt.Exec(g.GId, time.Now(), url)
 
 	if err != nil {
 		fmt.Println(err)
@@ -68,13 +64,13 @@ func InsertDescribe(g model.Goods, url string) error {
 }
 
 func InsertVideo(g model.Goods, url string) error {
-	stmt, err := dB.Prepare("insert into video values(type,id,time,url)")
+	stmt, err := dB.Prepare("insert into video values(gid,time,url)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(g.Type, g.GId, time.Now(), url)
+	_, err = stmt.Exec(g.GId, time.Now(), url)
 
 	if err != nil {
 		fmt.Println(err)
@@ -84,13 +80,13 @@ func InsertVideo(g model.Goods, url string) error {
 }
 
 func InsertDetail(g model.Goods, url string) error {
-	stmt, err := dB.Prepare("insert into detail values(type,id,time,url)")
+	stmt, err := dB.Prepare("insert into detail values(gid,time,url)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(g.Type, g.GId, time.Now(), url)
+	_, err = stmt.Exec(g.GId, time.Now(), url)
 
 	if err != nil {
 		fmt.Println(err)
@@ -118,7 +114,7 @@ func BrowseGoods(str string) (map[int]model.GoodsInfo, error) {
 	defer row.Close()
 	for i := 0; row.Next(); {
 		v := m[i]
-		err = row.Scan(&g.GId, &v.Name, &g.OwnerUid, &v.CommentAccount, &v.Cover, &v.Price)
+		err = row.Scan(&v.GId, &v.Name, &g.OwnerUid, &v.CommentAccount, &v.Cover, &v.Price)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -128,4 +124,29 @@ func BrowseGoods(str string) (map[int]model.GoodsInfo, error) {
 		}
 	}
 	return m, err
+}
+
+func InsertColorPhoto(color, url string, gid int64) error {
+	stmt, err := dB.Prepare("insert into color(fGid, color, url) values (?,?,?)")
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(gid, color, url)
+	if err != nil {
+		fmt.Println("插入颜色错误：", err)
+		return err
+	}
+	return nil
+}
+
+func InsertSize(gid int64, size string) error {
+	stmt, err := dB.Prepare("insert into size(gid, size) values(?,?) ")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(gid, size)
+	return err
 }

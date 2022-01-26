@@ -5,8 +5,8 @@ import (
 	"JD/model"
 )
 
-func InsertBlouse(bl model.Blouse, g model.Goods) (int64, error) {
-	return dao.InsertBlouse(bl, g)
+func InsertBlouse(bl model.Blouse, fGid int64) error {
+	return dao.InsertBlouse(bl, fGid)
 }
 
 func InsertGoods(g model.Goods, u model.User) (model.Goods, error) {
@@ -31,4 +31,12 @@ func InsertDetail(g model.Goods, url string) error {
 
 func BrowseGoods(str string) (map[int]model.GoodsInfo, error) {
 	return dao.BrowseGoods(str)
+}
+
+func InsertColorPhoto(color, url string, gid int64) error {
+	return dao.InsertColorPhoto(color, url, gid)
+}
+
+func InsertSize(gid int64, size string) error {
+	return dao.InsertSize(gid, size)
 }

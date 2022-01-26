@@ -81,7 +81,7 @@
 
 `检查所有参数是否合法` 
 
-|              | 说明                                      | 必须 |
+| 请求参数     | 说明                                      | 必须 |
 | ------------ | ----------------------------------------- | ---- |
 | `phone`      | 这里的`phone`参数是上面已经验证过的手机号 | 是   |
 | `userName`   | 用户名/账号                               | 是   |
@@ -178,61 +178,152 @@
 
 ## 插入商品
 
-#### `/goods/blouse` `POST`
+### 创建一个商品的基本信息
+
+#### `/goods/create` `POST`
+
+
 
 | 请求参数        | 说明                                             | 必选 |
 | --------------- | ------------------------------------------------ | ---- |
 | `type`          | 商品类别                                         | 是   |
 | `name`          | 商品名称                                         | 是   |
 | `token`         | 用户的token                                      | 是   |
+| `price`         | 商品的价格                                       | 是   |
 | `cover`         | 商品封面（二进制文件流）这里是单文件             | 是   |
 | `describePhoto` | 商品展示的图片（二进制文件流）这里可以是多个文件 | 是   |
 | `describeVideo` | 商品展示的视频（二进制文件流）这里可以是多个文件 | 是   |
 | `detailPhoto`   | 商品的介绍（二进制文件流）这里可以是多个文件     | 是   |
 
+| 返回参数 | 说明       |
+| -------- | ---------- |
+| `gid`    | 货物的fGid |
+| `status` | 状态码     |
+| `data`   | 信息       |
+
+| `status` | `data`                   | 说明                    |
+| -------- | ------------------------ | ----------------------- |
+| `false`  | `expiredToken`           | `token`过期             |
+| `false`  | `parseTokenError`        | `token`错误             |
+| `false`  | `errToken`               | `token`无效             |
+| `false`  | `类型不正确`             | `type`不能为空或不存在  |
+| `false`  | `商品名称不能为空`       | `name`为空              |
+| `false`  | `商品名称太长啦`         | `name`大于30字节        |
+| `false`  | `cover上传失败`          | 服务器错误              |
+| `false`  | `图片太大`               | `colorPhoto`大于5mb     |
+| `false`  | `封面文件不能为空的啦！` | `cover`大小为0          |
+| `false`  | `封面文件太大的啦`       | `cover`大小大于10mb     |
+| `false`  | `商品展示图不能为空呀！` | `describePhoto`为空     |
+| `false`  | `商品展示图太大啦！`     | `describePhoto`大于30mb |
+| `false`  | `商品展示视频不能为空`   | `describeVideo`为空     |
+| `false`  | `商品展示视频太大啦`     | `describeVideo`大于1个g |
+| `false`  | `商品介绍不能为空`       | `detailPhoto`为空       |
+| `true`   | `""`                     | 参数合法                |
+
+### 为一个商品插入尺寸表
+
+#### `/goods/create/size` `POST`
+
+| 请求参数 | 说明        | 必选   |
+| -------- | ----------- | ------ |
+| `token`  | 用户的token | **是** |
+| `size`   | 尺寸表      | **是** |
+| `gid`    | 商品的`gid` | **是** |
+
+说明：商品的`size`以这样的格式：
+
+如有S,M,L,XL,XXL的尺码:
+
+`S;M;L;XL;XXL;`	每个尺码中间用`;`间隔
+
+
+
+| `status` | `data`            | 说明               |
+| -------- | ----------------- | ------------------ |
+| `false`  | `expiredToken`    | `token`过期        |
+| `false`  | `parseTokenError` | `token`错误        |
+| `false`  | `errToken`        | `token`无效        |
+| `false`  | `商品不存在`      | `fGid`不存在或错误 |
+
+
+
+### 为一个商品插入颜色表
+
+#### `/goods/photo/color` `POST`
+
+| 请求参数     | 说明                   | 必选 |
+| ------------ | ---------------------- | ---- |
+| `token`      | 用户的token            | 是   |
+| `gid`        | 商品的`fGid`           | 是   |
+| `color`      | 颜色描述               | 是   |
+| `colorPhoto` | 颜色图片(二进制文件流) | 是   |
+
+| 返回参数 | 说明   |
+| -------- | ------ |
+| `status` | 状态码 |
+| `data`   | 信息   |
+
+| `status` | `data`            | 说明                  |
+| -------- | ----------------- | --------------------- |
+| `false`  | `expiredToken`    | `token`过期           |
+| `false`  | `parseTokenError` | `token`错误           |
+| `false`  | `errToken`        | `token`无效           |
+| `false`  | `商品不存在`      | `fGid`不存在或错误    |
+| `false`  | `描述太长`        | `color`描述大于15字节 |
+| `false`  | `图片不能为空`    | `colorPhoto`为空      |
+| `false`  | `图片太大`        | `colorPhoto`大于5mb   |
+| `true`   | `""`              | 参数合法              |
+
+
+
+### 为一个商品的基本信息插入介绍
+
+##### 
+
+插入一条女士衬衫的介绍
+
+#### `/goods/blouse` `POST`
+
 `女士衬衫` `0520101`
 
-| 请求参数         | 说明                                                         | 必选 |
-| ---------------- | ------------------------------------------------------------ | ---- |
-| `price`          | 价格                                                         | 是   |
-| `brand`          | 品牌                                                         | 否   |
-| `womenClothing`  | 女装                                                         | 否   |
-| `size`           | 尺码                                                         | 否   |
-| `color`          | 颜色                                                         | 否   |
-| `version`        | 版型                                                         | 否   |
-| `length`         | 衣长                                                         | 否   |
-| `sleeveLength`   | 袖长                                                         | 否   |
-| `suitableAge`    | 适用年龄(18-24周岁请求参数为`1`,25-29周岁返回`2`,30-34周岁返回`3`,35-39周岁返回`4`,40-49周岁返回`5`) | 否   |
-| `getModel`       | 领型                                                         | 否   |
-| `style`          | 风格                                                         | 否   |
-| `material`       | 材质                                                         | 否   |
-| `pattern`        | 图案                                                         | 否   |
-| `wearingWay`     | 穿着方式                                                     | 否   |
-| `popularElement` | 流行元素                                                     | 否   |
-| `sleeveType`     | 袖型                                                         | 否   |
-| `clothesPlacket` | 衣门襟                                                       | 否   |
-| `marketTime`     | 上市时间                                                     | 否   |
-| `fabric`         | 面料                                                         | 否   |
-| `other`          | 其他分类                                                     | 否   |
+| 请求参数         | 说明                                                         | 必选   |
+| ---------------- | ------------------------------------------------------------ | ------ |
+| `gid`            | 商品的`gid`                                                  | **是** |
+| `brand`          | 品牌                                                         | 否     |
+| `womenClothing`  | 女装                                                         | 否     |
+| `version`        | 版型                                                         | 否     |
+| `length`         | 衣长                                                         | 否     |
+| `sleeveLength`   | 袖长                                                         | 否     |
+| `suitableAge`    | 适用年龄(18-24周岁请求参数为`1`,25-29周岁返回`2`,30-34周岁返回`3`,35-39周岁返回`4`,40-49周岁返回`5`) | 否     |
+| `getModel`       | 领型                                                         | 否     |
+| `style`          | 风格                                                         | 否     |
+| `material`       | 材质                                                         | 否     |
+| `pattern`        | 图案                                                         | 否     |
+| `wearingWay`     | 穿着方式                                                     | 否     |
+| `popularElement` | 流行元素                                                     | 否     |
+| `sleeveType`     | 袖型                                                         | 否     |
+| `clothesPlacket` | 衣门襟                                                       | 否     |
+| `marketTime`     | 上市时间                                                     | 否     |
+| `fabric`         | 面料                                                         | 否     |
+| `other`          | 其他分类                                                     | 否     |
 
 `牛仔长裤` `0520201`
 
-| 请求参数         | 说明     | 必选 |
-| ---------------- | -------- | ---- |
-| `brand`          | 品牌     | 否   |
-| `size`           | 尺码     | 否   |
-| `color`          | 颜色     | 否   |
-| `waistType`      | 腰型     | 否   |
-| `height`         | 裤长     | 否   |
-| `pants`          | 裤型     | 否   |
-| `thick`          | 厚度     | 否   |
-| `stretch`        | 弹力     | 否   |
-| `material`       | 材质     | 否   |
-| `suitableAge`    | 适用年龄 | 否   |
-| `markeTime`      | 上市时间 | 否   |
-| `popularElement` | 流行元素 | 否   |
-| `fabric`         | 面料     | 否   |
-| `frontPants`     | 裤门襟   | 否   |
+| 请求参数         | 说明     | 必选   |
+| ---------------- | -------- | ------ |
+| `brand`          | 品牌     | 否     |
+| `size`           | 尺码     | **是** |
+| `waistType`      | 腰型     | 否     |
+| `height`         | 裤长     | 否     |
+| `pants`          | 裤型     | 否     |
+| `thick`          | 厚度     | 否     |
+| `stretch`        | 弹力     | 否     |
+| `material`       | 材质     | 否     |
+| `suitableAge`    | 适用年龄 | 否     |
+| `markeTime`      | 上市时间 | 否     |
+| `popularElement` | 流行元素 | 否     |
+| `fabric`         | 面料     | 否     |
+| `frontPants`     | 裤门襟   | 否     |
 
 
 | 返回参数 | 说明   |
@@ -240,26 +331,15 @@
 | `status` | 状态码 |
 | `data`   | 信息   |
 
-| `status` | `data`                   | 说明                           |
-| -------- | ------------------------ | ------------------------------ |
-| `false`  | `expiredToken`           | `token`过期                    |
-| `false`  | `parseTokenError`        | `token`错误                    |
-| `false`  | `errToken`               | `token`无效                    |
-| `false`  | `类型不正确`             | `type`不能为空或不存在         |
-| `false`  | `商品名称不能为空`       | `name`为空                     |
-| `false`  | `商品名称太长啦`         | `name`大于30字节               |
-| `false`  | `属性名称太长啦`         | 女士衬衫某一属性长度大于30字节 |
-| `false`  | `价格填写不正确`         | `price`为空或为负数            |
-| `false`  | `请正确填写适用年龄`     | `suitableAge`填写不规范        |
-| `false`  | `cover上传失败`          | 服务器错误                     |
-| `false`  | `封面文件不能为空的啦！` | `cover`大小为0                 |
-| `false`  | `封面文件太大的啦`       | `cover`大小大于10mb            |
-| `false`  | `商品展示图不能为空呀！` | `describePhoto`为空            |
-| `false`  | `商品展示图太大啦！`     | `describePhoto`大于30mb        |
-| `false`  | `商品展示视频不能为空`   | `describeVideo`为空            |
-| `false`  | `商品展示视频太大啦`     | `describeVideo`大于1个g        |
-| `false`  | `商品介绍不能为空`       | `detailPhoto`为空              |
-| `false`  | `商品介绍图片太大`       | `detailPhoto`大于10mb          |
+| `status` | `data`               | 说明                           |
+| -------- | -------------------- | ------------------------------ |
+| `false`  | `expiredToken`       | `token`过期                    |
+| `false`  | `parseTokenError`    | `token`错误                    |
+| `false`  | `errToken`           | `token`无效                    |
+| `false`  | `属性名称太长啦`     | 女士衬衫某一属性长度大于30字节 |
+| `false`  | `请正确填写适用年龄` | `suitableAge`填写不规范        |
+| `false`  | `商品错误！`         | `fGid`不存在或错误             |
+| `true`   | `""`                 | 参数合法                       |
 
 ## 浏览所有商品
 
@@ -294,6 +374,7 @@
 {
     "status":"true",
     "data":{
+        "GId":"",//商品的id
         "cover":"",//这里是一串url
         "price":"",//价格
         "name":"",//商品名称

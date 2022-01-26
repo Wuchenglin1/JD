@@ -37,4 +37,5 @@ type Oss struct {
 	DescribeDir string `json:"describeDir"`
 	VideoDir    string `json:"videoDir"`
 	DetailDir   string `json:"detailDir"`
+	ColorDir    string `json:"colorDir"`
 }

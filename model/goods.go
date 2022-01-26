@@ -4,6 +4,7 @@ import "time"
 
 // GoodsInfo 专门用来返回给前端一个商品基本信息
 type GoodsInfo struct {
+	GId            int    `json:"GId"`
 	Cover          string `json:"cover"`
 	Price          int    `json:"price"`
 	Name           string `json:"name"`
@@ -12,7 +13,7 @@ type GoodsInfo struct {
 }
 
 type Goods struct {
-	Type            string `json:"type"`
+	Type            int    `json:"type"`
 	Name            string `json:"name"`
 	GId             int64  `json:"gid"`
 	Price           int    `json:"price"`
@@ -26,12 +27,9 @@ type Goods struct {
 
 //Blouse 女士衬衫
 type Blouse struct {
-	Gfid           int       `json:"gfid"`
 	Gid            int       `json:"gid"`
 	Brand          string    `json:"brand"`
 	WomenClothing  string    `json:"WomenClothing"`
-	Size           string    `json:"size"`
-	Color          string    `json:"color"`
 	Version        string    `json:"version"`
 	Length         string    `json:"length"`
 	SleeveLength   string    `json:"sleeveLength"`
@@ -51,11 +49,8 @@ type Blouse struct {
 }
 
 type CowboyPants struct {
-	Gfid           int       `json:"gfid"`
 	Gid            int       `json:"gid"`
 	Brand          string    `json:"brand"`
-	Size           string    `json:"size"`
-	Color          string    `json:"color"`
 	WaistType      string    `json:"waistType"`
 	Height         string    `json:"height"`
 	Pants          string    `json:"pants"`
@@ -68,4 +63,7 @@ type CowboyPants struct {
 	Fabric         string    `json:"fabric"`
 	FrontPants     string    `json:"frontPants"`
 	NowTime        time.Time `json:"nowTime"`
+}
+
+type Color struct {
 }
