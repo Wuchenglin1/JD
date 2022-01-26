@@ -40,6 +40,9 @@ func InitRouter() {
 		Goods.POST("/photo/color", ColorPhoto)
 		Goods.POST("/blouse", Blouse)
 		Goods.GET("/browse", BrowseGoods)
+		Goods.GET("/getInfo", GetGoodsBaseInfo)
+		Goods.GET("/getSize", GetGoodsSize)
+		Goods.GET("/getColor", GetGoodsColor)
 	}
 
 	token := Engine.Group("/token")

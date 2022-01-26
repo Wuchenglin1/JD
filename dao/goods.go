@@ -127,7 +127,7 @@ func BrowseGoods(str string) (map[int]model.GoodsInfo, error) {
 }
 
 func InsertColorPhoto(color, url string, gid int64) error {
-	stmt, err := dB.Prepare("insert into color(fGid, color, url) values (?,?,?)")
+	stmt, err := dB.Prepare("insert into color(gid, color, url) values (?,?,?)")
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -141,12 +141,81 @@ func InsertColorPhoto(color, url string, gid int64) error {
 	return nil
 }
 
-func InsertSize(gid int64, size string) error {
+func InsertSize(gid int64, m []string) error {
 	stmt, err := dB.Prepare("insert into size(gid, size) values(?,?) ")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
-	_, err = stmt.Exec(gid, size)
+
+	for _, v := range m {
+		_, err = stmt.Exec(gid, v)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 	return err
+}
+
+func GetGoodsBaseInfo(gid int64) (model.Goods, error) {
+	g := model.Goods{}
+	stmt, err := dB.Prepare("select gid, type, price, cover, name, owneruid, saletime, volume, commentamount, favorablerating from goods where gId = ?")
+	if err != nil {
+		return g, err
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(gid).Scan(&g.GId, &g.Type, &g.Price, &g.Cover, &g.Name, &g.OwnerUid, &g.SaleTime, &g.Volume, &g.CommentAccount, &g.FavorableRating)
+
+	if err != nil {
+		return g, err
+	}
+	return g, nil
+}
+
+func GetGoodsSize(gid int64) (map[int]string, error) {
+	m := make(map[int]string)
+	i := 0
+	stmt, err := dB.Prepare("select size from size where gid = ?")
+	if err != nil {
+		return m, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(gid)
+	if err != nil {
+		return m, err
+	}
+	defer row.Close()
+	for row.Next() {
+		var size string
+		err = row.Scan(&size)
+		m[i] = size
+		i++
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return m, err
+}
+
+func GetGoodsColor(gid int64) (map[int]model.GoodsColor, error) {
+	m := make(map[int]model.GoodsColor)
+	i := 0
+	stmt, err := dB.Prepare("select color,url from color where gid = ?")
+	if err != nil {
+		return m, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(gid)
+	if err != nil {
+		return m, err
+	}
+	for row.Next() {
+		var col model.GoodsColor
+		err = row.Scan(&col.Color, &col.Url)
+		m[i] = col
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return m, err
 }

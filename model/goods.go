@@ -13,16 +13,17 @@ type GoodsInfo struct {
 }
 
 type Goods struct {
-	Type            int    `json:"type"`
-	Name            string `json:"name"`
-	GId             int64  `json:"gid"`
-	Price           int    `json:"price"`
-	OwnerUid        int    `json:"ownerUid"`
-	OwnerName       string `json:"ownerName"`
-	CommentAccount  int    `json:"commentAccount"`
-	Volume          int    `json:"volume"`
-	FavorableRating int    `json:"FavorableRating"`
-	Cover           string `json:"cover"`
+	Type            int       `json:"type"`
+	Name            string    `json:"name"`
+	GId             int64     `json:"gid"`
+	Price           int       `json:"price"`
+	OwnerUid        int       `json:"ownerUid"`
+	OwnerName       string    `json:"ownerName"`
+	SaleTime        time.Time `json:"saleTime"`
+	CommentAccount  int       `json:"commentAccount"`
+	Volume          int       `json:"volume"`
+	FavorableRating int       `json:"FavorableRating"`
+	Cover           string    `json:"cover"`
 }
 
 //Blouse 女士衬衫
@@ -65,5 +66,7 @@ type CowboyPants struct {
 	NowTime        time.Time `json:"nowTime"`
 }
 
-type Color struct {
+type GoodsColor struct {
+	Color string `json:"color,"`
+	Url   string `json:"url""`
 }

@@ -37,6 +37,18 @@ func InsertColorPhoto(color, url string, gid int64) error {
 	return dao.InsertColorPhoto(color, url, gid)
 }
 
-func InsertSize(gid int64, size string) error {
-	return dao.InsertSize(gid, size)
+func InsertSize(gid int64, m []string) error {
+	return dao.InsertSize(gid, m)
+}
+
+func GetGoodsBaseInfo(gid int64) (model.Goods, error) {
+	return dao.GetGoodsBaseInfo(gid)
+}
+
+func GetGoodsSize(gid int64) (map[int]string, error) {
+	return dao.GetGoodsSize(gid)
+}
+
+func GetGoodsColor(gid int64) (map[int]model.GoodsColor, error) {
+	return dao.GetGoodsColor(gid)
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -307,7 +308,7 @@ func ColorPhoto(c *gin.Context) {
 		return
 	}
 
-	//获取fGid
+	//获取gid
 	fGid := c.PostForm("gid")
 	//获取颜色描述
 	color := c.PostForm("color")
@@ -365,7 +366,8 @@ func Size(c *gin.Context) {
 		return
 	}
 	size := c.PostForm("size")
-	err = service.InsertSize(gid, size)
+	m := strings.Split(size, ";")
+	err = service.InsertSize(gid, m)
 	if err != nil {
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
@@ -409,5 +411,62 @@ func BrowseGoods(c *gin.Context) {
 	}
 	for _, v := range m {
 		tool.RespSuccessWithData(c, true, v)
+	}
+}
+
+func GetGoodsBaseInfo(c *gin.Context) {
+	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	g, err := service.GetGoodsBaseInfo(gid)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, true, g)
+}
+
+func GetGoodsSize(c *gin.Context) {
+	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	m, err := service.GetGoodsSize(gid)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		c.JSON(200, gin.H{
+			"size": v,
+		})
+	}
+}
+
+func GetGoodsColor(c *gin.Context) {
+	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	m, err := service.GetGoodsColor(gid)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		c.JSON(200, gin.H{
+			"color": v.Color,
+			"url":   v.Url,
+		})
 	}
 }
