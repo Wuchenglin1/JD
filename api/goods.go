@@ -84,7 +84,7 @@ func Blouse(c *gin.Context) {
 		tool.RespErrWithData(c, false, "价格填写不正确")
 		return
 	}
-	bl.Price = price
+	g.Price = price
 	sa, err := strconv.Atoi(c.PostForm("suitableAge"))
 	if err != nil {
 		fmt.Println(err)
@@ -261,5 +261,43 @@ func Blouse(c *gin.Context) {
 			tool.RespErrWithData(c, false, "服务器错误")
 			return
 		}
+	}
+}
+
+func BrowseGoods(c *gin.Context) {
+	var i, str string
+	i = c.PostForm("arrangement")
+	switch i {
+	case "0":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by FavorableRating desc  "
+	case "1":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by FavorableRating asc  "
+	case "2":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by saleAccount desc  "
+	case "3":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by saleAccount asc  "
+	case "4":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by commentAccount desc  "
+	case "5":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by commentAccount asc  "
+	case "6":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by saleTime desc"
+	case "7":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by saleTime asc"
+	case "8":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by price desc"
+	case "9":
+		str = "select gId,name,ownerUid,commentAmount,cover,price from goods order by price desc"
+	default:
+		tool.RespErrWithData(c, false, "您筛选的方式有误")
+		return
+	}
+	m, err := service.BrowseGoods(str)
+	if err != nil {
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		c.JSON(200, v)
 	}
 }

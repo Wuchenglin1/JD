@@ -28,3 +28,7 @@ func InsertVideo(g model.Goods, url string) error {
 func InsertDetail(g model.Goods, url string) error {
 	return dao.InsertDetail(g, url)
 }
+
+func BrowseGoods(str string) (map[int]model.GoodsInfo, error) {
+	return dao.BrowseGoods(str)
+}

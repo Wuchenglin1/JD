@@ -2,21 +2,32 @@ package model
 
 import "time"
 
+// GoodsInfo 专门用来返回给前端一个商品基本信息
+type GoodsInfo struct {
+	Cover          string `json:"cover"`
+	Price          int    `json:"price"`
+	Name           string `json:"name"`
+	CommentAccount int    `json:"commentAccount"`
+	OwnerName      string `json:"ownerName"`
+}
+
 type Goods struct {
 	Type            string `json:"type"`
 	Name            string `json:"name"`
 	GId             int64  `json:"gid"`
+	Price           int    `json:"price"`
 	OwnerUid        int    `json:"ownerUid"`
+	OwnerName       string `json:"ownerName"`
 	CommentAccount  int    `json:"commentAccount"`
 	Volume          int    `json:"volume"`
 	FavorableRating int    `json:"FavorableRating"`
+	Cover           string `json:"cover"`
 }
 
 //Blouse 女士衬衫
 type Blouse struct {
 	Gfid           int       `json:"gfid"`
 	Gid            int       `json:"gid"`
-	Price          int       `json:"price"`
 	Brand          string    `json:"brand"`
 	WomenClothing  string    `json:"WomenClothing"`
 	Size           string    `json:"size"`
@@ -42,7 +53,6 @@ type Blouse struct {
 type CowboyPants struct {
 	Gfid           int       `json:"gfid"`
 	Gid            int       `json:"gid"`
-	Price          int       `json:"price"`
 	Brand          string    `json:"brand"`
 	Size           string    `json:"size"`
 	Color          string    `json:"color"`
