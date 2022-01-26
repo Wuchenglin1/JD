@@ -298,6 +298,6 @@ func BrowseGoods(c *gin.Context) {
 		return
 	}
 	for _, v := range m {
-		c.JSON(200, v)
+		tool.RespSuccessWithData(c, true, v)
 	}
 }
