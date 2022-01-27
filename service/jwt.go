@@ -3,6 +3,7 @@ package service
 import (
 	"JD/model"
 	"JD/tool"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
@@ -54,4 +55,18 @@ func CreateToken(u model.User, ExpireTime int64, tokenType string) (string, erro
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, myClaims)
 	return token.SignedString(signKey)
+}
+
+func CheckTokenErr(claims *model.Claims, err error) (bool, string) {
+	if err != nil {
+		if err.Error()[:16] == "token is expired" {
+			return false, "expiredToken"
+		}
+		fmt.Println("token解析错误:", err)
+		return false, "parseTokenError"
+	}
+	if claims.Type == "errToken" {
+		return false, "errToken"
+	}
+	return true, ""
 }

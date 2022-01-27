@@ -5,6 +5,7 @@ type Config struct {
 	Email Email `json:"email"`
 	Jwt   Jwt   `json:"jwt"`
 	Sms   Sms   `json:"sms"`
+	Oss   Oss   `json:"oss"`
 }
 
 type MySql struct {
@@ -25,4 +26,16 @@ type Sms struct {
 	SignId     string `json:"signId"`
 	TemplateId string `json:"templateId"`
 	Sign       string `json:"sign"`
+}
+
+type Oss struct {
+	SecretId    string `json:"secretId"`
+	SecretKey   string `json:"secretKey"`
+	Bucket      string `json:"bucket"`
+	EndPoint    string `json:"endPoint"`
+	CoverDir    string `json:"coverDir"`
+	DescribeDir string `json:"describeDir"`
+	VideoDir    string `json:"videoDir"`
+	DetailDir   string `json:"detailDir"`
+	ColorDir    string `json:"colorDir"`
 }
