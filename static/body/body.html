@@ -105,8 +105,9 @@
         }
 
         .div4 {
+            position: relative;
             width: 100%;
-            height: 100px;
+            height: 150px;
             color: #666666;
             font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
         }
@@ -119,7 +120,7 @@
         .div5 {
             position: absolute;
             left: 450px;
-            top: 78px;
+            top: 38px;
             width: 546px;
             height: 32px;
             border: 2px solid #e2231a;
@@ -158,7 +159,7 @@
         .div6 {
             position: absolute;
             left: 1050px;
-            top: 80px;
+            top: 40px;
             border: 1px solid rgb(223, 220, 220);
             font-size: 15px;
             text-align: center;
@@ -169,6 +170,349 @@
 
         .div6 i {
             font-size: 15px;
+        }
+
+        .div7 {
+            position: absolute;
+            right: 270px;
+            top: 20px;
+            width: 190px;
+            height: 120px;
+        }
+
+        .div7 img {
+            width: 190px;
+            height: 120px;
+        }
+
+        .div8 {
+            position: absolute;
+            left: 460px;
+            top: 85px;
+            width: 550px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .div8 a {
+            margin-right: 10px;
+            white-space: nowrap;
+            color: #999;
+        }
+
+        .div8 a:hover {
+            color: rgb(184, 21, 21);
+        }
+
+        .div9 {
+            position: absolute;
+            left: 353px;
+            bottom: -17px;
+            height: 40px;
+        }
+
+        .div9 ul {
+            display: flex;
+            justify-content: space-around;
+            width: 747px;
+            height: 60px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .div9 a {
+            color: rgb(94, 88, 88);
+        }
+
+        .div9 a:hover {
+            color: rgb(160, 16, 16);
+        }
+
+        .div10 {
+            display: flex;
+            justify-content: space-between;
+            width: 1190px;
+            height: 480px;
+            background-color: #F4F4F4;
+            margin: 8px auto;
+        }
+
+        .div11 {
+            width: 190px;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .div11 ul {
+            width: 190px;
+            height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .div11 li {
+            padding-left: 18px;
+            font-size: 14px;
+            color: #636363;
+            transition: all 0.15s;
+        }
+
+        .div11 a {
+            margin: 2px;
+            color: #636363;
+        }
+
+        .div11 a:hover {
+            color: #e1251b;
+        }
+
+        .div11 li:hover {
+            background-color: #D9D9D9;
+        }
+
+        .box {
+            width: 790px;
+            height: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .list {
+            position: relative;
+            width: 790px;
+            height: 480px;
+        }
+
+        .item {
+            position: absolute;
+            width: 790px;
+            height: 480px;
+            list-style: none;
+            z-index: 0;
+            opacity: 0;
+            transition: all 0.4s;
+        }
+
+        .box img {
+            width: 790px;
+            height: 480px;
+        }
+
+        .box button {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            z-index: 9999;
+            font-size: 20px;
+            color: rgb(137, 141, 138);
+            background-color: rgba(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .box button:hover {
+            background-color: rgb(145, 135, 135);
+            color: #fff;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        #btn1 {
+
+            top: 200px;
+        }
+
+        #btn2 {
+            right: 0;
+            top: 200px;
+        }
+
+        .item.active {
+            position: absolute;
+            list-style: none;
+            opacity: 1;
+            z-index: 100;
+        }
+
+        .pointList {
+            position: absolute;
+            display: flex;
+            justify-content: space-around;
+            bottom: 0px;
+            right: 50px;
+            width: 100px;
+            list-style: none;
+            z-index: 100000;
+        }
+
+        .point {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(19, 17, 17, 0.4);
+            border-radius: 50%;
+            border: 1px solid rgb(221, 218, 218);
+        }
+
+        .point.active {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(19, 17, 17, 0.9);
+            border-radius: 50%;
+            border: 2px solid rgb(221, 218, 218);
+        }
+
+        .div14 {
+            width: 190px;
+            height: 480px;
+            background-color: #fff;
+        }
+
+        .div15 {
+            position: relative;
+            width: 100%;
+            height: 102px;
+            border-bottom: 0.1px solid #666666;
+        }
+
+        .div15 i {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 45px;
+        }
+
+        .span1 {
+            position: absolute;
+            top: 16px;
+            right: 28px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .span2 {
+            position: absolute;
+            top: 35px;
+            left: 70px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .span2 a {
+            color: #666;
+        }
+
+        .span2 a:hover {
+            color: rgb(170, 22, 22);
+            text-decoration: underline;
+        }
+
+        .a1 {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 75px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 12px;
+            text-align: center;
+            color: #fff;
+            border-radius: 13px;
+            background: #e1251b;
+
+        }
+
+        .a2 {
+            position: absolute;
+            bottom: 10px;
+            left: 100px;
+            width: 75px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 12px;
+            text-align: center;
+            border-radius: 13px;
+            background: #363634;
+            color: #e5d790;
+        }
+
+        .div16 {
+            width: 100%;
+            height: 130px;
+            border-bottom: 0.1px solid #666666;
+        }
+
+        .div17 {
+            background-color: #fff;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .span3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-left: 15px;
+        }
+
+        .span4 {
+            display: inline-block;
+            font-size: 14px;
+            margin-left: 60px;
+            line-height: 30px;
+        }
+
+        .span4 a {
+            color: rgb(107, 100, 100);
+        }
+
+        .span4 a:hover {
+            color: #e1251b;
+        }
+
+        .span4 i {
+            font-size: 12px;
+        }
+
+        .div16 ul {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            margin-left: 15px;
+            height: 100px;
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .span5 {
+            font-size: 12px;
+            height: 16px;
+            width: 35px;
+            line-height: 16px;
+            text-align: center;
+            vertical-align: 0;
+            color: #e1251b;
+            margin-right: 6px;
+        }
+
+        .div18 {
+            width: 100%;
+            height: 200px;
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .div18 a {
+            width: 63px;
+            height: 58px;
+            text-align: center;
+            line-height: 58px;
+        }
+
+        .div18 a i {
+            font-size: 28px;
         }
     </style>
 </head>
@@ -231,7 +575,134 @@
             <img
                 src="//img10.360buyimg.com/babel/jfs/t1/103742/7/20940/70211/61d6a1b5E57d7ea51/258e261d2d6a63fe.png.webp">
         </div>
+        <div class="div8">
+            <a href="#">家电年货节</a>
+            <a href="#">服饰满减</a>
+            <a href="#">iQOO&nbsp9</a>
+            <a href="#">小家电</a>
+            <a href="#">京东京造</a>
+            <a href="#">美妆年礼</a>
+            <a href="#">玩具</a>
+            <a href="#">爆品折扣</a>
+            <a href="#">家居年货</a>
+        </div>
+        <div class="div9">
+            <ul>
+                <li><a href="#">秒杀</a></li>
+                <li><a href="#">优惠券</a></li>
+                <li><a href="#">PLUS会员</a></li>
+                <li><a href="#">品牌闪购</a></li>
+                <li><a href="#">拍卖</a></li>
+                <li><a href="#">京东家电</a></li>
+                <li><a href="#">京东超市</a></li>
+                <li><a href="#">京东生鲜</a></li>
+                <li><a href="#">京东国际</a></li>
+                <li><a href="#">京东云</a></li>
+            </ul>
+        </div>
+
     </div>
+
+    <div class="div10">
+        <div class="div11">
+            <ul>
+                <li><a href="#">家用电器</a></li>
+                <li><a href="#">手机</a>/<a href="#">运营商</a>/<a href="#">数码</a></li>
+                <li><a href="#">电脑</a>/<a href="#">办公</a></li>
+                <li><a href="#">家居</a>/<a href="#">家具</a></li>
+                <li>
+                    <a href="#">男装</a>/<a href="#">女装</a>/<a href="#">童装</a>/<a href="#">内衣</a>
+                    <div class="div12">
+
+                    </div>
+                </li>
+                <li><a href="#">美妆</a>/<a href="#">清洁</a>/<a href="#">宠物</a></li>
+                <li><a href="#">女鞋</a>/<a href="#">箱包</a>/<a href="#">珠宝</a></li>
+                <li><a href="#">男鞋</a>/<a href="#">运动</a></li>
+                <li><a href="#">房产</a>/<a href="#">汽车</a>/<a href="#">汽车用品</a>/</li>
+                <li><a href="#">母婴</a>/<a href="#">玩具乐器</a></li>
+                <li><a href="#">食品</a>/<a href="#">酒类</a>/<a href="#">生鲜</a></li>
+                <li><a href="#">艺术</a>/<a href="#">礼品鲜花</a></li>
+                <li><a href="#">医药保健</a>/<a href="#">计生</a></li>
+                <li><a href="#">图书</a>/<a href="#">文娱</a></li>
+                <li><a href="#">机票</a>/<a href="#">酒店</a></li>
+                <li><a href="#">理财</a>/<a href="#">众筹</a></li>
+                <li><a href="#">安装</a>/<a href="#">维修</a></li>
+                <li><a href="#">工业品</a></li>
+            </ul>
+        </div>
+        <div class="box">
+            <ul="list">
+                <li class="item active">
+                    <img
+                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/dd741adcce9417d72ea4c1a6dfcc96e2.jpg?w=2452&h=920">
+                </li>
+                <li class="item">
+                    <img
+                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/831e0eb28e01980ebf713f867de5033f.jpg?thumb=1&w=1609&h=604&f=webp&q=90">
+                </li>
+                <li class="item">
+                    <img src="	http://180.76.185.37/static/img/xmad-2.jpg">
+                </li>
+                <li class="item">
+                    <img src="	http://180.76.185.37/static/img/xmad-5.jpg">
+                </li>
+                <li class="item">
+                    <img src="	http://180.76.185.37/static/img/xmad-4.jpg">
+                </li>
+                </ul>
+                <ul class="pointList">
+                    <li class="point active"></li>
+                    <li class="point"></li>
+                    <li class="point"></li>
+                    <li class="point"></li>
+                    <li class="point"></li>
+                </ul>
+                <button type="button" id="btn1">&lt</button>
+                <button type="button" id="btn2">&gt</button>
+        </div>
+        <div class="div14">
+            <div class="div15">
+                <i class="iconfont icon-maomaochushou"></i>
+                <span class="span1">Hi~欢迎逛京东!</span>
+                <span class="span2">
+                    <a href="../zhuce/zhuce1.html">注册</a>
+                    |
+                    <a href="../login/login.html">登录</a>
+                </span>
+                <a href="#" class="a1">新人福利</a>
+                <a href="#" class="a2">PLUS会员</a>
+            </div>
+            <div class=" div16">
+                <div class="div17">
+                    <span class="span3">京东快报</span>
+                    <span class="span4">
+                        <a href="#">more<i class="iconfont icon-youjiantou"></i></a>
+                    </span>
+                </div>
+                <ul>
+                    <li><span class="span5">最新</span> 边伯贤好帅</li>
+                    <li><span class="span5">热门</span> 白敬亭好帅</li>
+                    <li><span class="span5">热评</span> 余庆伟好帅</li>
+                    <li><span class="span5">最新</span> 我爱帅哥</li>
+                </ul>
+            </div>
+            <div class="div18">
+                <a href="#" class="a3"><i class="iconfont icon-lvxing"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-youxiyouxiji"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-huafei"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-jiayouqia"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-huochepiao"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-jiudian"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-menpiao"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-chushoulipinka"></i></a>
+                <a href="#" class="a3"><i class="iconfont icon-licai"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="../js/body.js"></script>
 </body>
 
 </html>

@@ -356,10 +356,8 @@
         <div class="div2"><span>中国0086</span></div>
         <span class="span1"><a herf="#"><i class="iconfont icon-xiangxia"></i></a></span>
         <div class="div3"></div>
-        <form action="/user/login" method="post">
-            <input id="input1" placeholder="请输入手机号">
-            <input class="div4" type="submit" value="点击按钮进行验证">
-        </form>
+        <input id="input1" placeholder="请输入手机号">
+        <input class="div4" type="submit" value="点击按钮进行验证" id="btn1">
 
     </div>
 
@@ -400,18 +398,8 @@
     </div>
     <span class="span15">Copyright©2004-2022 WZ.com 版权所有</span>
     <div class="div13"></div>
-    <script>
-        let input1 = document.getElementById("input")
-        let btn = document.getElementsByClassName('btn')
-        btn.onclick = function () {
-            let xhr = new XMLHttpRequest();
-            xhr.open('post', 'http://110.42.165.192:8090', 'true');
-            xhr.setRequestHeader('Cotent-Type', 'application/x-www-form-urlencoded');
-            let form = input1.value
-            xhr.send(serialize(form));
-        }
+    <script src='../js/zhuce1.js'></script>
 
-    </script>
 </body>
 
 </html>
