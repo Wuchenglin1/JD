@@ -219,3 +219,35 @@ func GetGoodsColor(gid int64) (map[int]model.GoodsColor, error) {
 	}
 	return m, err
 }
+
+func BrowseGoodsType(type_ int) (map[int]model.GoodsInfo, error) {
+	m := make(map[int]model.GoodsInfo)
+	stmt, err := dB.Prepare("select gId,cover,price,name,commentAmount,ownerUid from goods where type = ?")
+	var g model.GoodsInfo
+	var ownerUid int
+	if err != nil {
+		fmt.Println("BrowseGoodsType Error :", err)
+		return m, err
+	}
+	defer stmt.Close()
+	result, err := stmt.Query(type_)
+
+	if err != nil {
+		fmt.Println("BrowseGoodsType Error :", err)
+		return m, err
+	}
+	defer result.Close()
+	for i := 0; result.Next(); i++ {
+		err = result.Scan(&g.GId, &g.Cover, &g.Price, &g.Name, &g.CommentAccount, &ownerUid)
+		if err != nil {
+			fmt.Println(err)
+		}
+		//查询商家名字
+		err = dB.QueryRow("select name from User where uid = ?", ownerUid).Scan(&g.OwnerName)
+		m[i] = g
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return m, err
+}

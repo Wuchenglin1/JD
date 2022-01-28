@@ -359,6 +359,7 @@ func Size(c *gin.Context) {
 		tool.RespErrWithData(c, false, str)
 		return
 	}
+
 	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
 	if err != nil {
 		fmt.Println(err)
@@ -423,6 +424,10 @@ func GetGoodsBaseInfo(c *gin.Context) {
 	}
 	g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
+		if err.Error()[4:] != "no rows in result set" {
+			tool.RespErrWithData(c, false, "物品不存在")
+			return
+		}
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
@@ -434,11 +439,15 @@ func GetGoodsSize(c *gin.Context) {
 	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
 	if err != nil {
 		fmt.Println(err)
-		tool.RespErrWithData(c, false, "服务器错误")
+		tool.RespErrWithData(c, false, "gid填写不正确！")
 		return
 	}
 	m, err := service.GetGoodsSize(gid)
 	if err != nil {
+		if err.Error()[4:] != "no rows in result set" {
+			tool.RespErrWithData(c, false, "物品不存在")
+			return
+		}
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
@@ -454,11 +463,15 @@ func GetGoodsColor(c *gin.Context) {
 	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
 	if err != nil {
 		fmt.Println(err)
-		tool.RespErrWithData(c, false, "服务器错误")
+		tool.RespErrWithData(c, false, "gid填写不正确！")
 		return
 	}
 	m, err := service.GetGoodsColor(gid)
 	if err != nil {
+		if err.Error()[4:] != "no rows in result set" {
+			tool.RespErrWithData(c, false, "物品不存在")
+			return
+		}
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
@@ -469,4 +482,48 @@ func GetGoodsColor(c *gin.Context) {
 			"url":   v.Url,
 		})
 	}
+}
+
+func BrowseGoodsType(c *gin.Context) {
+
+	type_, err := strconv.Atoi(c.PostForm("type"))
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "类型错误")
+		return
+	}
+	m, err := service.BrowseGoodsType(type_)
+	if err != nil {
+		if err.Error()[4:] == "no rows in result set" {
+			tool.RespErrWithData(c, false, "类型不存在！")
+			return
+		}
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+
+	for _, v := range m {
+		c.JSON(200, v)
+	}
+}
+
+func AddShoppingCart(c *gin.Context) {
+	s := model.ShoppingCart{}
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+	s.UId = claim.User.Id
+
+	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		tool.RespErrWithData(c, false, "商品不存在！")
+		return
+	}
+	s.Gid = gid
+
+	service.
 }

@@ -4,7 +4,7 @@ import "time"
 
 // GoodsInfo 专门用来返回给前端一个商品基本信息
 type GoodsInfo struct {
-	GId            int    `json:"GId"`
+	GId            int    `json:"gId"`
 	Cover          string `json:"cover"`
 	Price          int    `json:"price"`
 	Name           string `json:"name"`

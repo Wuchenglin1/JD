@@ -52,3 +52,7 @@ func GetGoodsSize(gid int64) (map[int]string, error) {
 func GetGoodsColor(gid int64) (map[int]model.GoodsColor, error) {
 	return dao.GetGoodsColor(gid)
 }
+
+func BrowseGoodsType(type_ int) (map[int]model.GoodsInfo, error) {
+	return dao.BrowseGoodsType(type_)
+}

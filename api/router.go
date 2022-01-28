@@ -1,20 +1,23 @@
 package api
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func InitRouter() {
 
 	Engine := gin.Default()
 
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://127.0.0.1:8080"}
-	Engine.Use(cors.New(config))
-	Engine.Static("./static", "./static")
-	Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
+	//config := cors.DefaultConfig()
+	//config.AllowOrigins = []string{"http://127.0.0.1:8080"}
+	//Engine.Use(cors.New(config))
+	//Engine.Static("./static", "./static")
+	//Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
+
+	//开启中间件，允许跨域
+	Engine.Use(Cors())
 
 	VerifyCode := Engine.Group("/verify")
 	{
@@ -39,10 +42,12 @@ func InitRouter() {
 		Goods.POST("/create/size", Size)
 		Goods.POST("/photo/color", ColorPhoto)
 		Goods.POST("/blouse", Blouse)
+		Goods.POST("/add/shoppingCart", AddShoppingCart)
 		Goods.GET("/browse", BrowseGoods)
 		Goods.GET("/getInfo", GetGoodsBaseInfo)
 		Goods.GET("/getSize", GetGoodsSize)
 		Goods.GET("/getColor", GetGoodsColor)
+		Goods.GET("/browse/type", BrowseGoodsType)
 	}
 
 	token := Engine.Group("/token")
@@ -50,4 +55,46 @@ func InitRouter() {
 		token.POST("/get", GetToken)
 	}
 	_ = Engine.Run()
+}
+
+//func Cors() gin.HandlerFunc {
+//	return func(c *gin.Context) {
+//		method := c.Request.Method
+//		origin := c.Request.Header.Get("Origin") //请求头部
+//		if origin != "" {
+//			// 当Access-Control-Allow-Credentials为true时，将*替换为指定的域名
+//			c.Header("Access-Control-Allow-Origin", "*")
+//			c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+//			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-Extra-Header, Content-Type, Accept, Authorization")
+//			c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Cache-Control, Content-Language, Content-Type")
+//			c.Header("Access-Control-Allow-Credentials", "true")
+//			c.Header("Access-Control-Max-Age", "86400") // 可选
+//			c.Set("content-type", "application/json")   // 可选
+//		}
+//
+//		if method == "OPTIONS" {
+//			c.AbortWithStatus(http.StatusNoContent)
+//
+//		}
+//
+//		c.Next()
+//	}
+//}
+
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		method := c.Request.Method
+		fmt.Println(method)
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
+		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE")
+		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		if method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+
+		c.Next()
+	}
 }

@@ -1,0 +1,33 @@
+{
+  "email": {
+    "user": "1336636739@wuchenglin.plus",
+    "password": "WUchenglin2021214174",
+    "host" : "smtpdm.aliyun.com:25"
+  },
+  "mysql": {
+    "user":"root:Wcl2021214174..@tcp(110.42.165.192:3306)/RedRock_WinterWork"
+  },
+  "jwt": {
+    "sign": "c林雨"
+  },
+  "sms": {
+    "secretId": "AKIDc4GCrGPItEI5bqpZ2EAqFNEo79uOcZFe",
+    "secretKey": "C7l8E3bssd7KGwLTKZYGhrmQnulLegQu",
+    "appId": "1400626749",
+    "appKey": "a0b14b4e8c6a4c0001e464996ed45ea6",
+    "signId": "435915",
+    "templateId": "1286392",
+    "sign": "红岩作业笔记个人网"
+  },
+  "oss": {
+    "secretId": "AKIDc4GCrGPItEI5bqpZ2EAqFNEo79uOcZFe",
+    "secretKey": "C7l8E3bssd7KGwLTKZYGhrmQnulLegQu",
+    "bucket": "redrock-winterwork",
+    "endPoint": "http://oss-cn-shanghai.aliyuncs.com",
+    "coverDir": "jd/cover/",
+    "describeDir": "jd/describe/",
+    "videoDir": "jd/video/",
+    "detailDir": "jd/video/",
+    "colorDir": "jd/color/"
+  }
+}

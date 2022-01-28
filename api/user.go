@@ -14,6 +14,7 @@ import (
 func RegisterSendSMS(c *gin.Context) {
 	u := model.User{}
 	u.Phone = c.PostForm("phone")
+	fmt.Println(u.Phone)
 	if u.Phone == "" {
 		tool.RespErrWithData(c, false, "手机号不可为空")
 		return
