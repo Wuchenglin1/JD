@@ -164,3 +164,7 @@ func CheckPassword(inputPassword, userPassword string) bool {
 	}
 	return true
 }
+
+func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
+	return dao.BrowseShoppingCart(uid)
+}

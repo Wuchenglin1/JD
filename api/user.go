@@ -200,10 +200,65 @@ func Login(c *gin.Context) {
 
 func GetToken(c *gin.Context) {
 	claim, err := service.ParseRefreshToken(c.PostForm("refreshToken"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)
 		return
 	}
-	tool.RespSuccess(c)
+	t, err := service.CreateToken(claim.User, 300, "token")
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   "",
+		"token":  t,
+	})
+}
+
+func BrowseShoppingCart(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	uid := claim.User.Id
+
+	m, totalPrice, err := service.BrowseShoppingCart(uid)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "服务器错误")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		tool.RespSuccessWithData(c, v)
+	}
+	if totalPrice == 0 {
+		tool.RespErrWithData(c, false, "购物车还是空空如也呀")
+		return
+	}
+	c.JSON(200, gin.H{
+		"totalPrice": totalPrice,
+	})
 }

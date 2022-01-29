@@ -14,6 +14,13 @@ func ParseRefreshToken(tokenStr string) (*model.Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return signKey, nil
 	})
+	//先处理token格式错误的情况,不然会报一大堆错误，淦！
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			return nil, err
+		}
+	}
+	//处理claim
 	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
 		if claims.Type == "token" {
 			errClaim := new(model.Claims)
@@ -31,6 +38,13 @@ func ParseAccessToken(tokenStr string) (*model.Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return signKey, nil
 	})
+	//先处理token格式错误的情况
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			return nil, err
+		}
+	}
+	//处理claim
 	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
 		if claims.Type == "refreshToken" {
 			errClaim := new(model.Claims)

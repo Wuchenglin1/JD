@@ -11,7 +11,7 @@ import (
 var _cfg *model.Config
 
 func GetConfig() *model.Config {
-	file, err := os.Open("./config/config.json")
+	file, err := os.Open("../config/config.json")
 	if err != nil {
 		fmt.Println(err)
 		return nil

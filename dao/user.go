@@ -69,3 +69,31 @@ func SaveUser(u model.RegisterUser) error {
 	_, err := dB.Exec("insert into User(name, phone, email,password) values (?,?,?,?)", u.UserName, u.Phone, u.Email, u.Password)
 	return err
 }
+
+func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
+	var totalPrice = 0
+	i := 0
+	m := make(map[int]model.ShoppingCart)
+	stmt, err := dB.Prepare("select uid, gid, goodsname, color, size, style, price, account from shoppingCart where uId = ?")
+	if err != nil {
+		return m, 0, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(uid)
+	if err != nil {
+		return m, 0, err
+	}
+	defer row.Close()
+	for row.Next() {
+		g := model.ShoppingCart{}
+		err = row.Scan(&g.UId, &g.Gid, &g.GoodsName, &g.Color, &g.Size, &g.Style, &g.Price, &g.Account)
+		if err != nil {
+			return m, 0, err
+		}
+		totalPrice += g.Price * g.Account
+		m[i] = g
+		i++
+	}
+
+	return m, totalPrice, nil
+}

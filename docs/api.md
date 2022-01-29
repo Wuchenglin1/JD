@@ -163,14 +163,20 @@
 | `data`   | 说明            |
 | `token`  | 用户的新`token` |
 
-| status  | data              |                                   |
-| ------- | ----------------- | --------------------------------- |
-| `false` | `parseTokenError` | `refreshToken`无效                |
-| `false` | `errToken`        | `refreshToken`错误                |
-| `false` | `expiredToken`    | `refreshToken`已过期              |
-| `true`  | `""`              | `refreshToken`正常，分发新的token |
+| status  | data              |                                             |
+| ------- | ----------------- | ------------------------------------------- |
+| `false` | `parseTokenError` | `refreshToken`无效                          |
+| `false` | `errToken`        | `refreshToken`错误                          |
+| `false` | `expiredToken`    | `refreshToken`已过期                        |
+| `true`  | `""`              | `refreshToken`正常，分发新的token(如下格式) |
 
-
+```json
+{
+    "data": "",
+    "token": "",//这里放的是token
+    "status": true
+}
+```
 
 
 
@@ -591,7 +597,7 @@
 
 ## 购物车相关
 
-`/goods/add/shoppingCart` `POST`
+#### `/goods/add/shoppingCart` `POST`
 
 将一件物品加入购物车
 
@@ -615,4 +621,43 @@
 |          | `false` | `商品数量有误`    | `account`错误         |
 |          | `false` | `商品id有误`      | `gid`有误             |
 |          | `true`  | `""`              | 参数合法，加入成功    |
+
+#### `/user/shoppingCart` `GET`
+
+查看购物车
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+
+| 返回参数 | status  | data                   | 说明           |
+| -------- | ------- | ---------------------- | -------------- |
+|          | `false` | `expiredToken`         | `token`过期    |
+|          | `false` | `parseTokenError`      | `token`错误    |
+|          | `false` | `errToken`             | `token`无效    |
+|          | `false` | `购物车还是空空如也呀` | 购物车没有东西 |
+|          | `true`  | `""`                   | 参数合法       |
+
+若`status`为`true`,返回以下格式的json字符串
+
+```json
+{
+    "data": {
+        "uId": 0,
+        "gid": 0,
+        "goodsName": "",
+        "color": "",
+        "size": "",
+        "style": "",
+        "price": 0,
+        "account": 0,
+        "totalPrice": 0
+    },
+    "status": true
+}{
+   ...
+}{
+    "totalPrice": 1600
+}
+```
 

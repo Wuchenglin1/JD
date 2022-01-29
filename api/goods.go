@@ -16,6 +16,12 @@ func Create(c *gin.Context) {
 	ossCfg := tool.GetConfig().Oss
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)
@@ -249,6 +255,12 @@ func Create(c *gin.Context) {
 func Blouse(c *gin.Context) {
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)
@@ -302,6 +314,12 @@ func Blouse(c *gin.Context) {
 func ColorPhoto(c *gin.Context) {
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)
@@ -354,6 +372,12 @@ func Size(c *gin.Context) {
 
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)
@@ -511,6 +535,12 @@ func AddShoppingCart(c *gin.Context) {
 	s := model.ShoppingCart{}
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
 	flag, str := service.CheckTokenErr(claim, err)
 	if !flag {
 		tool.RespErrWithData(c, false, str)

@@ -34,6 +34,7 @@ func InitRouter() {
 	{
 		User.POST("/login/normal", Login)
 		User.POST("/register/email", Register)
+		User.GET("/shoppingCart", BrowseShoppingCart)
 	}
 
 	Goods := Engine.Group("/goods")
