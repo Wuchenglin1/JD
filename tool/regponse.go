@@ -9,9 +9,9 @@ func RespErrWithData(c *gin.Context, status bool, data interface{}) {
 	})
 }
 
-func RespSuccessWithData(c *gin.Context, status bool, data interface{}) {
+func RespSuccessWithData(c *gin.Context, data interface{}) {
 	c.JSON(200, gin.H{
-		"status": status,
+		"status": true,
 		"data":   data,
 	})
 }

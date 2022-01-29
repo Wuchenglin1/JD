@@ -251,3 +251,63 @@ func BrowseGoodsType(type_ int) (map[int]model.GoodsInfo, error) {
 	}
 	return m, err
 }
+
+func AddGoods(s model.ShoppingCart) error {
+	stmt, err := dB.Prepare("select  goodsName from shoppingCart where uId = ? and gid = ?")
+	defer stmt.Close()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	err = stmt.QueryRow(s.UId, s.Gid).Scan(&s.GoodsName)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			//商品不存在
+			stmt1, err1 := dB.Prepare("insert  into shoppingCart(uid, gid, goodsname, color, size, style, price, account) values (?,?,?,?,?,?,?,?)")
+			defer stmt1.Close()
+			if err1 != nil {
+				fmt.Println(err1)
+				return err1
+			}
+			_, err = stmt1.Exec(s.UId, s.Gid, s.GoodsName, s.Color, s.Size, s.Style, s.Price, s.Account)
+			return err
+		}
+		return err
+	}
+	//商品存在,数量+1
+	stmt, err = dB.Prepare("update shoppingCart set account=account+1 where gid = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_ = stmt.QueryRow(s.Gid)
+	return nil
+}
+
+func BrowseGoodsByKeyWords(keyWords string) (map[int]model.GoodsInfo, error) {
+	m := make(map[int]model.GoodsInfo)
+	g := model.GoodsInfo{}
+	//模糊查询
+	stmt, err := dB.Prepare("select gid, price, cover, name, owneruid, commentamount from goods where name like  ?")
+	if err != nil {
+		return m, err
+	}
+	defer stmt.Close()
+	//这里需要符合like的用法
+	row, err := stmt.Query("%" + keyWords + "%")
+	if err != nil {
+		return m, err
+	}
+	defer row.Close()
+	for i := 0; row.Next(); i++ {
+		var uid int
+		row.Scan(&g.GId, &g.Price, &g.Cover, &g.Name, &uid, &g.CommentAccount)
+		//查询商家名称
+		err = dB.QueryRow("select  name from User where uid = ?", uid).Scan(&g.OwnerName)
+		if err != nil {
+			fmt.Println(err)
+		}
+		m[i] = g
+	}
+	return m, err
+}

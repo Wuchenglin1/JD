@@ -43,6 +43,7 @@ func InitRouter() {
 		Goods.POST("/photo/color", ColorPhoto)
 		Goods.POST("/blouse", Blouse)
 		Goods.POST("/add/shoppingCart", AddShoppingCart)
+		Goods.POST("/browse/all", BrowseGoodsByKeyWords)
 		Goods.GET("/browse", BrowseGoods)
 		Goods.GET("/getInfo", GetGoodsBaseInfo)
 		Goods.GET("/getSize", GetGoodsSize)

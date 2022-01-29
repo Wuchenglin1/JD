@@ -56,3 +56,17 @@ func GetGoodsColor(gid int64) (map[int]model.GoodsColor, error) {
 func BrowseGoodsType(type_ int) (map[int]model.GoodsInfo, error) {
 	return dao.BrowseGoodsType(type_)
 }
+
+func AddGoods(s model.ShoppingCart) error {
+	return dao.AddGoods(s)
+}
+
+func BrowseGoodsByKeyWords(keyWords string) (map[int]model.GoodsInfo, error) {
+	//查询所有商品
+	if keyWords == "" {
+		str := "select gId,name,ownerUid,commentAmount,cover,price from goods order by saleTime desc"
+		return dao.BrowseGoods(str)
+	}
+	//查询关键词商品
+	return dao.BrowseGoodsByKeyWords(keyWords)
+}

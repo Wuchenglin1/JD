@@ -411,7 +411,7 @@ func BrowseGoods(c *gin.Context) {
 		return
 	}
 	for _, v := range m {
-		tool.RespSuccessWithData(c, true, v)
+		tool.RespSuccessWithData(c, v)
 	}
 }
 
@@ -424,7 +424,7 @@ func GetGoodsBaseInfo(c *gin.Context) {
 	}
 	g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
-		if err.Error()[4:] != "no rows in result set" {
+		if err.Error()[4:] != " no rows in result set" {
 			tool.RespErrWithData(c, false, "物品不存在")
 			return
 		}
@@ -432,7 +432,7 @@ func GetGoodsBaseInfo(c *gin.Context) {
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-	tool.RespSuccessWithData(c, true, g)
+	tool.RespSuccessWithData(c, g)
 }
 
 func GetGoodsSize(c *gin.Context) {
@@ -444,7 +444,7 @@ func GetGoodsSize(c *gin.Context) {
 	}
 	m, err := service.GetGoodsSize(gid)
 	if err != nil {
-		if err.Error()[4:] != "no rows in result set" {
+		if err.Error()[4:] != " no rows in result set" {
 			tool.RespErrWithData(c, false, "物品不存在")
 			return
 		}
@@ -468,7 +468,7 @@ func GetGoodsColor(c *gin.Context) {
 	}
 	m, err := service.GetGoodsColor(gid)
 	if err != nil {
-		if err.Error()[4:] != "no rows in result set" {
+		if err.Error()[4:] != " no rows in result set" {
 			tool.RespErrWithData(c, false, "物品不存在")
 			return
 		}
@@ -494,7 +494,7 @@ func BrowseGoodsType(c *gin.Context) {
 	}
 	m, err := service.BrowseGoodsType(type_)
 	if err != nil {
-		if err.Error()[4:] == "no rows in result set" {
+		if err.Error()[4:] == " no rows in result set" {
 			tool.RespErrWithData(c, false, "类型不存在！")
 			return
 		}
@@ -516,14 +516,62 @@ func AddShoppingCart(c *gin.Context) {
 		tool.RespErrWithData(c, false, str)
 		return
 	}
+	//uid
 	s.UId = claim.User.Id
 
+	//获取加入商品的数量
+	s.Account, err = strconv.Atoi(c.PostForm("account"))
+	if err != nil {
+		tool.RespErrWithData(c, false, "商品数量有误")
+		return
+	}
 	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		tool.RespErrWithData(c, false, "商品id有误")
+		return
+	}
+	s.Gid = gid
+	s.Color = c.PostForm("color")
+	s.Size = c.PostForm("size")
+	s.Style = c.PostForm("style")
+	if s.Color == "" {
+		s.Color = "0"
+	}
+	if s.Size == "" {
+		s.Size = "0"
+	}
+	if s.Style == "" {
+		s.Style = "0"
+	}
+	//赋值价格,名称
+	g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
 		tool.RespErrWithData(c, false, "商品不存在！")
 		return
 	}
-	s.Gid = gid
+	s.Price = g.Price
+	s.GoodsName = g.Name
+	err = service.AddGoods(s)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccess(c)
+}
 
-	service.
+func BrowseGoodsByKeyWords(c *gin.Context) {
+
+	keyWords := c.PostForm("keyWords")
+
+	m, err := service.BrowseGoodsByKeyWords(keyWords)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "没有找到相关结果")
+			return
+		}
+	}
+	for _, v := range m {
+		tool.RespSuccessWithData(c, v)
+	}
 }
