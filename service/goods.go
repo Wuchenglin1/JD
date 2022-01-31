@@ -70,3 +70,11 @@ func BrowseGoodsByKeyWords(keyWords string) (map[int]model.GoodsInfo, error) {
 	//查询关键词商品
 	return dao.BrowseGoodsByKeyWords(keyWords)
 }
+
+func InsertFocus(f model.GoodsFocus) (bool, error) {
+	return dao.InsertFocus(f)
+}
+
+func GetGoodsFocus(f model.GoodsFocus) (map[int]model.GoodsFocus, bool, error) {
+	return dao.GetGoodsFocus(f)
+}

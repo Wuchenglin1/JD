@@ -70,3 +70,14 @@ type GoodsColor struct {
 	Color string `json:"color,"`
 	Url   string `json:"url""`
 }
+
+type GoodsFocus struct {
+	UId             int       `json:"uId"`
+	GId             int       `json:"gId"`
+	Name            string    `json:"name"`
+	Price           int       `json:"price"`
+	Cover           string    `json:"cover"`
+	CommentAccount  int       `json:"commentAccount"`
+	FavorableRating int       `json:"favorableRating"`
+	FocusTime       time.Time `json:"focusTime"`
+}

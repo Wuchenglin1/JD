@@ -605,3 +605,76 @@ func BrowseGoodsByKeyWords(c *gin.Context) {
 		tool.RespSuccessWithData(c, v)
 	}
 }
+
+func GoodsFocus(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	f := model.GoodsFocus{}
+
+	f.UId = claim.User.Id
+
+	f.GId, err = strconv.Atoi(c.PostForm("gid"))
+	if err != nil {
+		tool.RespErrWithData(c, false, "gid不正确")
+		return
+	}
+	f.FocusTime = time.Now()
+	flag, err = service.InsertFocus(f)
+
+	if err != nil {
+		fmt.Println("插入商品错误", err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	if flag == false {
+		tool.RespErrWithData(c, false, "您已经关注过该商品啦！请勿重复关注")
+		return
+	}
+	tool.RespSuccessWithData(c, "关注成功！")
+}
+
+func GetGoodsFocus(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	f := model.GoodsFocus{
+		UId: claim.User.Id,
+	}
+
+	m, flag, err := service.GetGoodsFocus(f)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	if !flag {
+		tool.RespErrWithData(c, false, "您还没有关注商品喔~=")
+		return
+	}
+	for _, v := range m {
+		tool.RespSuccessWithData(c, v)
+	}
+}

@@ -311,3 +311,62 @@ func BrowseGoodsByKeyWords(keyWords string) (map[int]model.GoodsInfo, error) {
 	}
 	return m, err
 }
+
+func InsertFocus(f model.GoodsFocus) (bool, error) {
+	err := dB.QueryRow("select uid from focus where gid = ?", f.GId).Scan(&f.UId)
+	if err == nil {
+		return false, nil
+	}
+
+	//error为没有该行
+	if err.Error()[4:] == " no rows in result set" {
+		stmt, err := dB.Prepare("insert into focus(uid, gid, time) VALUES(?,?,?)")
+		if err != nil {
+			return false, err
+		}
+		defer stmt.Close()
+		_, err = stmt.Exec(f.UId, f.GId, f.FocusTime)
+		if err != nil {
+			return false, err
+		}
+		return true, nil
+	}
+	//error为其他错误
+	return false, err
+}
+
+func GetGoodsFocus(f model.GoodsFocus) (map[int]model.GoodsFocus, bool, error) {
+	//声明一个map来放商品的信息
+	m := make(map[int]model.GoodsFocus)
+	//先查询用户的关注列表
+	stmt, err := dB.Prepare("select gid from focus where uid = ? order by time desc ")
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			return m, false, nil
+		}
+		return m, false, err
+	}
+	defer stmt.Close()
+
+	row, err := stmt.Query(f.UId)
+	if err != nil {
+		return m, false, err
+	}
+	defer row.Close()
+	for i := 0; row.Next(); i++ {
+		//赋值每个商品的gid
+		err = row.Scan(&f.GId)
+		if err != nil {
+			fmt.Println(err)
+		}
+		//通过每个gid来查询商品信息
+		err = dB.QueryRow("select  price, cover, name, commentamount, favorablerating from goods where gId = ?", f.GId).Scan(&f.Price, &f.Cover, &f.Name, &f.CommentAccount, &f.FavorableRating)
+		if err != nil {
+			fmt.Println(err)
+			return m, false, err
+		}
+		//存储每一个商品的信息
+		m[i] = f
+	}
+	return m, true, nil
+}

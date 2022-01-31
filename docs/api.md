@@ -661,3 +661,60 @@
 }
 ```
 
+## 关注商品
+
+#### `/goods/focus` `POST`
+
+通过插入商品的uid来关注商品
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+| `gid`    | 商品的`gid`   | 是   |
+
+
+
+| status  | data                                 | 说明                       |
+| ------- | ------------------------------------ | -------------------------- |
+| `false` | `expiredToken`                       | `token`过期                |
+| `false` | `parseTokenError`                    | `token`错误                |
+| `false` | `errToken`                           | `token`无效                |
+| `false` | `gid不正确`                          | `gid`格式错误              |
+| `false` | `您已经关注过该商品啦！请勿重复关注` | 该用户已经关注过这个商品了 |
+| `true`  | `关注成功`                           | 合法                       |
+
+
+
+## 获取关注商品的信息
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+
+| 返回参数 | 说明   |
+| -------- | ------ |
+| `status` | 状态码 |
+| `data`   | 信息   |
+
+| status  | data                         | 说明                 |
+| ------- | ---------------------------- | -------------------- |
+| `false` | `expiredToken`               | `token`过期          |
+| `false` | `parseTokenError`            | `token`错误          |
+| `false` | `errToken`                   | `token`无效          |
+| `false` | `您还没有关注商品喔`         | 用户的喜爱的商品为空 |
+| `true`  | 返回下面格式的一段json字符串 |                      |
+
+```json
+{
+    "status":true,
+    "data":{
+        "gId":0,//商品的gid
+        "name":"",//商品的名称
+        "price":0,//商品的价格
+        "cover":"",//商品封面的url
+        "commentAccount":0,//商品的评论数量
+        "favorableRating":0,//商品的好评率
+    }
+}
+```
+

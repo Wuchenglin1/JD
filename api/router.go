@@ -45,11 +45,13 @@ func InitRouter() {
 		Goods.POST("/blouse", Blouse)
 		Goods.POST("/add/shoppingCart", AddShoppingCart)
 		Goods.POST("/browse/all", BrowseGoodsByKeyWords)
+		Goods.POST("/focus", GoodsFocus)
 		Goods.GET("/browse", BrowseGoods)
 		Goods.GET("/getInfo", GetGoodsBaseInfo)
 		Goods.GET("/getSize", GetGoodsSize)
 		Goods.GET("/getColor", GetGoodsColor)
 		Goods.GET("/browse/type", BrowseGoodsType)
+		Goods.GET("/getFocus", GetGoodsFocus)
 	}
 
 	token := Engine.Group("/token")
