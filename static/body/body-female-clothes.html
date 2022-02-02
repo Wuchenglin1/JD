@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../fonts/iconfont.css">
+    <title>女装</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(244, 244, 244);
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .div1 {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background-color: #ccc;
+            font-size: 13.33px;
+            color: rgb(104, 100, 100);
+        }
+
+        .ul1 {
+            position: absolute;
+            top: 16px;
+            right: 100px;
+            display: flex;
+            align-items: center;
+            width: 800px;
+            justify-content: space-around;
+        }
+
+        .ul1 a {
+            font-size: 13.33px;
+            color: rgb(68, 67, 67);
+        }
+
+        .spacer {
+            width: 0.1px;
+            height: 12px;
+            background-color: rgb(10, 9, 9);
+        }
+
+        .ul1>li .special {
+            color: rgb(218, 19, 19);
+        }
+
+        .ul1>li:nth-child(6) {
+            position: relative;
+        }
+
+        .div2 {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 200px;
+            height: 100px;
+            border-bottom: 0.01px solid rgb(233, 223, 223);
+            visibility: hidden;
+            background-color: #fff;
+        }
+
+        .ul1>li .div2 a {
+            width: 80px;
+            height: 20px;
+            color: #333;
+        }
+
+        .div3 {
+            position: absolute;
+            top: 124px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 200px;
+            height: 100px;
+            align-items: center;
+            display: none;
+            color: #333;
+        }
+
+        .ul1>li .div3 a {
+            width: 80px;
+            height: 20px;
+        }
+
+        .li1:hover .div2 {
+            display: block;
+        }
+
+        .li1:hover .div3 {
+            display: block;
+        }
+
+        .div4 {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            color: #666666;
+            background-color: #fff;
+            font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+        }
+
+        .div4 img {
+            position: absolute;
+            left: 150px;
+        }
+
+        .div5 {
+            position: absolute;
+            left: 450px;
+            top: 38px;
+            width: 546px;
+            height: 32px;
+            border: 2px solid #e2231a;
+            background: #fff;
+        }
+
+        .input1 {
+            position: absolute;
+            left: 0;
+            padding: 2px 44px 2px 17px;
+            width: 425px;
+            height: 26px;
+            border: 1px solid transparent;
+            line-height: 26px;
+            font-size: 12px;
+            outline: 0;
+        }
+
+        .search {
+            position: absolute;
+            border-radius: 0;
+            top: -1px;
+            right: -2px;
+            width: 58px;
+            height: 34px;
+            line-height: 32px;
+            border: none;
+            background-color: #e1251b;
+        }
+
+        .search i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .div6 {
+            position: absolute;
+            left: 1050px;
+            top: 40px;
+            border: 1px solid rgb(223, 220, 220);
+            font-size: 15px;
+            text-align: center;
+            line-height: 40px;
+            width: 140px;
+            height: 40px;
+        }
+
+        .div6 i {
+            font-size: 15px;
+        }
+
+        .div6 a {
+            color: rgb(92, 89, 89);
+        }
+
+        .div7 {
+            position: absolute;
+            right: 270px;
+            top: 20px;
+            width: 190px;
+            height: 120px;
+        }
+
+        .div7 img {
+            width: 190px;
+            height: 120px;
+        }
+
+        .div8 {
+            position: absolute;
+            left: 460px;
+            top: 85px;
+            width: 550px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .div8 a {
+            margin-right: 10px;
+            white-space: nowrap;
+            color: #999;
+        }
+
+        .div8 a:hover {
+            color: rgb(184, 21, 21);
+        }
+
+        .div9 {
+            position: relative;
+            margin: 20px auto;
+            width: 1201px;
+            height: 416px;
+        }
+
+        .div9-1 {
+            width: 230px;
+            height: 100%;
+            background-color: rgb(88, 88, 88);
+        }
+
+        .div9-1>h4 {
+            width: 230px;
+            height: 40px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .div9-1-1 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 100%;
+            height: 93px;
+            border-bottom: 1px dashed #fff;
+        }
+
+        .p1 {
+            margin-left: 15px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .div9-1-1-1 {
+            padding-left: 15px;
+            height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 215px;
+            font-size: 12px;
+            color: rgb(184, 173, 173);
+        }
+
+        .div9-1-1-1 a {
+            width: 60px;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .div9-1-1-1 a:hover {
+            color: red;
+        }
+
+        .div9-1>div:last-child {
+            border-bottom: 0;
+        }
+
+        .div9-2 {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #fff;
+            width: 961px;
+            height: 100%;
+        }
+
+        .div9-2-1 {
+            line-height: 40px;
+            font-size: 12px;
+            width: 961px;
+            height: 40px;
+            background-color: black;
+            color: white;
+        }
+
+        .div9-2-1 a {
+            color: white;
+            font-size: 12px;
+            margin: 0 20px;
+        }
+
+        .box {
+            width: 100%;
+            height: 376px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .list {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .item {
+            position: absolute;
+            width: 100%;
+            height: 376px;
+            list-style: none;
+            z-index: 0;
+            opacity: 0;
+            transition: all 0.4s;
+        }
+
+        .item img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .box button {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            z-index: 9999;
+            font-size: 20px;
+            color: rgb(137, 141, 138);
+            background-color: rgba(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .box button:hover {
+            background-color: rgb(145, 135, 135);
+            color: #fff;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        #btn1 {
+
+            top: 170px;
+        }
+
+        #btn2 {
+            right: 0;
+            top: 180px;
+        }
+
+        .item.active {
+            position: absolute;
+            list-style: none;
+            opacity: 1;
+            z-index: 100;
+        }
+
+        .pointList {
+            position: absolute;
+            display: flex;
+            justify-content: space-around;
+            bottom: 0px;
+            right: 50px;
+            width: 100px;
+            list-style: none;
+            z-index: 100000;
+        }
+
+        .point {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(19, 17, 17, 0.4);
+            border-radius: 50%;
+            border: 1px solid rgb(221, 218, 218);
+        }
+
+        .point.active {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(19, 17, 17, 0.9);
+            border-radius: 50%;
+            border: 2px solid rgb(221, 218, 218);
+        }
+
+        .title {
+            margin: 10px auto;
+            width: 1201px;
+            height: 80px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .title p {
+            font-weight: 100;
+            font-size: 14px;
+        }
+
+        .div10 {
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            width: 1201px;
+            height: 280px;
+        }
+
+        .div10-1 img {
+            width: 190px;
+            height: 280px;
+        }
+
+        .div11 {
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 1201px;
+            height: 540px;
+        }
+
+        .good {
+            background-color: #fff;
+            width: 190px;
+            height: 265px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .good a img {
+            width: 160px;
+            height: 160px;
+        }
+
+        .p2 {
+            width: 160px;
+            height: 36px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .price {
+            font-size: 16px;
+            color: rgb(240, 43, 43);
+        }
+
+        .good2 {
+            background-color: rgb(240, 240, 240);
+            width: 190px;
+            height: 306px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .good2 a img {
+            width: 160px;
+            height: 160px;
+        }
+
+        .buy {
+            width: 160px;
+            height: 30px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #666666;
+            text-align: center;
+            line-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><a href="../login/login.html">你好，请登录</a></li>
+            <li><a href="../zhuce/zhuce1.html" class="special">免费注册</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">我的订单</a></li>
+            <li class="spacer"></li>
+            <li class="li1">
+                <a href="#">我的京东</a>
+                <div class="div2">
+                    <a href="#">待处理订单</a>
+                    <a href="#">我的问答</a>
+                    <a href="#">返修退换货</a>
+                    <a href="#">我的关注</a>
+                    <a href="#">降价商品</a>
+                    <a href="#"></a>
+                </div>
+                <div class="div3">
+                    <a href="#">我的京豆</a>
+                    <a href="#">我的优惠券</a>
+                    <a href="#">我的白条</a>
+                    <a href="#">我的理财</a>
+                </div>
+            </li>
+            <li class="spacer"></li>
+            <li><a href="#">京东会员</a></li>
+            <li class="spacer"></li>
+            <li><a href="#" class="special">政府采购</a></li>
+            <li class="spacer"></li>
+            <li>客户服务</li>
+            <li class="spacer"></li>
+            <li>网址导航</li>
+            <li class="spacer"></li>
+            <li>手机京东</li>
+            <li class="spacer"></li>
+            <li><a href="#">网站无障碍</a></li>
+        </ul>
+    </div>
+    <div class="div4">
+        <img src="//img10.360buyimg.com/img/jfs/t1/137458/22/20884/367319/61d7e10cE227befe9/7472fc868c0088dc.gif"
+            style="display: block; height: 120px; margin: 0px auto; width: 190px;">
+        <div class="div5">
+            <input type="search" class="input1">
+            <button class="search">
+                <i class="iconfont icon-sousuo"></i>
+            </button>
+        </div>
+        <div class="div6">
+            <a href="#">
+                <i class="iconfont icon-gouwuche"></i>我的购物车
+            </a>
+
+        </div>
+        <div class="div7">
+            <img
+                src="//img10.360buyimg.com/babel/jfs/t1/103742/7/20940/70211/61d6a1b5E57d7ea51/258e261d2d6a63fe.png.webp">
+        </div>
+        <div class="div8">
+            <a href="#">羊绒衫</a>
+            <a href="#">羽绒服</a>
+            <a href="#">秋冬连衣裙</a>
+            <a href="#">西装外套</a>
+            <a href="#">配饰</a>
+        </div>
+    </div>
+
+    <div class="div9">
+        <div class="div9-1">
+            <h4>女装分类</h2>
+                <div class="div9-1-1">
+                    <p class="p1">大家都在穿</p>
+                    <div class="div9-1-1-1">
+                        <a href="#">应急新品</a>|
+                        <a href="#">商场同款</a>|
+                        <a href="#">休闲卫衣</a>
+
+                        <a href="#">毛衣针织</a>|
+                        <a href="#">风衣外套</a>|
+                        <a href="#">羊绒衫</a>
+                    </div>
+                </div>
+                <div class="div9-1-1">
+                    <p class="p1">大家都在穿</p>
+                    <div class="div9-1-1-1">
+                        <a href="#">应急新品</a>|
+                        <a href="#">商场同款</a>|
+                        <a href="#">休闲卫衣</a>
+
+                        <a href="#">毛衣针织</a>|
+                        <a href="#">风衣外套</a>|
+                        <a href="#">羊绒衫</a>
+                    </div>
+                </div>
+                <div class="div9-1-1">
+                    <p class="p1">大家都在穿</p>
+                    <div class="div9-1-1-1">
+                        <a href="#">应急新品</a>|
+                        <a href="#">商场同款</a>|
+                        <a href="#">休闲卫衣</a>
+
+                        <a href="#">毛衣针织</a>|
+                        <a href="#">风衣外套</a>|
+                        <a href="#">羊绒衫</a>
+                    </div>
+                </div>
+                <div class="div9-1-1">
+                    <p class="p1">大家都在穿</p>
+                    <div class="div9-1-1-1">
+                        <a href="#">应急新品</a>|
+                        <a href="#">商场同款</a>|
+                        <a href="#">休闲卫衣</a>
+
+                        <a href="#">毛衣针织</a>|
+                        <a href="#">风衣外套</a>|
+                        <a href="#">羊绒衫</a>
+                    </div>
+                </div>
+        </div>
+
+        <div class="div9-2">
+            <div class="div9-2-1">
+                <a href="#">设计师</a>|
+                <a href="#">内衣</a>|
+                <a href="#">童装</a>|
+                <a href="#">男装</a>|
+                <a href="#">定制</a>|
+                <a href="#">闪购</a>
+            </div>
+            <div class="box">
+                <ul="list">
+                    <li class="item active">
+                        <img
+                            src="//img10.360buyimg.com/babel/s1980x750_jfs/t1/142706/9/23324/94580/61a4804eE01a237a6/637dbac832542e30.jpg!cc_1980x750.webp">
+                    </li>
+                    <li class="item">
+                        <img
+                            src="//img11.360buyimg.com/babel/s1980x750_jfs/t1/218898/33/9823/93741/61ce9691E1f78b2c2/a2af1a633cee9aab.jpg!cc_1980x750.webp">
+                    </li>
+                    <li class="item">
+                        <img
+                            src="//img30.360buyimg.com/babel/s1980x750_jfs/t1/146641/16/21875/44571/61a5e243E19bf0954/799a04f17a04cc7d.jpg!cc_1980x750.webp">
+                    </li>
+                    <li class="item">
+                        <img
+                            src="//img12.360buyimg.com/babel/s1980x750_jfs/t1/166827/32/23920/83421/61cee65aEf47195ed/20aed18a21078f6a.jpg!cc_1980x750.webp">
+                    </li>
+                    <li class="item">
+                        <img
+                            src="//img11.360buyimg.com/babel/s1980x750_jfs/t1/218919/14/5686/96040/619efd6aE2a759648/c90e346242aca093.jpg!cc_1980x750.webp">
+                    </li>
+                    </ul>
+                    <ul class="pointList">
+                        <li class="point active"></li>
+                        <li class="point"></li>
+                        <li class="point"></li>
+                        <li class="point"></li>
+                        <li class="point"></li>
+                    </ul>
+                    <button type="button" id="btn1">&lt</button>
+                    <button type="button" id="btn2">&gt</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="title">
+        <h2 style="font-weight: 400;">今&nbsp/&nbsp日&nbsp/&nbsp好&nbsp/&nbsp店</h4>
+            <p>活动连连，逛店首选</p>
+    </div>
+
+    <div class="div10">
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/jfs/t1/169386/23/25220/27488/619efba8E14f5e76f/512bcc6b388b6990.jpg.webp">
+            </a>
+        </div>
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img12.360buyimg.com/babel/jfs/t1/205435/2/17777/36870/61aec443E02dde074/5fc1010aa64b6d57.jpg.webp">
+            </a>
+        </div>
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/jfs/t1/207274/35/10755/86808/61a08d7cE3c3f4450/1b093b1ef8c54c34.jpg.webp">
+            </a>
+        </div>
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img20.360buyimg.com/babel/jfs/t1/212270/20/5809/58297/61a080b7Ea2d4238d/738ed79e239f3910.jpg.webp">
+            </a>
+        </div>
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img10.360buyimg.com/babel/jfs/t1/143484/38/21596/67218/61a7145dEc4a5dd3a/74866aca9c0c5bd9.jpg.webp">
+            </a>
+        </div>
+        <div class="div10-1">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/jfs/t1/141135/27/24872/121991/61a5df9eEd25fde80/10658df2dc316144.jpg.webp">
+            </a>
+        </div>
+    </div>
+
+    <div class="title">
+        <h2 style="font-weight: 400;">气&nbsp/&nbsp质&nbsp/&nbsp衬&nbsp/&nbsp衫</h4>
+            <p>品质大气· 温婉有型</p>
+    </div>
+
+    <div class="div11">
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+        <div class="good">
+            <a href="#">
+                <img
+                    src="//img11.360buyimg.com/babel/s320x320_jfs/t1/158789/25/26697/266020/61f241d7E29b70680/8a3ac6b4bf2e66db.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥317.00</span>
+        </div>
+    </div>
+
+    <div class="title">
+        <h2 style="font-weight: 400;">质&nbsp/&nbsp感&nbsp/&nbsp外&nbsp/&nbsp套</h4>
+            <p>品质之选 · 气场全开</p>
+    </div>
+
+    <div class="div11">
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+        <div class="good2">
+            <a href="#">
+                <img
+                    src="//img14.360buyimg.com/babel/s320x320_jfs/t1/200142/17/17386/170730/61f21e95E47f04595/fa0d3f838ceacb27.jpg!cc_320x320.webp">
+            </a>
+            <p class="p2">betu百图女装纯棉长袖衬衫女春季新款上衣简约荷叶边百搭衬衣2101T21 米杏色 M</p>
+            <span class="price">￥359.00</span>
+            <a href="#" class="buy">立即购买</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../js/body-female-clothes.js"></script>
+</body>
+
+</html>
