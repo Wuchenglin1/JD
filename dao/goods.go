@@ -370,3 +370,45 @@ func GetGoodsFocus(f model.GoodsFocus) (map[int]model.GoodsFocus, bool, error) {
 	}
 	return m, true, nil
 }
+
+func DeleteFocus(f model.GoodsFocus) (bool, error) {
+	err := dB.QueryRow("select time from focus where gid = ? and uid = ?", f.GId, f.UId).Scan(&f.FocusTime)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			return false, nil
+		}
+		return false, err
+	}
+
+	stmt, err := dB.Prepare("delete from focus where gid = ? and uid = ? ")
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(f.GId, f.GId)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func DeleteShoppingCart(s model.ShoppingCart) (bool, error) {
+	err := dB.QueryRow("select goodsName from shoppingCart where gid = ? and uId = ?", s.Gid, s.UId).Scan(&s.GoodsName)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			return false, nil
+		}
+		return false, err
+	}
+
+	stmt, err := dB.Prepare("delete from shoppingCart where gid = ? and uId = ?")
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(s.Gid, s.UId)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

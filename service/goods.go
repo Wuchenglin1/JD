@@ -78,3 +78,11 @@ func InsertFocus(f model.GoodsFocus) (bool, error) {
 func GetGoodsFocus(f model.GoodsFocus) (map[int]model.GoodsFocus, bool, error) {
 	return dao.GetGoodsFocus(f)
 }
+
+func DeleteFocus(f model.GoodsFocus) (bool, error) {
+	return dao.DeleteFocus(f)
+}
+
+func DeleteShoppingCart(s model.ShoppingCart) (bool, error) {
+	return dao.DeleteShoppingCart(s)
+}

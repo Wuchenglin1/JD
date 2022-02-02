@@ -52,6 +52,8 @@ func InitRouter() {
 		Goods.GET("/getColor", GetGoodsColor)
 		Goods.GET("/browse/type", BrowseGoodsType)
 		Goods.GET("/getFocus", GetGoodsFocus)
+		Goods.DELETE("/delete/shoppingCart", DeleteShoppingCart)
+		Goods.DELETE("/delete/focus", DeleteFocus)
 	}
 
 	token := Engine.Group("/token")

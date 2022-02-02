@@ -590,6 +590,43 @@ func AddShoppingCart(c *gin.Context) {
 	tool.RespSuccess(c)
 }
 
+func DeleteShoppingCart(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	gid, err := strconv.ParseInt(c.PostForm("gid"), 10, 64)
+	if err != nil {
+		tool.RespErrWithData(c, false, "gid不正确")
+		return
+	}
+	g := model.ShoppingCart{
+		UId: claim.User.Id,
+		Gid: gid,
+	}
+	flag, err = service.DeleteShoppingCart(g)
+	if err != nil {
+		fmt.Println("商品删除错误:", err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	if !flag {
+		tool.RespErrWithData(c, false, "您还没有关注该商品")
+		return
+	}
+	tool.RespErrWithData(c, true, "删除成功")
+}
+
 func BrowseGoodsByKeyWords(c *gin.Context) {
 
 	keyWords := c.PostForm("keyWords")
@@ -677,4 +714,43 @@ func GetGoodsFocus(c *gin.Context) {
 	for _, v := range m {
 		tool.RespSuccessWithData(c, v)
 	}
+}
+
+func DeleteFocus(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	gid, err := strconv.Atoi(c.PostForm("gid"))
+	if err != nil {
+		tool.RespErrWithData(c, false, "商品id有误")
+		return
+	}
+
+	f := model.GoodsFocus{
+		UId: claim.User.Id,
+		GId: gid,
+	}
+
+	flag, err = service.DeleteFocus(f)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	if !flag {
+		tool.RespErrWithData(c, false, "您还没有关注该商品")
+		return
+	}
+	tool.RespSuccess(c)
 }
