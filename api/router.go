@@ -46,14 +46,27 @@ func InitRouter() {
 		Goods.POST("/add/shoppingCart", AddShoppingCart)
 		Goods.POST("/browse/all", BrowseGoodsByKeyWords)
 		Goods.POST("/focus", GoodsFocus)
+		//	Goods.POST("/comment/add", CommentAdd)
+		//	Goods.GET("/comment/view", CommentView)
 		Goods.GET("/browse", BrowseGoods)
 		Goods.GET("/getInfo", GetGoodsBaseInfo)
 		Goods.GET("/getSize", GetGoodsSize)
 		Goods.GET("/getColor", GetGoodsColor)
 		Goods.GET("/browse/type", BrowseGoodsType)
 		Goods.GET("/getFocus", GetGoodsFocus)
+		//	Goods.DELETE("/delete", GoodsDelete)
+		//	Goods.DELETE("/comment/delete", CommentDelete)
 		Goods.DELETE("/delete/shoppingCart", DeleteShoppingCart)
 		Goods.DELETE("/delete/focus", DeleteFocus)
+	}
+
+	order := Engine.Group("/order")
+	{
+		order.POST("/create", CreateOrder) //还差在创建订单时使商品库存减少account个,以及一天定时取消订单
+		order.POST("/cancel", CancelOrder) //还差在取消订单时使商品库存增加account个
+		order.GET("/checkAll", CheckAllOrder)
+		order.GET("/checkSpecified", CheckSpecified)
+
 	}
 
 	token := Engine.Group("/token")

@@ -25,9 +25,9 @@ type ShoppingCart struct {
 	UId        int    `json:"uId"`
 	Gid        int64  `json:"gid"`
 	GoodsName  string `json:"goodsName"`
+	Cover      string `json:"cover"`
 	Color      string `json:"color"`
 	Size       string `json:"size"`
-	Style      string `json:"style"`
 	Price      int    `json:"price"`
 	Account    int    `json:"account"`
 	TotalPrice int    `json:"totalPrice"`

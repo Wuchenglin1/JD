@@ -263,13 +263,13 @@ func AddGoods(s model.ShoppingCart) error {
 	if err != nil {
 		if err.Error()[4:] == " no rows in result set" {
 			//商品不存在
-			stmt1, err1 := dB.Prepare("insert  into shoppingCart(uid, gid, goodsname, color, size, style, price, account) values (?,?,?,?,?,?,?,?)")
+			stmt1, err1 := dB.Prepare("insert  into shoppingCart(uid, gid, goodsname, color, size, price, account,cover) values (?,?,?,?,?,?,?,?)")
 			defer stmt1.Close()
 			if err1 != nil {
 				fmt.Println(err1)
 				return err1
 			}
-			_, err = stmt1.Exec(s.UId, s.Gid, s.GoodsName, s.Color, s.Size, s.Style, s.Price, s.Account)
+			_, err = stmt1.Exec(s.UId, s.Gid, s.GoodsName, s.Color, s.Size, s.Price, s.Account, s.Cover)
 			return err
 		}
 		return err

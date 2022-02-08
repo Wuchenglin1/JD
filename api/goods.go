@@ -74,6 +74,13 @@ func Create(c *gin.Context) {
 
 	g.Price = price
 
+	g.Inventory, err = strconv.Atoi(c.DefaultPostForm("inventory", "0"))
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+
 	//读取商品封面
 
 	coverFile, header, err := c.Request.FormFile("cover")
@@ -563,24 +570,24 @@ func AddShoppingCart(c *gin.Context) {
 	s.Gid = gid
 	s.Color = c.PostForm("color")
 	s.Size = c.PostForm("size")
-	s.Style = c.PostForm("style")
+
 	if s.Color == "" {
 		s.Color = "0"
 	}
 	if s.Size == "" {
 		s.Size = "0"
 	}
-	if s.Style == "" {
-		s.Style = "0"
-	}
+
 	//赋值价格,名称
 	g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
 		tool.RespErrWithData(c, false, "商品不存在！")
 		return
 	}
+	s.Cover = g.Cover
 	s.Price = g.Price
 	s.GoodsName = g.Name
+	//存储商品到用户的购物车
 	err = service.AddGoods(s)
 	if err != nil {
 		fmt.Println(err)
@@ -754,3 +761,28 @@ func DeleteFocus(c *gin.Context) {
 	}
 	tool.RespSuccess(c)
 }
+
+//func CommentAdd(c *gin.Context) {
+//	//解析token
+//	claim, err := service.ParseAccessToken(c.PostForm("token"))
+//	if err != nil {
+//		if err.Error() == "token contains an invalid number of segments" {
+//			c.JSON(200, "token错误！")
+//			return
+//		}
+//	}
+//	flag, str := service.CheckTokenErr(claim, err)
+//	if !flag {
+//		tool.RespErrWithData(c, false, str)
+//		return
+//	}
+//
+//	comment := model.Comment{UId: claim.User.Id}
+//	comment.GId, err = strconv.Atoi(c.PostForm("gid"))
+//	if err != nil {
+//		tool.RespErrWithData(c, false, "商品不存在")
+//		return
+//	}
+//
+//	file, header, err := c.Request.FormFile("video")
+//}

@@ -17,6 +17,7 @@ type Goods struct {
 	Name            string    `json:"name"`
 	GId             int64     `json:"gid"`
 	Price           int       `json:"price"`
+	Inventory       int       `json:"inventory"`
 	OwnerUid        int       `json:"ownerUid"`
 	OwnerName       string    `json:"ownerName"`
 	SaleTime        time.Time `json:"saleTime"`
@@ -80,4 +81,10 @@ type GoodsFocus struct {
 	CommentAccount  int       `json:"commentAccount"`
 	FavorableRating int       `json:"favorableRating"`
 	FocusTime       time.Time `json:"focusTime"`
+}
+
+type Comment struct {
+	UId     int    `json:"uid"`
+	GId     int    `json:"gId"`
+	Comment string `json:"comment"`
 }
