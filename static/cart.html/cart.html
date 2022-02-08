@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <link rel="stylesheet" href="../fonts/iconfont.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .div1 {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background-color: #ccc;
+            font-size: 13.33px;
+            color: rgb(104, 100, 100);
+        }
+
+        .ul1 {
+            position: absolute;
+            top: 16px;
+            right: 100px;
+            display: flex;
+            align-items: center;
+            width: 800px;
+            justify-content: space-around;
+        }
+
+        .ul1 a {
+            font-size: 13.33px;
+            color: rgb(68, 67, 67);
+        }
+
+        .spacer {
+            width: 0.1px;
+            height: 12px;
+            background-color: rgb(10, 9, 9);
+        }
+
+        .ul1>li .special {
+            color: rgb(218, 19, 19);
+        }
+
+        .ul1>li:nth-child(6) {
+            position: relative;
+        }
+
+        .div2 {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 200px;
+            height: 100px;
+            border-bottom: 0.01px solid rgb(233, 223, 223);
+            visibility: hidden;
+            background-color: #fff;
+        }
+
+        .ul1>li .div2 a {
+            width: 80px;
+            height: 20px;
+            color: #333;
+        }
+
+        .div3 {
+            position: absolute;
+            top: 124px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 200px;
+            height: 100px;
+            align-items: center;
+            display: none;
+            color: #333;
+        }
+
+        .ul1>li .div3 a {
+            width: 80px;
+            height: 20px;
+        }
+
+        .li1:hover .div2 {
+            display: block;
+        }
+
+        .li1:hover .div3 {
+            display: block;
+        }
+
+        .div4 {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            color: #666666;
+            background-color: #fff;
+            border-bottom: 0.1px solid #ccc;
+            font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+        }
+
+        .div4 img {
+            position: absolute;
+            left: 150px;
+        }
+
+        .div5 {
+            position: absolute;
+            left: 450px;
+            top: 38px;
+            width: 546px;
+            height: 32px;
+            border: 2px solid #e2231a;
+            background: #fff;
+        }
+
+        .input1 {
+            position: absolute;
+            left: 0;
+            padding: 2px 44px 2px 17px;
+            width: 425px;
+            height: 26px;
+            border: 1px solid transparent;
+            line-height: 26px;
+            font-size: 12px;
+            outline: 0;
+        }
+
+        .search {
+            position: absolute;
+            border-radius: 0;
+            top: -1px;
+            right: -2px;
+            width: 58px;
+            height: 34px;
+            line-height: 32px;
+            border: none;
+            background-color: #e1251b;
+        }
+
+        .search i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .cart {
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cart table {
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+
+        .cart thead td {
+            padding: 5px 10px;
+            background-color: rgb(224, 221, 221);
+        }
+
+        p {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .size {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .deletebtn {
+            margin-right: -5px;
+            width: 17px;
+            height: 19px;
+            border: 0.1px solid black;
+            border-right: 0;
+        }
+
+
+        .plusbtn {
+            margin-left: -5px;
+            width: 17px;
+            height: 19px;
+            border: 0.1px solid black;
+            border-left: 0;
+
+        }
+
+        .number {
+            width: 40px;
+            height: 18px;
+            border: 0.1px solid black;
+            text-align: center;
+        }
+
+        .delete {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            border: 1px solid black;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .delete:hover {
+            cursor: pointer;
+            background-color: #e1251b;
+            color: white;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        .checkout {
+            width: 1200px;
+            margin: 20px auto;
+            height: 50px;
+            border: 1px solid #333;
+        }
+
+        .total {
+            display: inline-block;
+            margin: 0 5px;
+            font-size: 16px;
+        }
+
+        .checkout p {
+            margin-top: 5px;
+        }
+
+        .total-money {
+            margin: 0 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><a href="../login/login.html">你好，请登录</a></li>
+            <li><a href="../zhuce/zhuce1.html" class="special">免费注册</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">我的订单</a></li>
+            <li class="spacer"></li>
+            <li class="li1">
+                <a href="#">我的京东</a>
+                <div class="div2">
+                    <a href="#">待处理订单</a>
+                    <a href="#">我的问答</a>
+                    <a href="#">返修退换货</a>
+                    <a href="#">我的关注</a>
+                    <a href="#">降价商品</a>
+                    <a href="#"></a>
+                </div>
+                <div class="div3">
+                    <a href="#">我的京豆</a>
+                    <a href="#">我的优惠券</a>
+                    <a href="#">我的白条</a>
+                    <a href="#">我的理财</a>
+                </div>
+            </li>
+            <li class="spacer"></li>
+            <li><a href="#">京东会员</a></li>
+            <li class="spacer"></li>
+            <li><a href="#" class="special">政府采购</a></li>
+            <li class="spacer"></li>
+            <li>客户服务</li>
+            <li class="spacer"></li>
+            <li>网址导航</li>
+            <li class="spacer"></li>
+            <li>手机京东</li>
+            <li class="spacer"></li>
+            <li><a href="#">网站无障碍</a></li>
+        </ul>
+    </div>
+    <div class="div4">
+        <img src="//img10.360buyimg.com/img/jfs/t1/137458/22/20884/367319/61d7e10cE227befe9/7472fc868c0088dc.gif"
+            style="display: block; height: 120px; margin: 0px auto; width: 190px;">
+        <div class="div5">
+            <input type="search" class="input1">
+            <button class="search">
+                <i class="iconfont icon-sousuo"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="cart">
+        <table>
+            <thead>
+                <tr>
+                    <td>全选</td>
+                    <td>商品信息</td>
+                    <td>单价</td>
+                    <td>数量</td>
+                    <td>小计</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tr data-gid='0'>
+                <td>
+                    <input type="checkbox" class="checkbox">
+                </td>
+                <td>
+                    <img src="">
+                    <p class="goodsName">goodsName</p>
+                    <span>尺码:</span>
+                    <span class="size">S</span>
+                </td>
+                <td>
+                    <p class="price">100</p>
+                </td>
+                <td>
+                    <button class="deletebtn">-</button>
+                    <input type="text" class="number" value="1">
+                    <button class="plusbtn">+</button>
+                </td>
+                <td>
+                    <p class="count"></p>
+                </td>
+                <td><a herf="javascript:void(0)" class="delete">删除</a></td>
+            </tr>
+        </table>
+
+        <div class="checkout">
+            <p>
+                共<span class="total">0</span>件商品
+            </p>
+            <p>
+                总金额&nbsp<span class="total-money">0</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        /*  //创建一行
+         function newTr(id) {
+             let tr = document.createElement('tr');
+             tr.setAttribute('data-gid', item.gid);
+         }
+ 
+         //创建选择列
+         function newTdOfCheckbox(tr) {
+             let tdOfCheck = document.createElement('td');
+             let checkboxInput = document.createElement('input');
+             checkboxInput.type = "checkbox";
+             checkboxInput.className = "checkbox";
+             tr.appendChild(tdOfCheck);
+             tdOfCheck.appendChild(checkboxInput);
+         }
+ 
+         //创建商品信息列（图片，名字，尺码）；
+         function newGoodsinformation(tr) {
+             let td2 = document.createElement("td");
+             let img = document.createElement("img");
+             let goodsname = document.createElement("p");
+             goodsname.className = "goodsname";
+             let spanOfChinese = document.createElement("span");
+             let spanOfSize = document.createElement("span");
+             spanOfSize.className = "size";
+             tr.appendChild(td2);
+             td2.appendChild(img);
+             td2.appendChild(goodsname);
+             td2.appendChild(spanOfChinese);
+             spanOfChinese.innerText = "尺码:"
+             td2.appendChild(spanOfSize);
+         }
+ 
+         //创建单价列
+         function newTdOfPrice(tr) {
+             let tdOfPrice = document.createElement("td");
+             tr.appendChild(tdOfPrice);
+         }
+ 
+         //创建增减按钮列
+         function newTdOfNumber(tr) {
+             let tdOfBtn = document.createElement("td");
+             let deletebtn = document.createElement("button");
+             deletebtn.className = 'deletebtn';
+             deletebtn.innerText = '-';
+             let numberInput = document.createElement("input");
+             numberInput.type = "text";
+             numberInput.className = "number";
+             numberInput.value = '1';
+             let plus = document.createElement("button");
+             plus.className = "plusbtn";
+             plus.innerText = '+';
+ 
+             tr.appendChild(tdOfBtn);
+             tdOfBtn.appendChild('deletebtn');
+             tdOfBtn.appendChild('numberInput');
+             tdOfBtn.appendChild('plus');
+         }
+ 
+         //创建小计列
+         function newTdOfCount(tr) {
+             let tdOfCount = document.createElement("td");
+             let pOfCount = document.createElement("p");
+             pOfCount.className = "count";
+             tr.appendChild('tdOfCount');
+             tdOfCount.appendChild('pOfCount');
+         }
+ 
+         //创建删除列
+         function newTdOfDelete(tr) {
+             let tdOfDelete = document.createElement("td");
+             let aOfdelete = document.createElement("a");
+             a.href = 'javascript:void(0)';
+             a.className = "delete";
+             tr.appendChild('tdOfDelete');
+             tdOfDelete.appendChild('aOfDelete');
+             a.innerText = "删除";
+         }
+ 
+ 
+ 
+         //获取商品
+         let table = document.querySelector('table');
+         fetch('url').then(res => {
+             JSON.parse(res);
+         }).then(function (response) {
+             response.data.map(item => {
+                 let id = item.gid;
+                 //创建一行
+                 newTr(id);
+ 
+                 //插入到table内
+                 table.appendChild(tr);
+ 
+                 //创建选择列
+                 newTdOfCheckbox(tr);
+ 
+                 //创建商品信息列（图片，名字，尺码）；
+                 newGoodsinformation(tr);
+ 
+                 img.src = item.cover;
+                 goodsname.innerText = item.goodsname;
+                 spanOfSize.innerText = item.size;
+                 //创建单价列
+                 newTdOfPrice(tr);
+                 tdOfPrice.innerText = item.price;
+ 
+                 //创建增减按钮列
+                 newTdOfNumber(tr);
+ 
+                 //创建小计列
+                 newTdOfCount(tr);
+                 //计算小计
+                 pOfCount.innerText = numberInput.value * item.price;
+ 
+                 //创建删除列
+                 newTdOfDelete(tr);
+             })
+         }) */
+
+        //删除操作
+        let remove = document.getElementsByClassName("delete");
+        for (let i = 0; i < remove.length; i++) {
+            remove[i].addEventListener("click", function () {
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            })
+        }
+
+        //计算数量
+        let number = document.getElementsByClassName("number");
+        let plusbtn = document.getElementsByClassName("plusbtn");
+        let minusbtn = document.getElementsByClassName("deletebtn");
+        let count = document.getElementsByClassName("count");
+        let index = 0;
+        let i = 0
+        let sum = 0;
+        let price = document.getElementsByClassName("price");
+        count[index].innerText = number[index].value * price[index].innerText;
+
+        //选择操作
+        let checkbox = document.getElementsByClassName("checkbox");
+        for (i = 0; i < checkbox.length; i++) {
+            checkbox[i].onclick = function () {
+                let index = this.parentNode.parentNode.getAttribute("data-gid");
+                if (checkbox[index].checked) {
+                    sum += parseInt(count[index].innerText);
+                }
+                else {
+                    sum -= parseInt(count[index].innerText);
+                }
+                totalMoney.innerText = sum;
+
+            }
+        }
+
+
+        //计算总数，总价
+        let total = document.getElementsByClassName("total")[0];
+        total.innerText = number.length;
+        let totalMoney = document.getElementsByClassName('total-money')[0];
+        totalMoney.innerText = 0;
+        /* function caculateTotalMoney() {
+            for (let j = 0; j < count.length; j++) {
+                sum += parseInt(count[j].innerText);
+            }
+            totalMoney.innerText = sum;
+        } */
+
+        //增加操作
+        for (i = 0; i < plusbtn.length; i++) {
+            plusbtn[i].addEventListener("click", function () {
+                index = this.parentNode.parentNode.getAttribute("data-gid");
+
+                number[index].value++;
+                //计算小计
+                price = document.getElementsByClassName("price")[index].innerText;
+                count[index].innerText = number[index].value * price;
+                if (checkbox[index].checked) {
+                    sum += parseInt(price);
+                    totalMoney.innerText = sum;
+                }
+            })
+        }
+
+        //减少操作
+        for (i = 0; i < minusbtn.length; i++) {
+            minusbtn[i].addEventListener("click", function () {
+                let index = this.parentNode.parentNode.getAttribute("data-gid");
+                if (number[index].value == 1) {
+                    console.log(price[index].innerText);
+                    sum -= parseInt(price[index].innerText);
+                    totalMoney.innerText = sum;
+                    this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                }
+                else
+                    number[index].value--;
+                //计算小计
+                price = document.getElementsByClassName("price")[index].innerText;
+                count[index].innerText = number[index].value * price;
+
+                if (checkbox[index].checked) {
+                    sum -= parseInt(price);
+                    totalMoney.innerText = sum;
+                }
+            })
+        }
+
+
+
+
+    </script>
+</body>
+
+
+</html>

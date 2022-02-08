@@ -17,6 +17,9 @@ for (i = 0; i < lis.length; i++) {
     })
 }
 
+
+
+//加入购物车
 let buybtn = document.getElementsByClassName("car-plus")[0];
 let deletebtn = document.getElementsByClassName("delete")[0];
 let plusbtn = document.getElementsByClassName("plus")[0];
@@ -24,7 +27,7 @@ let sizes = document.getElementsByClassName("size");
 let size = sizes[0].innerText;
 let number = document.getElementsByClassName("number")[0];
 let plus = 0;
-let price = document.getElementsByClassName("div10-price-price")[0];
+
 
 let k = 0;
 
