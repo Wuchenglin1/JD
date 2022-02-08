@@ -43,29 +43,3 @@ setInterval(function () {
         time = 0;
     }
 }, 200)
-
-let wrapper = document.getElementsByClassName("wrapper")[0];
-let slider = document.getElementsByClassName("slider")[0];
-let left = 0;
-let time1 = 0
-wrapper.innerHTML += wrapper.innerHTML;
-function autoPlay() {
-    left -= 2;
-    if (left === -(150 * 7 + 10 * 7)) {
-        left = 0;
-    }
-    wrapper.style.left = left + 'px';
-
-}
-function timerPlay() {
-    time1 = setInterval(function () {
-        autoPlay();
-    }, 20)
-}
-timerPlay();
-slider.onmouseover = function () {
-    clearInterval(time1);
-}
-slider.onmouseout = function () {
-    timerPlay();
-}

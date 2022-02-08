@@ -334,15 +334,15 @@
     </div>
     <div class="div4">
         <span class="span12">用 户 名</span>
-        <input class="input1" placeholder="请输入用户名">
+        <input class="input1" placeholder="请输入用户名" id="username">
     </div>
     <div class="div5">
         <span class="span12"> 设置密码</span>
-        <input class="input1" type="password" placeholder="请输入密码">
+        <input class="input1" type="password" placeholder="请输入密码" id="password">
     </div>
     <div class="div6">
         <span class="span12">确认密码</span>
-        <input class="input1" placeholder="请确认密码">
+        <input class="input1" placeholder="请确认密码" id="insurepassword">
     </div>
     <a href="zhuce3.html" class="a1">下一步</a>
     <div class="div7">
@@ -379,6 +379,32 @@
     </div>
     <span class="span15">Copyright©2004-2022 WZ.com 版权所有</span>
     <div class="div11"></div>
+
+    <script>
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let submit = document.getElementsByClassName("a1")[0];
+
+        let userinfo = {
+            username: username,
+            password: password
+        }
+        let param = JSON.stringify(userinfo);
+
+        submit.addEventListener("click", function () {
+            fetch('http://110.42.165.192:8080/user/register/email', {
+                method: 'POST',
+                body: param,
+
+            }).then(res => { res.json() })
+                .then(function (response) {
+
+                    alert('注册成功！');
+
+                })
+        })
+
+    </script>
 </body>
 
 </html>
