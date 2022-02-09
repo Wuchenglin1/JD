@@ -215,3 +215,113 @@ func PayOrder(c *gin.Context) {
 	}
 	tool.RespSuccessWithData(c, "支付成功")
 }
+
+func CreateConsigneeInfo(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	consignee := model.ConsigneeInfo{
+		Uid:            claim.User.Id,
+		Name:           c.PostForm("name"),
+		Province:       c.PostForm("province"),
+		City:           c.PostForm("city"),
+		Area:           c.PostForm("area"),
+		Town:           c.PostForm("town"),
+		DetailAddress:  c.PostForm("detailAddress"),
+		Phone:          c.PostForm("phone"),
+		FixedTelephone: c.PostForm("fixedTelephone"),
+		Email:          c.PostForm("email"),
+		AddressAlias:   c.PostForm("addressAlias"),
+	}
+	if consignee.Name == "" || consignee.Province == "" || consignee.City == "" || consignee.Area == "" || consignee.Town == "" || consignee.DetailAddress == "" || consignee.Phone == "" {
+		tool.RespErrWithData(c, false, "参数不能为空")
+		return
+	}
+
+	err = service.CreateConsigneeInfo(consignee)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, "添加成功")
+}
+
+func GetConsigneeInfo(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	consignee := model.ConsigneeInfo{Uid: claim.User.Id}
+	m, err := service.GetConsigneeInfo(consignee)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "您还没有添加过收件人信息")
+			return
+		}
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		c.JSON(200, gin.H{
+			"uid":            v.Uid,
+			"cid":            v.Cid,
+			"name":           v.Name,
+			"address":        v.Province + "" + v.City + "" + v.Area + "" + v.Town,
+			"detailAddress":  v.DetailAddress,
+			"phone":          v.Phone,
+			"fixedTelephone": v.FixedTelephone,
+			"email":          v.Email,
+			"addressAlias":   v.AddressAlias,
+		})
+	}
+}
+
+func DeleteConsigneeInfo(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	consignee := model.ConsigneeInfo{Uid: claim.User.Id}
+	err = service.DeleteConsigneeInfo(consignee)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "该收货人不存在")
+			return
+		}
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, "删除成功")
+}

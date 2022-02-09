@@ -768,6 +768,87 @@
 
 ## 结算购物车
 
+### 新增一个收货人信息
+
+#### `/order/createConsigneeInfo` `POST`
+
+| 请求参数         | 说明                   | 必选 |
+| ---------------- | ---------------------- | ---- |
+| `token`          | 用户的`token`          | 是   |
+| `name`           | 收件人的名字           | 是   |
+| `province`       | 所在省(直辖市和市相同) | 是   |
+| `city`           | 所在市                 | 是   |
+| `area`           | 所在区                 | 是   |
+| `town`           | 所在镇                 | 是   |
+| `detailAddress`  | 详细地址               | 是   |
+| `phone`          | 收件人电话             | 是   |
+| `fixedTelephone` | 固定电话               | 否   |
+| `email`          | 邮箱地址               | 否   |
+| `addressAlias`   | 地址别名               | 否   |
+
+| 返回参数 | status  | data              | 说明               |
+| -------- | ------- | ----------------- | ------------------ |
+|          | `false` | `expiredToken`    | `token`过期        |
+|          | `false` | `parseTokenError` | `token`错误        |
+|          | `false` | `errToken`        | `token`无效        |
+|          | `false` | `参数不能为空`    | 必选参数某一项为空 |
+|          | `true`  | `添加成功`        | 添加成功           |
+
+
+
+### 获取收货人信息
+
+#### `/order/getConsigneeInfo` `GET`
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+
+| 返回参数 | status  | data                         | 说明                     |
+| -------- | ------- | ---------------------------- | ------------------------ |
+|          | `false` | `expiredToken`               | `token`过期              |
+|          | `false` | `parseTokenError`            | `token`错误              |
+|          | `false` | `errToken`                   | `token`无效              |
+|          | `false` | `您还没有添加过收件人信息`   | 没有找到创建过收件人信息 |
+|          | 无      | 返回一个以下格式的json字符串 |                          |
+
+```json
+{
+   		 	"uid":0,//创建该收货人的uid
+			"cid":0,//收货人的编号
+			"name":"",
+			"address": "",//直接是地址 省+""+市+""+区+""+镇
+			"detailAddress":  "",
+			"phone":          "",
+			"fixedTelephone": "",
+			"email":          "",
+			"addressAlias":   "",
+}{
+    ...
+}
+```
+
+
+
+### 删除一个收货人信息
+
+#### `/order/DeleteConsigneeInfo` `DELETE`
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+| `cid`    | 收货人的编号  | 是   |
+
+| 返回参数 | status  | data              | 说明         |
+| -------- | ------- | ----------------- | ------------ |
+|          | `false` | `expiredToken`    | `token`过期  |
+|          | `false` | `parseTokenError` | `token`错误  |
+|          | `false` | `errToken`        | `token`无效  |
+|          | `false` | `该收货人不存在`  | 收货人不存在 |
+|          | `true`  | `删除成功`        | 删除成功     |
+
+
+
 ### 创建订单
 
 #### `/goods/settlement` `POST`

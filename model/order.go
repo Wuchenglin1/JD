@@ -26,3 +26,18 @@ type Settlement struct {
 	Color   string `json:"color"`
 	Size    string `json:"size"`
 }
+
+type ConsigneeInfo struct {
+	Uid            int    `json:"uid"`
+	Cid            int    `json:"cid"`
+	Name           string `json:"name"`
+	Province       string `json:"province"`
+	City           string `json:"city"`
+	Area           string `json:"area"`
+	Town           string `json:"town"`
+	DetailAddress  string `json:"detailAddress"`
+	Phone          string `json:"phone"`
+	FixedTelephone string `json:"fixedTelephone"`
+	Email          string `json:"email"`
+	AddressAlias   string `json:"addressAlias"`
+}

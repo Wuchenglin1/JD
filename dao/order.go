@@ -229,3 +229,45 @@ func SolveOrder(o model.Order, u model.User) error {
 	fmt.Println("事务提交成功")
 	return nil
 }
+
+func CreateConsigneeInfo(c model.ConsigneeInfo) error {
+	stmt, err := dB.Prepare("insert into consigneeInfo(uid, name, province, city, area, town, detailAddress, phone, fixedTelephone, email, addressAlias) values(?,?,?,?,?,?,?,?,?,?,?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(c.Uid, c.Name, c.Province, c.City, c.Area, c.Town, c.DetailAddress, c.Phone, c.FixedTelephone, c.Email, c.AddressAlias)
+	return err
+}
+
+func GetConsigneeInfo(c model.ConsigneeInfo) (map[int]model.ConsigneeInfo, error) {
+	m := make(map[int]model.ConsigneeInfo)
+	stmt, err := dB.Prepare("select * from consigneeInfo where uid = ? ")
+	if err != nil {
+		return m, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(c.Uid)
+	if err != nil {
+		return m, err
+	}
+	defer row.Close()
+	for i := 0; row.Next(); i++ {
+		err = row.Scan(&c.Uid, &c.Cid, &c.Name, &c.Province, &c.City, &c.Area, &c.Town, &c.DetailAddress, &c.Phone, &c.FixedTelephone, &c.Email, &c.AddressAlias)
+		if err != nil {
+			return m, err
+		}
+		m[i] = c
+	}
+	return m, nil
+}
+
+func DeleteConsigneeInfo(c model.ConsigneeInfo) error {
+	stmt, err := dB.Prepare("delete from consigneeInfo where cid = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(c.Cid)
+	return err
+}

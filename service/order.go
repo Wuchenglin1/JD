@@ -60,3 +60,15 @@ func PayOrder(order model.Order) (bool, error) {
 	}
 	return true, nil
 }
+
+func CreateConsigneeInfo(consignee model.ConsigneeInfo) error {
+	return dao.CreateConsigneeInfo(consignee)
+}
+
+func GetConsigneeInfo(consignee model.ConsigneeInfo) (map[int]model.ConsigneeInfo, error) {
+	return dao.GetConsigneeInfo(consignee)
+}
+
+func DeleteConsigneeInfo(consignee model.ConsigneeInfo) error {
+	return dao.DeleteConsigneeInfo(consignee)
+}
