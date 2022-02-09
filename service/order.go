@@ -72,3 +72,15 @@ func GetConsigneeInfo(consignee model.ConsigneeInfo) (map[int]model.ConsigneeInf
 func DeleteConsigneeInfo(consignee model.ConsigneeInfo) error {
 	return dao.DeleteConsigneeInfo(consignee)
 }
+
+func ConfirmOrder(order model.Order) error {
+	return dao.ConfirmOrder(order)
+}
+
+func DeleteOrder(order model.Order) error {
+	return dao.DeleteOrder(order)
+}
+
+func CheckOrderByStatus(order model.Order, status string) (map[int]model.Order, error) {
+	return dao.CheckOrderByStatus(order, status)
+}

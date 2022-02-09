@@ -211,7 +211,7 @@ func SolveOrder(o model.Order, u model.User) error {
 		}
 	}
 	//修改订单的状态
-	_, err = tx.Exec("update goodsOrder set status = ? where orderNumber = ?", "已支付", o.OrderNumber)
+	_, err = tx.Exec("update goodsOrder set status = ? where orderNumber = ?", "待收货", o.OrderNumber)
 	if err != nil {
 		err = tx.Rollback()
 		if err != nil {
@@ -270,4 +270,72 @@ func DeleteConsigneeInfo(c model.ConsigneeInfo) error {
 	defer stmt.Close()
 	_, err = stmt.Exec(c.Cid)
 	return err
+}
+
+func ConfirmOrder(order model.Order) error {
+	stmt, err := dB.Prepare("update goodsOrder set status = ? where orderNumber = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec("已完成", order.OrderNumber)
+	return err
+}
+
+func DeleteOrder(order model.Order) error {
+	stmt, err := dB.Prepare("delete from goodsOrder where orderNumber = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(order.OrderNumber)
+	return err
+}
+
+func CheckOrderByStatus(o model.Order, status string) (map[int]model.Order, error) {
+	m := make(map[int]model.Order)
+	stmt, err := dB.Prepare("select orderNumber, consignee, address, phone, payWay, totalPrice, time, status from goodsOrder where status = ?")
+	if err != nil {
+		return m, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(status)
+	if err != nil {
+		return m, err
+	}
+	defer row.Close()
+	for i := 0; row.Next(); i++ {
+		err = row.Scan(&o.OrderNumber, &o.Consignee, &o.Address, &o.Phone, &o.PayWay, &o.TotalPrice, &o.Time, &o.Status)
+		if err != nil {
+			return m, err
+		}
+		if o.PayWay == "1" {
+			o.PayWay = "在线支付"
+		}
+		length := 0
+		err = dB.QueryRow("select count(*) from orderGoods where orderNumber = ?", o.OrderNumber).Scan(&length)
+		if err != nil {
+			return m, err
+		}
+		array := make([]model.Settlement, length)
+		//查询每个订单下的每个商品
+		rows, err1 := dB.Query("select gid, name, account, color, size from orderGoods where orderNumber = ?", o.OrderNumber)
+		if err1 != nil {
+			return m, err1
+		}
+		for k := 0; rows.Next(); k++ {
+			err1 = rows.Scan(&array[k].GId, &array[k].Name, &array[k].Account, &array[k].Color, &array[k].Size)
+			if err1 != nil {
+				return m, err1
+			}
+			err1 = dB.QueryRow("select cover from goods where gid  = ?", array[k].GId).Scan(&array[k].Cover)
+			if err1 != nil {
+				return m, err1
+			}
+			o.Settlement[k] = array[k]
+		}
+		rows.Close()
+		m[i] = o
+	}
+	return m, nil
 }

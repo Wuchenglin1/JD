@@ -325,3 +325,115 @@ func DeleteConsigneeInfo(c *gin.Context) {
 	}
 	tool.RespSuccessWithData(c, "删除成功")
 }
+
+func ConfirmOrder(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	order := model.Order{
+		Uid:         claim.User.Id,
+		OrderNumber: c.PostForm("order"),
+	}
+
+	err = service.ConfirmOrder(order)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "该订单不存在")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, "取消成功")
+}
+
+func DeleteOrder(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	order := model.Order{
+		Uid:         claim.User.Id,
+		OrderNumber: c.PostForm("order"),
+	}
+	err = service.DeleteOrder(order)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "该订单不存在")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, "删除成功")
+}
+
+func CheckOrderByStatus(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	status := c.PostForm("status")
+	switch status {
+	case "1":
+		status = "待付款"
+	case "2":
+		status = "待收货"
+	case "3":
+		status = "已完成"
+	case "4":
+		status = "已取消"
+	default:
+		tool.RespErrWithData(c, false, "status错误")
+		return
+	}
+	order := model.Order{
+		Uid: claim.User.Id,
+	}
+	m, err := service.CheckOrderByStatus(order, status)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "该订单不存在")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	for _, v := range m {
+		c.JSON(200, v)
+	}
+}
