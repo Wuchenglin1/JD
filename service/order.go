@@ -39,3 +39,24 @@ func CheckSpecified(order model.Order) (model.Order, error) {
 func CancelOrder(order model.Order) error {
 	return dao.CancelOrder(order)
 }
+
+func PayOrder(order model.Order) (bool, error) {
+	o, err := dao.CheckSpecified(order)
+	if err != nil {
+		return false, err
+	}
+	u := model.User{Id: order.Uid}
+	u, err = dao.SearchUserByUid(u)
+	if err != nil {
+		return false, err
+	}
+	if u.Money < o.TotalPrice {
+		return false, nil
+	}
+	//将所有settlement里的商品的销售量+account,扣钱,并将订单的状态进行修改
+	err = dao.SolveOrder(o, u)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

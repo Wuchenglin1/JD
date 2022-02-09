@@ -74,7 +74,7 @@ func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
 	var totalPrice = 0
 	i := 0
 	m := make(map[int]model.ShoppingCart)
-	stmt, err := dB.Prepare("select uid, gid, goodsname, color, size, style, price, account,cover from shoppingCart where uId = ?")
+	stmt, err := dB.Prepare("select uid, gid, goodsname, color, size, price, account,cover from shoppingCart where uId = ?")
 	if err != nil {
 		return m, 0, err
 	}
@@ -86,7 +86,7 @@ func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
 	defer row.Close()
 	for row.Next() {
 		g := model.ShoppingCart{}
-		err = row.Scan(&g.UId, &g.Gid, &g.GoodsName, &g.Color, &g.Size, &g.Style, &g.Price, &g.Account, &g.Cover)
+		err = row.Scan(&g.UId, &g.Gid, &g.GoodsName, &g.Color, &g.Size, &g.Price, &g.Account, &g.Cover)
 		if err != nil {
 			return m, 0, err
 		}
@@ -98,16 +98,22 @@ func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
 	return m, totalPrice, nil
 }
 
-func SearchMoney(u model.User) (int, error) {
-	money := 0
-	stmt, err := dB.Prepare("select money from User where uid = ?")
+func SearchUserByUid(u model.User) (model.User, error) {
+	stmt, err := dB.Prepare("select uid, name, password, headPic, phone, email, money from User where uid = ?")
 	if err != nil {
-		return 0, err
+		return u, err
 	}
 	defer stmt.Close()
-	err = stmt.QueryRow(u.Id).Scan(&money)
+	err = stmt.QueryRow(u.Id).Scan(&u.Id, &u.UserName, &u.Password, u.HeadPic, &u.Phone, &u.Email, &u.Money)
+	return u, err
+}
+
+func UpdateUserByUid(u model.User) error {
+	stmt, err := dB.Prepare("update User set uid=?,name=?,password=?,headPic=?,phone=?,email=?,money=?  where uid = ?")
 	if err != nil {
-		return 0, err
+		return err
 	}
-	return money, nil
+	defer stmt.Close()
+	_, err = stmt.Exec(u.Id, u.UserName, u.Password, u.HeadPic, u.Phone, u.Email, u.Money)
+	return err
 }

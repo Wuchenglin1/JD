@@ -175,3 +175,43 @@ func CancelOrder(c *gin.Context) {
 	}
 	tool.RespSuccess(c)
 }
+
+func PayOrder(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	order := model.Order{
+		OrderNumber: c.PostForm("order"),
+		Uid:         claim.User.Id,
+	}
+	if order.OrderNumber == "" {
+		tool.RespErrWithData(c, false, "订单号不能为空")
+		return
+	}
+	flag, err = service.PayOrder(order)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "该订单不存在")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	if !flag {
+		tool.RespErrWithData(c, false, "您的余额不足,请充值")
+		return
+	}
+	tool.RespSuccessWithData(c, "支付成功")
+}

@@ -9,6 +9,7 @@ type User struct {
 	Favorite     string      `json:"favorite"`
 	ShoppingCart map[int]int `json:"shoppingCart"`
 	Money        int         `json:"money"`
+	HeadPic      string      `json:"headPic"`
 }
 
 type RegisterUser struct {

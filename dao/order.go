@@ -148,3 +148,84 @@ func CancelOrder(o model.Order) error {
 	_, err := dB.Exec("update goodsOrder set status = ? where orderNumber = ?", "已取消", o.OrderNumber)
 	return err
 }
+
+func SolveOrder(o model.Order, u model.User) error {
+	//首先先开启事务
+	tx, err := dB.Begin()
+	if err != nil {
+		return err
+	}
+	u.Money = u.Money - o.TotalPrice
+	//扣除用户的钱
+	stmt, preErr := tx.Prepare("update User set money = ? where uid = ?")
+	if preErr != nil {
+		err = tx.Rollback()
+		if err != nil {
+			fmt.Println("事务回滚失败:", err)
+			return err
+		}
+		return preErr
+	}
+	defer stmt.Close()
+	_, execErr := stmt.Exec(u.Money, u.Id)
+	if execErr != nil {
+		err = tx.Rollback()
+		if err != nil {
+			fmt.Println("事务回滚失败:", err)
+			return err
+		}
+		return execErr
+	}
+	//再对每一个商品的商家加钱
+	for _, v := range o.Settlement {
+		//查询单个商品商家uid
+		var uid int
+		err = tx.QueryRow("select ownerUid from goods where gId = ?", v.GId).Scan(&uid)
+		if err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				fmt.Println("事务回滚失败:", err)
+				return err
+			}
+			return err
+		}
+		//对单个商品商家进行加钱
+		_, err = tx.Exec("update User set money = money + ? where uid = ? ", v.Account*v.Price, uid)
+		if err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				fmt.Println("事务回滚失败:", err)
+				return err
+			}
+			return err
+		}
+		//对单个商品销售量+account个
+		_, err = tx.Exec("update goods set sales = sales + ? where gId = ? ", v.Account, v.GId)
+		if err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				fmt.Println("事务回滚失败:", err)
+				return err
+			}
+			return err
+		}
+	}
+	//修改订单的状态
+	_, err = tx.Exec("update goodsOrder set status = ? where orderNumber = ?", "已支付", o.OrderNumber)
+	if err != nil {
+		err = tx.Rollback()
+		if err != nil {
+			fmt.Println("事务回滚失败:", err)
+			return err
+		}
+		return err
+	}
+	//提交事务
+	err = tx.Commit()
+	if err != nil {
+		fmt.Println("事务提交失败", err)
+		return err
+	}
+	fmt.Println("事务提交成功")
+	return nil
+}
