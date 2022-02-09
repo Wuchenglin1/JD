@@ -129,8 +129,8 @@ func Create(c *gin.Context) {
 	files = form.File["describeVideo[]"]
 	for _, file := range files {
 		if file.Size == 0 {
-			tool.RespErrWithData(c, false, "商品展示视频不能为空")
-			return
+			fmt.Println("未上传视频")
+			break
 		}
 		if file.Size >= (1 >> 30) {
 			tool.RespErrWithData(c, false, "商品展示视频太大了")
@@ -213,10 +213,13 @@ func Create(c *gin.Context) {
 
 	//视频入oss
 	i = 0
-	for k, v := range v {
+	for k, value := range v {
+		if len(v) == 0 {
+			break
+		}
 		suffix = tool.GetFileSuffix(k)
 		url = ossCfg.VideoDir + strconv.FormatInt(g.GId, 10) + strconv.Itoa(i) + "." + suffix
-		err = service.SaveFile(url, v)
+		err = service.SaveFile(url, value)
 		if err != nil {
 			fmt.Println("商品视频插入oss错误:", err)
 			tool.RespErrWithData(c, false, "服务器错误")
