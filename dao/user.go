@@ -117,3 +117,13 @@ func UpdateUserByUid(u model.User) error {
 	_, err = stmt.Exec(u.Id, u.UserName, u.Password, u.HeadPic, u.Phone, u.Email, u.Money)
 	return err
 }
+
+func RechargeBalance(u model.User, money int) error {
+	stmt, err := dB.Prepare("update User set money =  money + ? where uid = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(money, u.Id)
+	return err
+}

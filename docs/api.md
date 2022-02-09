@@ -147,6 +147,53 @@
 | `false` | `账户名与密码不匹配，请重新输入` | `account`和`password`对不上   |
 | `true`  | `"登录成功！"`                   | 参数合法                      |
 
+## 金钱系统
+
+### 用户充值
+
+#### `/user/rechargeBalance` `POST`
+
+| 请求参数 | 说明           | 必选 |
+| -------- | -------------- | ---- |
+| `token`  | 用户的`token`  | 是   |
+| `gold`   | 充值的金钱数量 | 是   |
+
+| 返回参数 | status  | data              | 说明        |
+| -------- | ------- | ----------------- | ----------- |
+|          | `false` | `expiredToken`    | `token`过期 |
+|          | `false` | `parseTokenError` | `token`错误 |
+|          | `false` | `errToken`        | `token`无效 |
+|          | `false` | `充值余额不正确`  | 数字不正确  |
+|          | `false` | `用户不存在`      | 用户不存在  |
+|          | `true`  | `充值$money$成功` | 充值成功    |
+
+`$money$`表示一个int参数
+
+### 用户查询余额
+
+#### `/user/checkBalance` `GET`
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+
+| 返回参数 | status  | data               | 说明        |
+| -------- | ------- | ------------------ | ----------- |
+|          | `false` | `expiredToken`     | `token`过期 |
+|          | `false` | `parseTokenError`  | `token`错误 |
+|          | `false` | `errToken`         | `token`无效 |
+|          | `false` | `用户不存在`       | 用户不存在  |
+|          | `true`  | 如下格式json字符串 | 参数合法    |
+
+```json
+{
+    "status":true,
+    "data":0
+}
+```
+
+
+
 ## 用户获取通过获取token
 
 #### `/token/get` `POST`

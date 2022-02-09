@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
 	"strings"
 )
 
@@ -261,4 +262,70 @@ func BrowseShoppingCart(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"totalPrice": totalPrice,
 	})
+}
+
+func RechargeBalance(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	u := model.User{
+		Id: claim.User.Id,
+	}
+	sMoney := c.PostForm("gold")
+	money, err := strconv.Atoi(sMoney)
+	if err != nil {
+		tool.RespErrWithData(c, false, "充值余额不正确")
+		return
+	}
+	err = service.RechargeBalance(u, money)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "用户不存在")
+			return
+		}
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, "充值"+sMoney+"成功")
+}
+
+func CheckBalance(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+	u := model.User{
+		Id: claim.User.Id,
+	}
+	u, err = service.CheckBalance(u)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "用户不存在")
+			return
+		}
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, u.Money)
 }

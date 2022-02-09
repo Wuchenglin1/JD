@@ -34,6 +34,8 @@ func InitRouter() {
 	{
 		User.POST("/login/normal", Login)
 		User.POST("/register/email", Register)
+		User.POST("/rechargeBalance", RechargeBalance)
+		User.GET("/checkBalance", CheckBalance)
 		User.GET("/shoppingCart", BrowseShoppingCart)
 	}
 

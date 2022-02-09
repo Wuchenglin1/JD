@@ -168,3 +168,11 @@ func CheckPassword(inputPassword, userPassword string) bool {
 func BrowseShoppingCart(uid int) (map[int]model.ShoppingCart, int, error) {
 	return dao.BrowseShoppingCart(uid)
 }
+
+func RechargeBalance(u model.User, money int) error {
+	return dao.RechargeBalance(u, money)
+}
+
+func CheckBalance(u model.User) (model.User, error) {
+	return dao.SearchUserByUid(u)
+}
