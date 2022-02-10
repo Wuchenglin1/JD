@@ -157,19 +157,28 @@ func InsertSize(gid int64, m []string) error {
 	return err
 }
 
-func GetGoodsBaseInfo(gid int64) (model.Goods, error) {
+func GetGoodsBaseInfo(gid int64) (string, string, model.Goods, error) {
 	g := model.Goods{}
 	stmt, err := dB.Prepare("select gid, type, price, cover, name, owneruid, saletime, volume, commentamount, favorablerating from goods where gId = ?")
 	if err != nil {
-		return g, err
+		return "", "", g, err
 	}
 	defer stmt.Close()
 	err = stmt.QueryRow(gid).Scan(&g.GId, &g.Type, &g.Price, &g.Cover, &g.Name, &g.OwnerUid, &g.SaleTime, &g.Volume, &g.CommentAccount, &g.FavorableRating)
 
 	if err != nil {
-		return g, err
+		return "", "", g, err
 	}
-	return g, nil
+	var describePhoto, detailPhoto string
+	err = dB.QueryRow("select url from photo where gid = ?", gid).Scan(&describePhoto)
+	if err != nil {
+		return "", "", g, err
+	}
+	err = dB.QueryRow("select url from detail where gid = ?", gid).Scan(&detailPhoto)
+	if err != nil {
+		return "", "", g, err
+	}
+	return describePhoto, detailPhoto, g, nil
 }
 
 func GetGoodsSize(gid int64) (map[int]string, error) {
@@ -411,4 +420,50 @@ func DeleteShoppingCart(s model.ShoppingCart) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func CreateGoods(goods model.Goods, describePhoto string, detailPhoto string) (model.Goods, error) {
+	tx, err := dB.Begin()
+	stmt, err := tx.Prepare("insert into goods(type, price, cover, name, ownerUid, saleTime, inventory) values(?,?,?,?,?,?,?) ")
+	if err != nil {
+		err1 := tx.Rollback()
+		if err1 != nil {
+			return goods, err1
+		}
+		return goods, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Exec(goods.Type, goods.Price, goods.Cover, goods.Name, goods.OwnerUid, time.Now(), goods.Inventory)
+	if err != nil {
+		err1 := tx.Rollback()
+		if err1 != nil {
+			return goods, err1
+		}
+		return goods, err
+	}
+	goods.GId, err = row.LastInsertId()
+	if err != nil {
+		err1 := tx.Rollback()
+		if err1 != nil {
+			return goods, err1
+		}
+		return goods, err
+	}
+	_, err = tx.Exec("insert  into photo(gid, time, url) values (?,?,?)", goods.GId, time.Now(), describePhoto)
+	if err != nil {
+		err1 := tx.Rollback()
+		if err1 != nil {
+			return goods, err1
+		}
+		return goods, err
+	}
+	_, err = tx.Exec("insert into detail (gid, time, url) values (?,?,?)", goods.GId, time.Now(), detailPhoto)
+	if err != nil {
+		err1 := tx.Rollback()
+		if err1 != nil {
+			return goods, err1
+		}
+		return goods, err
+	}
+	return goods, err
 }

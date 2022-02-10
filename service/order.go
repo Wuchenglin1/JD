@@ -11,7 +11,7 @@ import (
 func CreateOrder(o model.Order) (string, error) {
 	for _, v := range o.Settlement {
 		//查询价格
-		iG, err := dao.GetGoodsBaseInfo(v.GId)
+		_, _, iG, err := dao.GetGoodsBaseInfo(v.GId)
 		if err != nil {
 			fmt.Println(err)
 		}

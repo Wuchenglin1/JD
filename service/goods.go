@@ -41,7 +41,7 @@ func InsertSize(gid int64, m []string) error {
 	return dao.InsertSize(gid, m)
 }
 
-func GetGoodsBaseInfo(gid int64) (model.Goods, error) {
+func GetGoodsBaseInfo(gid int64) (string, string, model.Goods, error) {
 	return dao.GetGoodsBaseInfo(gid)
 }
 
@@ -85,4 +85,8 @@ func DeleteFocus(f model.GoodsFocus) (bool, error) {
 
 func DeleteShoppingCart(s model.ShoppingCart) (bool, error) {
 	return dao.DeleteShoppingCart(s)
+}
+
+func CreateGoods(goods model.Goods, describePhoto string, detailPhoto string) (model.Goods, error) {
+	return dao.CreateGoods(goods, describePhoto, detailPhoto)
 }

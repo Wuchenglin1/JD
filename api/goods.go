@@ -456,7 +456,7 @@ func GetGoodsBaseInfo(c *gin.Context) {
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-	g, err := service.GetGoodsBaseInfo(gid)
+	describePhoto, detailPhoto, g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
 		if err.Error()[4:] != " no rows in result set" {
 			tool.RespErrWithData(c, false, "物品不存在")
@@ -466,7 +466,11 @@ func GetGoodsBaseInfo(c *gin.Context) {
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-	tool.RespSuccessWithData(c, g)
+	data := make([]interface{}, 3)
+	data[0] = g
+	data[1] = describePhoto
+	data[2] = detailPhoto
+	tool.RespSuccessWithData(c, data)
 }
 
 func GetGoodsSize(c *gin.Context) {
@@ -582,7 +586,7 @@ func AddShoppingCart(c *gin.Context) {
 	}
 
 	//赋值价格,名称
-	g, err := service.GetGoodsBaseInfo(gid)
+	_, _, g, err := service.GetGoodsBaseInfo(gid)
 	if err != nil {
 		tool.RespErrWithData(c, false, "商品不存在！")
 		return
@@ -789,3 +793,60 @@ func DeleteFocus(c *gin.Context) {
 //
 //	file, header, err := c.Request.FormFile("video")
 //}
+
+func CreateGoods(c *gin.Context) {
+	//解析token
+	claim, err := service.ParseAccessToken(c.PostForm("token"))
+	if err != nil {
+		if err.Error() == "token contains an invalid number of segments" {
+			c.JSON(200, "token错误！")
+			return
+		}
+	}
+	flag, str := service.CheckTokenErr(claim, err)
+	if !flag {
+		tool.RespErrWithData(c, false, str)
+		return
+	}
+
+	_type, err := strconv.Atoi(c.PostForm("type"))
+	if err != nil {
+		tool.RespErrWithData(c, false, "type有误")
+		return
+	}
+	price, err1 := strconv.Atoi(c.PostForm("price"))
+	if err1 != nil {
+		tool.RespErrWithData(c, false, "价格有误")
+		return
+	}
+	inventory, err2 := strconv.Atoi(c.PostForm("inventory"))
+	if err2 != nil {
+		tool.RespErrWithData(c, false, "商品数量有误")
+		return
+	}
+	goods := model.Goods{
+		OwnerUid:  claim.User.Id,
+		Type:      _type,
+		Name:      c.PostForm("name"),
+		Price:     price,
+		Inventory: inventory,
+		Cover:     c.PostForm("cover"),
+	}
+	describePhoto := c.PostForm("describePhoto")
+	if describePhoto == "" {
+		tool.RespErrWithData(c, false, "describePhoto错误")
+		return
+	}
+	detailPhoto := c.PostForm("detailPhoto")
+	if detailPhoto == "" {
+		tool.RespErrWithData(c, false, "detailPhoto错误")
+		return
+	}
+	goods, err = service.CreateGoods(goods, describePhoto, detailPhoto)
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, goods.GId)
+}

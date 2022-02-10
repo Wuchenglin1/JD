@@ -42,6 +42,7 @@ func InitRouter() {
 	Goods := Engine.Group("/goods")
 	{
 		Goods.POST("/create", Create)
+		Goods.POST("/createGoods", CreateGoods)
 		Goods.POST("/create/size", Size)
 		Goods.POST("/photo/color", ColorPhoto)
 		Goods.POST("/blouse", Blouse)
@@ -78,6 +79,10 @@ func InitRouter() {
 
 	}
 
+	comment := Engine.Group("/comment")
+	{
+		comment.POST("/add", AddComment)
+	}
 	token := Engine.Group("/token")
 	{
 		token.POST("/get", GetToken)

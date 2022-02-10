@@ -82,9 +82,3 @@ type GoodsFocus struct {
 	FavorableRating int       `json:"favorableRating"`
 	FocusTime       time.Time `json:"focusTime"`
 }
-
-type Comment struct {
-	UId     int    `json:"uid"`
-	GId     int    `json:"gId"`
-	Comment string `json:"comment"`
-}
