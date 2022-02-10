@@ -83,6 +83,11 @@ func InitRouter() {
 	{
 		comment.POST("/add", AddComment)
 	}
+
+	store := Engine.Group("/store")
+	{
+		store.GET("/getGoods", GetGoods)
+	}
 	token := Engine.Group("/token")
 	{
 		token.POST("/get", GetToken)
