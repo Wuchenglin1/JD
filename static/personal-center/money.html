@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../fonts/iconfont.css">
+    <title>余额</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(240, 243, 239);
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .div1 {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background-color: #ccc;
+            font-size: 13.33px;
+            color: rgb(104, 100, 100);
+        }
+
+        .ul1 {
+            position: absolute;
+            top: 16px;
+            right: 100px;
+            display: flex;
+            align-items: center;
+            width: 800px;
+            justify-content: space-around;
+        }
+
+        .ul1 a {
+            font-size: 13.33px;
+            color: rgb(68, 67, 67);
+        }
+
+        .spacer {
+            width: 0.1px;
+            height: 12px;
+            background-color: rgb(10, 9, 9);
+        }
+
+        .ul1>li .special {
+            color: rgb(218, 19, 19);
+        }
+
+        .ul1>li:nth-child(6) {
+            position: relative;
+        }
+
+        .div2 {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 200px;
+            height: 100px;
+            border-bottom: 0.01px solid rgb(233, 223, 223);
+            visibility: hidden;
+            background-color: #fff;
+        }
+
+        .ul1>li .div2 a {
+            width: 80px;
+            height: 20px;
+            color: #333;
+        }
+
+        .div3 {
+            position: absolute;
+            top: 124px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 200px;
+            height: 100px;
+            align-items: center;
+            visibility: hidden;
+            color: #333;
+        }
+
+        .ul1>li .div3 a {
+            width: 80px;
+            height: 20px;
+        }
+
+        .li1:hover .div2 {
+            visibility: visible;
+        }
+
+        .li1:hover .div3 {
+            visibility: visible;
+        }
+
+        .div4 {
+            margin-bottom: 50px;
+            position: relative;
+            width: 100%;
+            height: 134px;
+            color: #666666;
+            background-color: #ffffff;
+            border-bottom: 3px solid #e1251b;
+            font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+        }
+
+        .div4 img {
+            position: absolute;
+            left: 150px;
+        }
+
+        .div5 {
+            position: absolute;
+            right: 335px;
+            top: 38px;
+            width: 170px;
+            height: 32px;
+            border: 2px solid #e2231a;
+            background: #fff;
+        }
+
+        .input1 {
+            position: absolute;
+            left: 0;
+            padding: 2px 44px 2px 17px;
+            width: 425px;
+            height: 26px;
+            border: 1px solid transparent;
+            line-height: 26px;
+            font-size: 12px;
+            outline: 0;
+        }
+
+        .search {
+            position: absolute;
+            border-radius: 0;
+            top: -1px;
+            right: -2px;
+            width: 38px;
+            height: 34px;
+            line-height: 32px;
+            border: none;
+            background-color: #e1251b;
+        }
+
+        .search i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .div6 {
+            position: absolute;
+            left: 1212px;
+            top: 36px;
+            border: 1px solid rgb(223, 220, 220);
+            font-size: 15px;
+            text-align: center;
+            line-height: 40px;
+            width: 140px;
+            height: 40px;
+        }
+
+        .div6 i {
+            font-size: 15px;
+        }
+
+        .div6 a {
+            color: rgb(92, 89, 89);
+        }
+
+        input {
+            outline: 0;
+        }
+
+        .box {
+            width: 990px;
+            margin: 20px auto;
+        }
+
+        .column {
+            width: 90px;
+            float: left;
+        }
+
+        .title {
+            font-size: 12px;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .content a {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .content a:hover {
+            color: #e1251b;
+            text-decoration: underline;
+        }
+
+        .main {
+            float: right;
+            background-color: #fff;
+            width: 880px;
+            height: 400px;
+        }
+
+        .money-show {
+            margin: 10px 50px;
+            margin-top: 30px;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+        }
+
+        .p1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .money {
+            font-size: 30px;
+        }
+
+        .num {
+            width: 150px;
+            height: 40px;
+        }
+
+        .money-btn {
+            height: 41px;
+            background-color: #fff;
+        }
+
+        .money-btn:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><a href="../login/login.html">你好，请登录</a></li>
+            <li><a href="../zhuce/zhuce1.html" class="special">免费注册</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">我的订单</a></li>
+            <li class="spacer"></li>
+            <li class="li1">
+                <a href="#">我的京东</a>
+                <div class="div2">
+                    <a href="#">待处理订单</a>
+                    <a href="#">我的问答</a>
+                    <a href="#">返修退换货</a>
+                    <a href="#">我的关注</a>
+                    <a href="#">降价商品</a>
+                    <a href="#"></a>
+                </div>
+                <div class="div3">
+                    <a href="#">我的京豆</a>
+                    <a href="#">我的优惠券</a>
+                    <a href="#">我的白条</a>
+                    <a href="#">我的理财</a>
+                </div>
+            </li>
+            <li class="spacer"></li>
+            <li><a href="#">京东会员</a></li>
+            <li class="spacer"></li>
+            <li><a href="#" class="special">政府采购</a></li>
+            <li class="spacer"></li>
+            <li>客户服务</li>
+            <li class="spacer"></li>
+            <li>网址导航</li>
+            <li class="spacer"></li>
+            <li>手机京东</li>
+            <li class="spacer"></li>
+            <li><a href="#">网站无障碍</a></li>
+        </ul>
+    </div>
+    <div class="div4">
+        <img src="//img10.360buyimg.com/img/jfs/t1/137458/22/20884/367319/61d7e10cE227befe9/7472fc868c0088dc.gif"
+            style="display: block; height: 120px; margin: 0px auto; width: 190px;">
+        <div class="div5">
+            <input type="search" class="input1">
+            <button class="search">
+                <i class="iconfont icon-sousuo"></i>
+            </button>
+        </div>
+        <div class="div6">
+            <a href="./购物车.html">
+                <i class="iconfont icon-gouwuche"></i>我的购物车(<span class="buying-number">0</span>)
+            </a>
+
+        </div>
+
+    </div>
+    <div class="box">
+        <div class="column">
+            <p class="title">订单中心</p>
+            <ul class="content">
+                <li><a href="#">我的订单</a></li>
+                <li><a href="#">我的活动</a></li>
+                <li><a href="#">评价晒单</a></li>
+                <li><a href="#">代下单</a></li>
+            </ul>
+            <p class="title">订单中心</p>
+            <ul class="content">
+                <li><a href="#">我的订单</a></li>
+                <li><a href="#">我的活动</a></li>
+                <li><a href="#">评价晒单</a></li>
+                <li><a href="#">代下单</a></li>
+            </ul>
+            <p class="title">订单中心</p>
+            <ul class="content">
+                <li><a href="#">我的订单</a></li>
+                <li><a href="#">我的活动</a></li>
+                <li><a href="#">评价晒单</a></li>
+                <li><a href="#">代下单</a></li>
+            </ul>
+            <p class="title">订单中心</p>
+            <ul class="content">
+                <li><a href="#">我的订单</a></li>
+                <li><a href="#">我的活动</a></li>
+                <li><a href="#">评价晒单</a></li>
+                <li><a href="#">代下单</a></li>
+            </ul>
+        </div>
+        <div class="main">
+            <div class="moneybox">
+                <div class="money-show">
+                    <p class="p1">余额</p>
+                    <span class="money">0</span>
+                </div>
+                <input type="text" class="num" placeholder="请输入所充金额">
+                <button class="money-btn">确认充值</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let money = document.getElementsByClassName('money')[0];
+        let num = document.getElementsByClassName('num')[0];
+        let addbtn = document.getElementsByClassName('money-btn')[0];
+        let sum = 0;
+        fetch('http://110.42.165.192:8080/user/checkBalance', {
+            body: {
+                token: '1'
+            }
+        }).then((res) => {
+            JSON.parse(res);
+        }).then((res) => {
+            if (res.status == true)
+                money.innerText = res.data;
+        })
+        addbtn.addEventListener('click', function () {
+            /* fetch('http://110.42.165.192:8080/user/rechargeBalance',
+                {
+                    method: 'POST',
+                    body: {
+                        gold: JSON.stringify(num.value)
+                    }
+                }).then((res) => {
+                    if (res.ok)
+                        JSON.parse(res);
+                }).then((res) => {
+                    console.log(res.data);
+                    if (res.status == true) {
+                        sum += parseInt(num.value);
+                        money.innerText = sum;
+                        num.value = null;
+                    }
+                }
+                ) */
+            sum += parseInt(num.value);
+            money.innerText = sum;
+            num.value = null;
+        })
+    </script>
+</body>
+
+</html>

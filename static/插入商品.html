@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input class="type" placeholder="商品类别">
+    <input class="name" placeholder="商品名称">
+    <input class="price" placeholder="价格">
+    <input class="inventory" placeholder="库存">
+    <img src="" <script>
+    let type = document.querySelector('type');
+    let name = document.querySelector('name');
+    let price = document.querySelector('price');
+    let inventory = document.querySelector('inventory');
+    let img
+    /* ajax({
+    type:'post',
+    url:'http://110.42.165.192:8080/goods/create',
+    data:{
+    type:type.value,
+    name:name.value,
+    price:price.value,
+    token:1,
+    inventory:inventory.value,
+    cover:'',
+    describePhoto:'',
+    describeVideo:'',
+    detailPhoto:''
+    success: function(res){
+    JSON.parse(res);
+    console.log(res);
+    }
+    }
+    })*/
+
+    function ajax(opt) {
+    let defaultParam = {
+    type: 'get',
+    url: '#',
+    data: {},
+    async: true,
+    success: function () { },
+    }
+
+    for (key in opt) {
+    defaultParam[key] = opt[key];
+    }
+    let paramStr = "";
+    for (key in defaultParam.data) {
+    paramStr += key + '=' + defaultParam.data[key] + '&';
+    }
+    paramStr = paramStr.substr(0, paramStr.length - 1);
+
+    let xhr = new XMLHttpRequest();
+    if (defaultParam.type == 'get') {
+    xhr.open(defaultParam.type, defaultParam.url + '?' + paramStr, defaultParam.async);
+    } else {
+    xhr.open(defaultParam.type, defaultParam.url, defaultParam.async);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send(paramStr);
+    }
+
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+    if (xhr.status == 200) {
+    defaultParam.success(xhr.responseText);
+    }
+    }
+    }
+
+    }
+    </script>
+</body>
+
+</html>
