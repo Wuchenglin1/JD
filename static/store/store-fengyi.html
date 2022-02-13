@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../fonts/iconfont.css">
+    <title>风衣</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .div1 {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background-color: #ccc;
+            font-size: 13.33px;
+            color: rgb(104, 100, 100);
+        }
+
+        .ul1 {
+            position: absolute;
+            top: 16px;
+            right: 100px;
+            display: flex;
+            align-items: center;
+            width: 800px;
+            justify-content: space-around;
+        }
+
+        .ul1 a {
+            font-size: 13.33px;
+            color: rgb(68, 67, 67);
+        }
+
+        .spacer {
+            width: 0.1px;
+            height: 12px;
+            background-color: rgb(10, 9, 9);
+        }
+
+        .ul1>li .special {
+            color: rgb(218, 19, 19);
+        }
+
+        .ul1>li:nth-child(6) {
+            position: relative;
+        }
+
+        .div2 {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 200px;
+            height: 100px;
+            border-bottom: 0.01px solid rgb(233, 223, 223);
+            visibility: hidden;
+            background-color: #fff;
+        }
+
+        .ul1>li .div2 a {
+            width: 80px;
+            height: 20px;
+            color: #333;
+        }
+
+        .div3 {
+            position: absolute;
+            top: 124px;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 200px;
+            height: 100px;
+            align-items: center;
+            visibility: hidden;
+            color: #333;
+        }
+
+        .ul1>li .div3 a {
+            width: 80px;
+            height: 20px;
+        }
+
+        .li1:hover .div2 {
+            visibility: visible;
+        }
+
+        .li1:hover .div3 {
+            visibility: visible;
+        }
+
+        .div4 {
+            margin-bottom: 15px;
+            position: relative;
+            width: 100%;
+            height: 150px;
+            color: #666666;
+            background-color: #fff;
+            border-bottom: 3px solid #e1251b;
+            font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+        }
+
+        .div4 img {
+            position: absolute;
+            left: 150px;
+        }
+
+        .div5 {
+            position: absolute;
+            left: 450px;
+            top: 38px;
+            width: 546px;
+            height: 32px;
+            border: 2px solid #e2231a;
+            background: #fff;
+        }
+
+        .input1 {
+            position: absolute;
+            left: 0;
+            padding: 2px 44px 2px 17px;
+            width: 425px;
+            height: 26px;
+            border: 1px solid transparent;
+            line-height: 26px;
+            font-size: 12px;
+            outline: 0;
+        }
+
+        .search {
+            position: absolute;
+            border-radius: 0;
+            top: -1px;
+            right: -2px;
+            width: 58px;
+            height: 34px;
+            line-height: 32px;
+            border: none;
+            background-color: #e1251b;
+        }
+
+        .search i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .div6 {
+            position: absolute;
+            left: 1050px;
+            top: 40px;
+            border: 1px solid rgb(223, 220, 220);
+            font-size: 15px;
+            text-align: center;
+            line-height: 40px;
+            width: 140px;
+            height: 40px;
+        }
+
+        .div6 i {
+            font-size: 15px;
+        }
+
+        .div6 a {
+            color: rgb(92, 89, 89);
+        }
+
+        .div8 {
+            position: absolute;
+            left: 460px;
+            top: 85px;
+            width: 550px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .div8 a {
+            margin-right: 10px;
+            white-space: nowrap;
+            color: #999;
+        }
+
+        .div8 a:hover {
+            color: rgb(184, 21, 21);
+        }
+
+        .div9 {
+            width: 100%;
+        }
+
+        .ul2 {
+            width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 17px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ul2 li a {
+            font-size: 13.33px;
+            color: #333;
+        }
+
+        .ul2 a:hover {
+            color: rgb(109, 105, 105);
+        }
+
+        .goodsbox {
+            margin: 0 auto;
+            width: 990px;
+            background: #fff;
+        }
+
+        .classfication {
+            text-align: center;
+            width: 180px;
+            float: left;
+        }
+
+        .header {
+            font-size: 12px;
+            color: #999;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .title {
+            font-weight: normal;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .point {
+            margin: 2px 5px;
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #000;
+        }
+
+        .category1 a {
+            display: inline-block;
+            color: #000;
+        }
+
+        .category1 h5 {
+            margin: 8px 0;
+            border-bottom: 1px dotted #ccc;
+            height: 44.8px;
+            line-height: 44.8px;
+        }
+
+        .arrow i {
+            font-size: 12px;
+        }
+
+        .spring {
+            display: none;
+        }
+
+        .spring li {
+            width: 160px;
+            padding: 3px 3px;
+            border-radius: 10px;
+            margin: 10px auto;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .spring li:hover {
+            cursor: pointer;
+            background: rgb(239, 239, 239);
+        }
+
+        .good {
+            margin-left: 2px;
+            margin-top: 8px;
+            float: left;
+            width: 190px;
+            height: 295px;
+        }
+
+        .goodsimg {
+            margin: 0 auto;
+            width: 188px;
+            height: 188px;
+        }
+
+        .goodsimg img {
+            width: 188px;
+            height: 188px;
+        }
+
+        .money {
+            margin: 5px 7.5px;
+            font-size: 16px;
+            color: #e1251b;
+        }
+
+        .price {
+            font-size: 20px;
+            color: #e1251b;
+        }
+
+        .comment {
+            margin: 0 7.5px;
+            font-size: 12px;
+            color: #a7a7a7;
+        }
+
+        .usernumber {
+            color: #005AA0;
+            font-weight: bold;
+            margin: 0 3px;
+        }
+
+        .classfy {
+            margin: 10px 7.5px;
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .good:hover {
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .goodsbox:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .goods {
+            float: right;
+            width: 790px;
+        }
+
+        .goods:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><a href="../login/login.html">你好，请登录</a></li>
+            <li><a href="../zhuce/zhuce1.html" class="special">免费注册</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">我的订单</a></li>
+            <li class="spacer"></li>
+            <li class="li1">
+                <a href="#">我的京东</a>
+                <div class="div2">
+                    <a href="#">待处理订单</a>
+                    <a href="#">我的问答</a>
+                    <a href="#">返修退换货</a>
+                    <a href="#">我的关注</a>
+                    <a href="#">降价商品</a>
+                    <a href="#"></a>
+                </div>
+                <div class="div3">
+                    <a href="#">我的京豆</a>
+                    <a href="#">我的优惠券</a>
+                    <a href="#">我的白条</a>
+                    <a href="#">我的理财</a>
+                </div>
+            </li>
+            <li class="spacer"></li>
+            <li><a href="#">京东会员</a></li>
+            <li class="spacer"></li>
+            <li><a href="#" class="special">政府采购</a></li>
+            <li class="spacer"></li>
+            <li>客户服务</li>
+            <li class="spacer"></li>
+            <li>网址导航</li>
+            <li class="spacer"></li>
+            <li>手机京东</li>
+            <li class="spacer"></li>
+            <li><a href="#">网站无障碍</a></li>
+        </ul>
+    </div>
+    <div class="div4">
+        <img src="	http://img10.360buyimg.com/img/jfs/t1/137458/22/20884/367319/61d7e10cE227befe9/7472fc868c0088dc.gif"
+            style="display: block; height: 120px; margin: 0px auto; width: 190px;">
+        <div class="div5">
+            <input type="search" class="input1">
+            <button class="search">
+                <i class="iconfont icon-sousuo"></i>
+            </button>
+        </div>
+        <div class="div6">
+            <a href="./购物车.html">
+                <i class="iconfont icon-gouwuche"></i>我的购物车(<span class="buying-number">0</span>)
+            </a>
+
+        </div>
+
+        <div class="div8">
+            <a href="#">衬衫女长袖</a>
+            <a href="#">花衬衫女长袖</a>
+            <a href="#">红色衬衫</a>
+            <a href="#">衬衫女休闲</a>
+            <a href="#">时尚衬衫</a>
+            <a href="#">缎面衬衫</a>
+            <a href="#">夏天衬衫</a>
+            <a href="#">上衣女</a>
+        </div>
+    </div>
+    <div class="div9">
+        <ul class="ul2">
+            <li><a href="./store-announcement.html" target="_blank">首页</a></li>
+            <li><a href="./store-allgoods.html" target="_blank">所有宝贝</a></li>
+            <li><a href="#">新品上新</a></li>
+            <li><a href="#">风衣</a></li>
+            <li><a href="#">西装</a></li>
+            <li><a href="#">连衣裙</a></li>
+            <li><a href="#">针织</a></li>
+            <li><a href="#">衬衫</a></li>
+            <li><a href="#">T恤</a></li>
+            <li><a href="#">卫衣</a></li>
+            <li><a href="#">短外套</a></li>
+            <li><a href="#">半身裙</a></li>
+            <li><a href="#">休闲裤</a></li>
+            <li><a href="#">牛仔装</a></li>
+        </ul>
+    </div>
+    <div class="goodsbox">
+        <div class="classfication">
+            <span class="header">CLASSIFICATION</span>
+            <h2 class="title">
+                <span class="point"></span>商品分类<span class="point"></span>
+            </h2>
+            <div class="category1">
+                <h5>
+                    <a href="#">2022年春装新品<span class="arrow" data-index="0"><i
+                                class="iconfont icon-xiajiantou"></i></span></a>
+                </h5>
+                <div class="spring showitem">
+                    <ul>
+                        <li>春10波(3.10)</li>
+                        <li>春9波(3.3)</li>
+                        <li>春8波(2.24)</li>
+                        <li>春7波(2.17)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="category1">
+                <h5>
+                    <a href="#">2021冬季促销大会<span class="arrow" data-index="1"><i
+                                class="iconfont icon-xiajiantou"></i></span></a>
+                </h5>
+                <div class="spring showitem">
+                    <ul>
+                        <li>春10波(3.10)</li>
+                        <li>春9波(3.3)</li>
+                        <li>春8波(2.24)</li>
+                        <li>春7波(2.17)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="goods">
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img13.360buyimg.com/n7/jfs/t1/102099/5/22256/236340/62014998E44d66aa3/404d9fed6b2bc260.jpg">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img14.360buyimg.com/n7/jfs/t1/174401/3/28013/239995/62014994E2971cf7d/8d9f04f838b93013.jpg">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img14.360buyimg.com/n7/jfs/t1/220890/22/11879/200342/6201450bE2a073231/84e0f246af2d88c0.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img11.360buyimg.com/n7/jfs/t1/88141/20/21242/207024/62014331E4d2e2268/d73de1cf97132332.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+            <div class="good">
+                <div class="goodsimg">
+                    <a href="#">
+                        <img
+                            src="//img10.360buyimg.com/n7/jfs/t1/215633/13/12234/202177/62014333E5eba22bd/ee26498aceddff0b.jpg!q90">
+                    </a>
+                </div>
+                <p class="money">￥
+                    <span class="" price> 419.00</span>
+                </p>
+                <span class="comment">
+                    已有<span class="usernumber">20</span>人评价
+                </span>
+                <p class="classfy">西装外套女春秋休闲小西服kbne新款韩版宽松小个子上衣
+                    <span class="color">黑色</span>
+                    <span class="size">S</span>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let show = document.getElementsByClassName('arrow');
+        let showitem = document.getElementsByClassName("showitem");
+        let i = 1;
+        for (let j = 0; j < show.length; j++) {
+            show[j].addEventListener("click", function () {
+                let index = this.getAttribute("data-index");
+                if (i == 1) {
+                    showitem[index].style.display = 'block';
+                    i++;
+                }
+                else {
+                    showitem[index].style.display = 'none';
+                    i = 1;
+                }
+
+            })
+        }
+    </script>
+</body>
+
+</html>

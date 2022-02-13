@@ -513,28 +513,16 @@
         .items {
             position: absolute;
             width: 100%;
+            display: none;
+            height: 490px;
         }
 
-        .ul3>li:nth-child(2) {
-            background: rgb(121, 121, 111);
-        }
-
-        .ul3>li:nth-child(3) {
-            background: rgb(134, 53, 158);
-        }
-
-        .ul3>li:nth-child(4) {
-            background: rgb(131, 206, 116);
-        }
-
-        .ul3>li:nth-child(5) {
-            background: rgb(238, 160, 123);
-        }
 
         .items.show {
             position: absolute;
             width: 100%;
-            z-index: 1000;
+            z-index: 10000;
+            display: block;
         }
 
         .brand-name {
@@ -565,6 +553,10 @@
         .style {
             width: 715px;
             margin: 0 auto;
+        }
+
+        #introduction {
+            background-color: #fff;
         }
     </style>
 </head>
@@ -644,7 +636,7 @@
     <div class="div9">
         <div><a href="#">联系客服</a></div>
         <div><a href="#">关注店铺</a></div>
-        <div class="9-1"><a href="#">KBNE旗舰店</a></div>
+        <div class="9-1"><a href="../store/store-announcement.html">KBNE旗舰店</a></div>
     </div>
 
     <div class="goodbox">
@@ -758,7 +750,7 @@
         </ul>
         <div class="div11">
             <ul class="ul3">
-                <li class="items show">
+                <li class="items show" id="introduction">
                     <div class="brand-name">品牌:<a href="#">KBNE</a></div>
                     <ul class="introduction">
                         <li>商品名称：女士衬衫设计感小众长袖</li>
@@ -798,12 +790,14 @@
                         </div>
                     </div>
                 </li>
-                <li class="items"></li>
-                <li class="items"></li>
-                <li class="items" id="commit">
-
+                <li class="items">
+                    我是规格与包装...
                 </li>
-                <li class="items"></li>
+                <li class="items">我是售后保障...</li>
+                <li class="items" id="commit">
+                    评论区，待装修...
+                </li>
+                <li class="items">我是好评商品...</li>
             </ul>
         </div>
     </div>
