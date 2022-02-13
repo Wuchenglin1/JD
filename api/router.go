@@ -49,16 +49,12 @@ func InitRouter() {
 		Goods.POST("/add/shoppingCart", AddShoppingCart)
 		Goods.POST("/browse/all", BrowseGoodsByKeyWords)
 		Goods.POST("/focus", GoodsFocus)
-		//	Goods.POST("/comment/add", CommentAdd)
-		//	Goods.GET("/comment/view", CommentView)
 		Goods.GET("/browse", BrowseGoods)
 		Goods.GET("/getInfo", GetGoodsBaseInfo)
 		Goods.GET("/getSize", GetGoodsSize)
 		Goods.GET("/getColor", GetGoodsColor)
 		Goods.GET("/browse/type", BrowseGoodsType)
 		Goods.GET("/getFocus", GetGoodsFocus)
-		//	Goods.DELETE("/delete", GoodsDelete)
-		//	Goods.DELETE("/comment/delete", CommentDelete)
 		Goods.DELETE("/delete/shoppingCart", DeleteShoppingCart)
 		Goods.DELETE("/delete/focus", DeleteFocus)
 	}
@@ -82,6 +78,8 @@ func InitRouter() {
 	comment := Engine.Group("/comment")
 	{
 		comment.POST("/add", AddComment)
+		comment.POST("/reply", ReplyComment)
+		comment.GET("/viewComment", ViewComment)
 	}
 
 	store := Engine.Group("/store")

@@ -29,13 +29,15 @@ type Sms struct {
 }
 
 type Oss struct {
-	SecretId    string `json:"secretId"`
-	SecretKey   string `json:"secretKey"`
-	Bucket      string `json:"bucket"`
-	EndPoint    string `json:"endPoint"`
-	CoverDir    string `json:"coverDir"`
-	DescribeDir string `json:"describeDir"`
-	VideoDir    string `json:"videoDir"`
-	DetailDir   string `json:"detailDir"`
-	ColorDir    string `json:"colorDir"`
+	SecretId        string `json:"secretId"`
+	SecretKey       string `json:"secretKey"`
+	Bucket          string `json:"bucket"`
+	EndPoint        string `json:"endPoint"`
+	CoverDir        string `json:"coverDir"`
+	DescribeDir     string `json:"describeDir"`
+	VideoDir        string `json:"videoDir"`
+	DetailDir       string `json:"detailDir"`
+	ColorDir        string `json:"colorDir"`
+	CommentPhotoDir string `json:"commentPhotoDir"`
+	CommentVideoDir string `json:"commentVideoDir"`
 }

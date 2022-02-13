@@ -1185,22 +1185,113 @@
 
 ## 用户评论
 
+### 评论某个商品
+
 #### `/comment/add` `POST`
 
-| 请求参数      | 说明                             | 必选 |
-| ------------- | -------------------------------- | ---- |
-| `token`       | 用户的`token`                    | 是   |
-| `gid`         | 要评论商品的`gid`                | 是   |
-| `comment`     | 评价晒单(限制500字)              | 是   |
-| `grade`       | 商品评分                         | 是   |
-| `isAnonymous` | 是否匿名:`1`为匿名,`2`为不匿名   | 是   |
-| `video`       | 评论的视频(限制只能上传一个视频) | 否   |
-| `photo`       | 评论的图片(可以上传多个图片)     | 否   |
+| 请求参数      | 说明                              | 必选 |
+| ------------- | --------------------------------- | ---- |
+| `token`       | 用户的`token`                     | 是   |
+| `gid`         | 要评论商品的`gid`                 | 是   |
+| `comment`     | 评价晒单(限制500字)               | 是   |
+| `grade`       | 商品评分`1`、`2`、`3`、`4`、`5`分 | 是   |
+| `isAnonymous` | 是否匿名:`1`为匿名,`2`为不匿名    | 是   |
+| `video`       | 评论的视频(限制只能上传一个视频)  | 否   |
+| `photo`       | 评论的图片(可以上传多个图片)      | 否   |
+
+| status  | data              | 说明              |
+| ------- | ----------------- | ----------------- |
+| `false` | `expiredToken`    | `token`过期       |
+| `false` | `parseTokenError` | `token`错误       |
+| `false` | `errToken`        | `token`无效       |
+| `false` | `gid有误`         | `gid`有误         |
+| `false` | `是否匿名`        | `isAnonymous`有误 |
+| `false` | `评分有误`        | `grade`有误       |
+| `false` | `上传的视频有误`  | `video`文件有误   |
+| `false` | `视频文件太大`    | `video`文件太大   |
+| `false` | `图片太大啦`      | `photo`文件太大   |
+| `true`  | `""`              |                   |
+
+
+
+### 查询商品下的评论
+
+#### `/comment/viewComment` `GET`
+
+| 请求参数 | 说明        | 必选 |
+| -------- | ----------- | ---- |
+| `gid`    | 商品的`gid` | 是   |
+
+| status  | data               | 说明 |
+| ------- | ------------------ | ---- |
+| `false` | `gid错误`          |      |
+| `false` | `没有查询到评论`   |      |
+| `true`  | 返回以下格式的data |      |
+
+```json
+{
+    "status":true,
+    "data":{
+        "commentId":0,
+        "gid":0,
+        "uid":0,
+        "comment":"",//评论的内容
+        "grade":0,//评分
+        "isAnonymous":false,//是否匿名
+        "time":时间的默认格式,
+        "name":"",
+        "photoUrl":[
+            "0":"",
+            "1":""//对应的url
+        ],
+        "videoUrl":url,
+    },{
+    ...
+}
+```
+
+
+
+### 回复某条评论
+
+#### `/comment/reply` `POST`
+
+| 请求参数    | 说明              | 必选 |
+| ----------- | ----------------- | ---- |
+| `token`     | 用户的`token`     | 是   |
+| `gid`       | 商品的`gid`       | 是   |
+| `commentId` | 评论的`commentId` | 是   |
+| `comment`   | 回复的内容        | 是   |
+
+`这里不带文件`
+
+| status  | data              | 说明                    |
+| ------- | ----------------- | ----------------------- |
+| `false` | `expiredToken`    | `token`过期             |
+| `false` | `parseTokenError` | `token`错误             |
+| `false` | `errToken`        | `token`无效             |
+| `false` | `评论id有误`      | `commentId`有误         |
+| `false` | `评论不能为空`    | `comment`为空           |
+| `false` | `gid有误`         | `gid`有误               |
+| `false` | `没有找到该评论`  | `commentId`的评论不存在 |
+| `true`  | `""`              |                         |
+
+
+
+### 查看某条评论下的回复
+
+| 请求参数    | 说明              | 必选 |
+| ----------- | ----------------- | ---- |
+| `token`     | 用户的`token`     | 是   |
+| `commentId` | 评论的`commentId` | 是   |
+
+
+
+
 
 - ## 店铺详情页
 
 - - 店铺公告
-  - 按照不同规则展示商品（销量，价格，有能力的可以写分类展示）
 
 
 
@@ -1236,7 +1327,7 @@
 }
 ```
 
-### 店铺相关
+## 店铺相关
 
 #### `/store/getGoods` `GET`
 
@@ -1272,14 +1363,16 @@
 ```json
 {
     "status":true,
-    "data":{
+    "data":[{
         "gId":0,
         "cover":"",
         "price":0,
         "name":"",
         "commentAccount":0,
         "ownerName":"",
-    }
+    },{
+        ...
+    }]
 }
 ```
 
