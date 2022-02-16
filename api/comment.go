@@ -165,3 +165,22 @@ func ReplyComment(c *gin.Context) {
 	}
 	tool.RespSuccess(c)
 }
+
+func ViewSpecificComment(c *gin.Context) {
+	commentId, err := strconv.Atoi(c.PostForm("commentId"))
+	if err != nil {
+		tool.RespErrWithData(c, false, "commentId有误")
+		return
+	}
+	comment := model.Comment{CommentId: commentId}
+	comment, err = service.ViewSpecificComment(comment)
+	if err != nil {
+		if err.Error()[4:] == " no rows in result set" {
+			tool.RespErrWithData(c, false, "没有多余的评论啦")
+			return
+		}
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	tool.RespSuccessWithData(c, comment)
+}

@@ -172,3 +172,68 @@ func ReplyComment(c model.Comment) error {
 	err = tx.Commit()
 	return err
 }
+
+func ViewSpecificComment(c model.Comment) (model.Comment, error) {
+	stmt, err := dB.Prepare("select commentId from goodsComment where fCommentId = ?")
+	if err != nil {
+		return c, err
+	}
+	defer stmt.Close()
+
+	row, err := stmt.Query(c.CommentId)
+	if err != nil {
+		return c, err
+	}
+	defer row.Close()
+	for i := 0; row.Next(); i++ {
+		err = row.Scan(&c.CommentId)
+		if err != nil {
+			return c, err
+		}
+
+		//一个赋值了commentId的model.comment,和一个空的装评论的map
+		c, err = ViewSonComment(c, 0)
+		if err != nil {
+			if err.Error()[4:] == " no rows in result set" {
+				continue
+			}
+			return c, err
+		}
+	}
+	return c, nil
+}
+
+func ViewSonComment(c model.Comment, i int) (model.Comment, error) {
+	//创建一个新的SComment
+	sc := model.Comment{}
+	//查询所有的评论信息
+	stmt, err := dB.Prepare("select commentId, uid, comment, grade, IsAnonymous, time from goodsComment where fCommentId = ?")
+	if err != nil {
+		return sc, err
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(c.CommentId)
+	if err != nil {
+		return sc, err
+	}
+	defer row.Close()
+	for row.Next() {
+		//赋值所有信息
+		err = row.Scan(&sc.CommentId, &sc.UId, &sc.Comment, &sc.Grade, &sc.IsAnonymous, &sc.Time)
+		if err != nil {
+			return sc, err
+		}
+		c.SComment[i] = sc
+
+		i++
+
+		sc, err = ViewSonComment(c, i)
+		if err != nil {
+			if err.Error()[4:] == " no rows in result set" {
+				continue
+			}
+			return c, err
+		}
+	}
+	return c, nil
+}

@@ -80,6 +80,7 @@ func InitRouter() {
 		comment.POST("/add", AddComment)
 		comment.POST("/reply", ReplyComment)
 		comment.GET("/viewComment", ViewComment)
+		comment.GET("/viewComment/specific", ViewSpecificComment)
 	}
 
 	store := Engine.Group("/store")

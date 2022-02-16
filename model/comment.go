@@ -20,5 +20,5 @@ type Comment struct {
 	PhotoUrl    map[int]string            `json:"photoUrl"`
 	IsAnonymous bool                      `json:"isAnonymous"`
 	Time        time.Time                 `json:"time"`
-	sComment    map[int]Comment
+	SComment    map[int]Comment           `json:"sComment"`
 }

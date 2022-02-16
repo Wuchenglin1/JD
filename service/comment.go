@@ -51,3 +51,7 @@ func ViewComment(c model.Comment) (map[int]model.Comment, error) {
 func ReplyComment(c model.Comment) error {
 	return dao.ReplyComment(c)
 }
+
+func ViewSpecificComment(c model.Comment) (model.Comment, error) {
+	return dao.ViewSpecificComment(c)
+}

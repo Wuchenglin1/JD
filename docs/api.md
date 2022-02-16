@@ -1280,12 +1280,39 @@
 
 ### 查看某条评论下的回复
 
+#### `/comment/viewComment/specific` `GET`
+
 | 请求参数    | 说明              | 必选 |
 | ----------- | ----------------- | ---- |
-| `token`     | 用户的`token`     | 是   |
 | `commentId` | 评论的`commentId` | 是   |
 
+| status  | data                     | 说明              |
+| ------- | ------------------------ | ----------------- |
+| `false` | `commentId有误`          | `commentId`有误   |
+| `false` | `没有找到该评论`         | `commentId`不存在 |
+| `false` | `没有多余的评论啦`       | 该评论没有回复    |
+| `true`  | 返回以下格式的json字符串 |                   |
 
+```json
+{
+    "status":true,
+    "data":{
+        "commentId":0,
+        "sComment":[
+           "0":{
+            "commentId":0,
+            "uid":0,
+            "comment":"",
+            "grade":0,
+            "isAnonymous":false,
+            "time":"时间的标准格式",
+            },{
+    ...
+}
+        ]
+    }
+}
+```
 
 
 
