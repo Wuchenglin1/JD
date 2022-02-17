@@ -322,6 +322,66 @@
         <span class="span15">Copyright©2004-2022 WZ.com 版权所有</span>
         <div class="div11"></div>
     </div>
+
+    <script>
+        let account = document.getElementsByClassName('input1')[0];
+        let password = document.getElementsByClassName('password')[0];
+        let login = document.getElementsByClassName('a1')[0];
+
+        login.onclick = function () {
+            ajax({
+                type: 'post',
+                url: 'http://110.42.165.192:8080//register/normal',
+                data: {
+                    account: account.value,
+                    password: password.value,
+                },
+                async: true,
+                success: function (res) {
+                    JSON.parse(res);
+                    alert('rse.data');
+                    console.log(res.status);
+                }
+            })
+        }
+
+        function ajax(opt) {
+            let defaultParam = {
+                type: 'get',
+                url: '#',
+                data: {},
+                async: true,
+                success: function () { },
+            }
+
+            for (key in opt) {
+                defaultParam[key] = opt[key];
+            }
+            let paramStr = "";
+            for (key in defaultParam.data) {
+                paramStr += key + '=' + defaultParam.data[key] + '&';
+            }
+            paramStr = paramStr.substr(0, paramStr.length - 1);
+
+            let xhr = new XMLHttpRequest();
+            if (defaultParam.type == 'get') {
+                xhr.open(defaultParam.type, defaultParam.url + '?' + paramStr, defaultParam.async);
+            } else {
+                xhr.open(defaultParam.type, defaultParam.url, defaultParam.async);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(paramStr);
+            }
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        defaultParam.success(xhr.responseText);
+                    }
+                }
+            }
+
+        }
+    </script>
 </body>
 
 </html>

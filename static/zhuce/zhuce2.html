@@ -381,17 +381,21 @@
     <div class="div11"></div>
 
     <script>
-        let username = document.getElementById("username").value;
-        let password = document.getElementById("password").value;
+        let username = document.getElementById("username");
+        let password = document.getElementById("password");
         let submit = document.getElementsByClassName("a1")[0];
 
-        let userinfo = {
-            username: username,
-            password: password
-        }
-        let param = JSON.stringify(userinfo);
-
         submit.addEventListener("click", function () {
+
+            let userinfo = {
+                username: username.value,
+                password: password.value,
+                phone: '',
+                email: '2875854612@qq.com',
+                verifyCode: '',
+            }
+            let param = JSON.stringify(userinfo);
+
             fetch('http://110.42.165.192:8080/user/register/email', {
                 method: 'POST',
                 body: param,
