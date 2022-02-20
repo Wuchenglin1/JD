@@ -769,31 +769,6 @@ func DeleteFocus(c *gin.Context) {
 	tool.RespSuccess(c)
 }
 
-//func CommentAdd(c *gin.Context) {
-//	//解析token
-//	claim, err := service.ParseAccessToken(c.PostForm("token"))
-//	if err != nil {
-//		if err.Error() == "token contains an invalid number of segments" {
-//			c.JSON(200, "token错误！")
-//			return
-//		}
-//	}
-//	flag, str := service.CheckTokenErr(claim, err)
-//	if !flag {
-//		tool.RespErrWithData(c, false, str)
-//		return
-//	}
-//
-//	comment := model.Comment{UId: claim.User.Id}
-//	comment.GId, err = strconv.Atoi(c.PostForm("gid"))
-//	if err != nil {
-//		tool.RespErrWithData(c, false, "商品不存在")
-//		return
-//	}
-//
-//	file, header, err := c.Request.FormFile("video")
-//}
-
 func CreateGoods(c *gin.Context) {
 	//解析token
 	claim, err := service.ParseAccessToken(c.PostForm("token"))

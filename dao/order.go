@@ -4,13 +4,14 @@ import (
 	"JD/model"
 	"fmt"
 	"log"
+	"time"
 )
 
-func CreateOrder(o model.Order) error {
+func CreateOrder(o model.Order) (bool, error) {
 	tx, err := dB.Begin()
 	if err != nil {
 		log.Fatalln("开启事务失败：", err)
-		return err
+		return false, err
 	}
 	stmt, err := tx.Prepare("insert into goodsOrder(uid, orderNumber, consignee, address, phone, payWay,totalPrice, time) values (?,?,?,?,?,?,?,?)")
 	if err != nil {
@@ -18,7 +19,7 @@ func CreateOrder(o model.Order) error {
 		if err1 != nil {
 			fmt.Println(err1)
 		}
-		return err
+		return false, err
 	}
 	defer stmt.Close()
 	_, err = stmt.Exec(o.Uid, o.OrderNumber, o.Consignee, o.Address, o.Phone, o.PayWay, o.TotalPrice, o.Time)
@@ -28,7 +29,7 @@ func CreateOrder(o model.Order) error {
 			if err1 != nil {
 				fmt.Println(err1)
 			}
-			return err
+			return false, err
 		}
 	}
 
@@ -41,7 +42,7 @@ func CreateOrder(o model.Order) error {
 				if err1 != nil {
 					fmt.Println(err1)
 				}
-				return err
+				return false, err
 			}
 		}
 		defer stmt1.Close()
@@ -53,13 +54,47 @@ func CreateOrder(o model.Order) error {
 				if err1 != nil {
 					fmt.Println(err1)
 				}
-				return err
+				return false, err
 			}
 		}
+		var inventory int
+		err = tx.QueryRow("select inventory from goods where gId = ?", v.GId).Scan(&inventory)
+		if err != nil {
+			if err != nil {
+				err1 := tx.Rollback()
+				if err1 != nil {
+					fmt.Println(err1)
+				}
+				return false, err
+			}
+		}
+		//库存不足
+		if inventory <= v.Account {
+			if err != nil {
+				err1 := tx.Rollback()
+				if err1 != nil {
+					fmt.Println(err1)
+				}
+				return false, err
+			}
+			return false, nil
+		}
+		//减少商品的库存
+		_, err = tx.Exec("update goods set inventory = inventory - ? where gId = ?", v.Account, v.GId)
+		if err != nil {
+			err1 := tx.Rollback()
+			if err1 != nil {
+				fmt.Println(err1)
+			}
+			return false, err
+		}
 	}
+	go UpdateOrderInfo(o.OrderNumber)
 	err = tx.Commit()
-
-	return err
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func CheckAllOrder(o model.Order) (map[int]model.Order, error) {
@@ -146,14 +181,58 @@ func CheckSpecified(o model.Order) (model.Order, error) {
 
 func CancelOrder(o model.Order) error {
 	_, err := dB.Exec("update goodsOrder set status = ? where orderNumber = ?", "已取消", o.OrderNumber)
+
+	tx, err := dB.Begin()
+	if err != nil {
+		fmt.Println("开启事务失败:", err)
+		return err
+	}
+	stmt, err1 := tx.Prepare("select gid,account from orderGoods where orderNumber = ?")
+	if err1 != nil {
+		return err1
+	}
+	defer stmt.Close()
+
+	row, err2 := stmt.Query(o.OrderNumber)
+	if err2 != nil {
+		err = tx.Rollback()
+		if err != nil {
+			fmt.Println("回滚失败:", err)
+			return err
+		}
+		return err2
+	}
+	defer row.Close()
+	for row.Next() {
+		var gid, account int
+		err = row.Scan(&gid, &account)
+		if err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				fmt.Println("回滚失败:", err)
+				return err
+			}
+			return err
+		}
+
+		_, err = tx.Exec("update goods set inventory = inventory + ? where gId = ?", account, gid)
+		if err != nil {
+			err1 = tx.Rollback()
+			if err1 != nil {
+				fmt.Println("回滚失败:", err1)
+				return err1
+			}
+			return err
+		}
+	}
 	return err
 }
 
-func SolveOrder(o model.Order, u model.User) error {
+func SolveOrder(o model.Order, u model.User) (bool, error) {
 	//首先先开启事务
 	tx, err := dB.Begin()
 	if err != nil {
-		return err
+		return false, err
 	}
 	u.Money = u.Money - o.TotalPrice
 	//扣除用户的钱
@@ -162,9 +241,9 @@ func SolveOrder(o model.Order, u model.User) error {
 		err = tx.Rollback()
 		if err != nil {
 			fmt.Println("事务回滚失败:", err)
-			return err
+			return false, err
 		}
-		return preErr
+		return false, preErr
 	}
 	defer stmt.Close()
 	_, execErr := stmt.Exec(u.Money, u.Id)
@@ -172,9 +251,9 @@ func SolveOrder(o model.Order, u model.User) error {
 		err = tx.Rollback()
 		if err != nil {
 			fmt.Println("事务回滚失败:", err)
-			return err
+			return false, err
 		}
-		return execErr
+		return false, execErr
 	}
 	//再对每一个商品的商家加钱
 	for _, v := range o.Settlement {
@@ -185,9 +264,9 @@ func SolveOrder(o model.Order, u model.User) error {
 			err = tx.Rollback()
 			if err != nil {
 				fmt.Println("事务回滚失败:", err)
-				return err
+				return false, err
 			}
-			return err
+			return false, err
 		}
 		//对单个商品商家进行加钱
 		_, err = tx.Exec("update User set money = money + ? where uid = ? ", v.Account*v.Price, uid)
@@ -195,9 +274,9 @@ func SolveOrder(o model.Order, u model.User) error {
 			err = tx.Rollback()
 			if err != nil {
 				fmt.Println("事务回滚失败:", err)
-				return err
+				return false, err
 			}
-			return err
+			return false, err
 		}
 		//对单个商品销售量+account个
 		_, err = tx.Exec("update goods set sales = sales + ? where gId = ? ", v.Account, v.GId)
@@ -205,29 +284,42 @@ func SolveOrder(o model.Order, u model.User) error {
 			err = tx.Rollback()
 			if err != nil {
 				fmt.Println("事务回滚失败:", err)
-				return err
+				return false, err
 			}
-			return err
+			return false, err
 		}
 	}
 	//修改订单的状态
+	var status string
+	err = tx.QueryRow("select status from goodsOrder where orderNumber = ?", o.OrderNumber).Scan(&status)
+	if err != nil {
+		return false, err
+	}
+	if status == "已超时" || status == "已取消" {
+		err = tx.Rollback()
+		if err != nil {
+			fmt.Println("事务回滚失败:", err)
+			return false, err
+		}
+		return false, nil
+	}
 	_, err = tx.Exec("update goodsOrder set status = ? where orderNumber = ?", "待收货", o.OrderNumber)
 	if err != nil {
 		err = tx.Rollback()
 		if err != nil {
 			fmt.Println("事务回滚失败:", err)
-			return err
+			return false, err
 		}
-		return err
+		return false, err
 	}
 	//提交事务
 	err = tx.Commit()
 	if err != nil {
 		fmt.Println("事务提交失败", err)
-		return err
+		return false, err
 	}
 	fmt.Println("事务提交成功")
-	return nil
+	return true, nil
 }
 
 func CreateConsigneeInfo(c model.ConsigneeInfo) error {
@@ -338,4 +430,28 @@ func CheckOrderByStatus(o model.Order, status string) (map[int]model.Order, erro
 		m[i] = o
 	}
 	return m, nil
+}
+
+func UpdateOrderInfo(orderNum string) error {
+	endTimeUnix := time.Now().Add(time.Minute * 15).Unix()
+	for {
+		nowTimeUnix := time.Now().Unix()
+		var status string
+		//这里一直查数据库可能会出问题(但是我的redis还没学完,我是废物())
+		err := dB.QueryRow("select status from goodsOrder where orderNumber = ?", orderNum).Scan(&status)
+		if status == "待收货" {
+			break
+		}
+		if nowTimeUnix == endTimeUnix {
+			if err != nil {
+				return err
+			}
+			_, err = dB.Exec("update goodsOrder set status = ? where orderNumber = ?", "已超时", orderNum)
+			if err != nil {
+				return err
+			}
+			break
+		}
+	}
+	return nil
 }

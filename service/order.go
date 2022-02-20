@@ -5,10 +5,11 @@ import (
 	"JD/model"
 	"JD/tool"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
-func CreateOrder(o model.Order) (string, error) {
+func CreateOrder(o model.Order) (string, bool, error) {
 	for _, v := range o.Settlement {
 		//查询价格
 		_, _, iG, err := dao.GetGoodsBaseInfo(v.GId)
@@ -24,8 +25,8 @@ func CreateOrder(o model.Order) (string, error) {
 	//创建订单
 	o.OrderNumber = tool.CreateOrder(time.Now())
 
-	err := dao.CreateOrder(o)
-	return o.OrderNumber, err
+	flag, err := dao.CreateOrder(o)
+	return o.OrderNumber, flag, err
 }
 
 func CheckAllOrder(o model.Order) (map[int]model.Order, error) {
@@ -40,7 +41,7 @@ func CancelOrder(order model.Order) error {
 	return dao.CancelOrder(order)
 }
 
-func PayOrder(order model.Order) (bool, error) {
+func PayOrder(c *gin.Context, order model.Order) (bool, error) {
 	o, err := dao.CheckSpecified(order)
 	if err != nil {
 		return false, err
@@ -54,9 +55,13 @@ func PayOrder(order model.Order) (bool, error) {
 		return false, nil
 	}
 	//将所有settlement里的商品的销售量+account,扣钱,并将订单的状态进行修改
-	err = dao.SolveOrder(o, u)
+	flag, err := dao.SolveOrder(o, u)
 	if err != nil {
 		return false, err
+	}
+	if flag == false {
+		tool.RespErrWithData(c, false, "订单错误!")
+		c.Abort()
 	}
 	return true, nil
 }

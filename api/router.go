@@ -61,9 +61,9 @@ func InitRouter() {
 
 	order := Engine.Group("/order")
 	{
-		order.POST("/create", CreateOrder) //还差在创建订单时使商品库存减少account个,以及一天定时取消订单
+		order.POST("/create", CreateOrder)
 		order.POST("/createConsigneeInfo", CreateConsigneeInfo)
-		order.PUT("/cancel", CancelOrder) //还差在取消订单时使商品库存增加account个
+		order.PUT("/cancel", CancelOrder)
 		order.PUT("/confirm", ConfirmOrder)
 		order.POST("/pay", PayOrder)
 		order.GET("/GetConsigneeInfo", GetConsigneeInfo)
