@@ -402,7 +402,8 @@
 
             }).then(res => { res.json() })
                 .then(function (response) {
-
+                    res = JSON.parse(res);
+                    console.log(res);
                     alert('注册成功！');
 
                 })

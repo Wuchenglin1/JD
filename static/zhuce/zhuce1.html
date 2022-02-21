@@ -362,7 +362,7 @@
     </div>
 
     <div class="div5">
-        <a href="zhuce2.html">下一步</a>
+        <a href="javascript:void(0)" class="next">下一步</a>
     </div>
     <div class="div9">
         <span class="span13"><i class="iconfont icon-yonghu-yuan"></i></span>
@@ -402,6 +402,9 @@
         let input1 = document.getElementById("input1");
         let btn1 = document.getElementById('btn1');
         let phone = "";
+
+        let nextBtn = document.getElementsByClassName('next')[0];
+
         btn1.onclick = function () {
             ajax({
                 type: 'post',
@@ -410,8 +413,17 @@
                     phone: input1.value,
                 },
                 async: true,
-                success: function (data) {
-                    alert(data);
+                success: function (res) {
+                    res = JSON.parse(res);
+                    console.log(res);
+                    nextBtn.onclick = function () {
+                        if (res.status == true) {
+                            location.href = "zhuce2.html";
+                        }
+                        else {
+                            alert('请输入正确的手机号');
+                        }
+                    }
                 }
             })
         }
