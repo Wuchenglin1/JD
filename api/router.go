@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -12,10 +11,6 @@ func InitRouter() {
 
 	Engine := gin.Default()
 
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://127.0.0.1:8080"}
-	Engine.Use(cors.New(config))
-	Engine.Static("./static", "./static")
 	Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
 
 	//开启中间件，允许跨域
@@ -95,7 +90,7 @@ func InitRouter() {
 	{
 		token.POST("/get", GetToken)
 	}
-	_ = Engine.Run()
+	_ = Engine.RunTLS(":8080", "/root/GoProject/csr/wuchenglin.plus_bundle.crt", "/root/GoProject/csr/wuchenglin.plus.key")
 }
 
 //func Cors() gin.HandlerFunc {
