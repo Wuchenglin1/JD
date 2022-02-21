@@ -64,13 +64,16 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	orderNumber, err := service.CreateOrder(order)
+	orderNumber, flag, err := service.CreateOrder(order)
 	if err != nil {
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "服务器错误")
 		return
 	}
-
+	if flag == false {
+		tool.RespErrWithData(c, false, "商品库存不足")
+		return
+	}
 	tool.RespSuccessWithData(c, orderNumber)
 }
 
@@ -199,7 +202,8 @@ func PayOrder(c *gin.Context) {
 		tool.RespErrWithData(c, false, "订单号不能为空")
 		return
 	}
-	flag, err = service.PayOrder(order)
+	//这里是当时写的时候没注意，然后如果要改就是大改，太麻烦了！我就直接把上下文传进去了
+	flag, err = service.PayOrder(c, order)
 	if err != nil {
 		if err.Error()[4:] == " no rows in result set" {
 			tool.RespErrWithData(c, false, "该订单不存在")

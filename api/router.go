@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -10,11 +11,7 @@ func InitRouter() {
 
 	Engine := gin.Default()
 
-	//config := cors.DefaultConfig()
-	//config.AllowOrigins = []string{"http://127.0.0.1:8080"}
-	//Engine.Use(cors.New(config))
-	//Engine.Static("./static", "./static")
-	//Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
+	Engine.Use(static.Serve("/", static.LocalFile("../static", false)))
 
 	//开启中间件，允许跨域
 	Engine.Use(Cors())
@@ -61,9 +58,9 @@ func InitRouter() {
 
 	order := Engine.Group("/order")
 	{
-		order.POST("/create", CreateOrder) //还差在创建订单时使商品库存减少account个,以及一天定时取消订单
+		order.POST("/create", CreateOrder)
 		order.POST("/createConsigneeInfo", CreateConsigneeInfo)
-		order.PUT("/cancel", CancelOrder) //还差在取消订单时使商品库存增加account个
+		order.PUT("/cancel", CancelOrder)
 		order.PUT("/confirm", ConfirmOrder)
 		order.POST("/pay", PayOrder)
 		order.GET("/GetConsigneeInfo", GetConsigneeInfo)
@@ -86,12 +83,14 @@ func InitRouter() {
 	store := Engine.Group("/store")
 	{
 		store.GET("/getGoods", GetGoods)
+		store.GET("/getAnnouncement", GetAnnouncement)
+		store.PUT("/postAnnouncement", UpdateAnnouncement)
 	}
 	token := Engine.Group("/token")
 	{
 		token.POST("/get", GetToken)
 	}
-	_ = Engine.Run()
+	_ = Engine.RunTLS(":8080", "/root/GoProject/csr/wuchenglin.plus_bundle.crt", "/root/GoProject/csr/wuchenglin.plus.key")
 }
 
 //func Cors() gin.HandlerFunc {
