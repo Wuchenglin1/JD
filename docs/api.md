@@ -1357,6 +1357,8 @@
 
 ## 店铺相关
 
+### 查看店铺的商品
+
 #### `/store/getGoods` `GET`
 
 | 请求参数 | 说明                        | 必选 |
@@ -1401,6 +1403,50 @@
     },{
         ...
     }]
+}
+```
+
+### 发布(修改)店铺的公告
+
+#### `/store/postAnnouncement` `PUT`
+
+| 请求参数       | 说明          | 必选 |
+| -------------- | ------------- | ---- |
+| `token`        | 用户的`token` | 是   |
+| `announcement` | 店铺的公告    | 是   |
+
+返回参数
+
+| status  | data              | 说明                           |
+| ------- | ----------------- | ------------------------------ |
+| `false` | `expiredToken`    | `token`过期                    |
+| `false` | `parseTokenError` | `token`错误                    |
+| `false` | `errToken`        | `token`无效                    |
+| `false` | `公告不能为空`    | `announcement`为空             |
+| `false` | `公告太长了`      | `announcement`长度大于45个字符 |
+| `true`  | `""`              | 发布成功                       |
+
+
+
+### 获取公告
+
+`/store/getAnnouncement` `GET`
+
+| 请求参数 | 说明          | 必选 |
+| -------- | ------------- | ---- |
+| `token`  | 用户的`token` | 是   |
+
+| status  | data              | 说明                       |
+| ------- | ----------------- | -------------------------- |
+| `false` | `expiredToken`    | `token`过期                |
+| `false` | `parseTokenError` | `token`错误                |
+| `false` | `errToken`        | `token`无效                |
+| `true`  |                   | 返回以下格式的`json`字符串 |
+
+```json
+{
+	"status":true,
+    "data":""
 }
 ```
 
