@@ -1,11 +1,12 @@
 package model
 
 type Config struct {
-	MySql MySql `json:"mysql"`
-	Email Email `json:"email"`
-	Jwt   Jwt   `json:"jwt"`
-	Sms   Sms   `json:"sms"`
-	Oss   Oss   `json:"oss"`
+	MySql  MySql        `json:"mysql"`
+	Email  Email        `json:"email"`
+	Jwt    Jwt          `json:"jwt"`
+	Sms    Sms          `json:"sms"`
+	Oss    Oss          `json:"oss"`
+	Github GitHubConfig `json:"github"`
 }
 
 type MySql struct {

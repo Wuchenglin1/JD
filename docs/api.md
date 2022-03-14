@@ -1317,12 +1317,6 @@
 
 
 
-- ## 店铺详情页
-
-- - 店铺公告
-
-
-
 ## 创建一个商品(另辟蹊径)
 
 #### `/goods/createGoods` `POST`
@@ -1430,7 +1424,7 @@
 
 ### 获取公告
 
-`/store/getAnnouncement` `GET`
+#### `/store/getAnnouncement` `GET`
 
 | 请求参数 | 说明          | 必选 |
 | -------- | ------------- | ---- |
