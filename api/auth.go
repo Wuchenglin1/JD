@@ -2,6 +2,7 @@ package api
 
 import (
 	"JD/model"
+	"JD/service"
 	"JD/tool"
 	"encoding/json"
 	"fmt"
@@ -50,12 +51,43 @@ func Authorization(c *gin.Context) {
 	userInfo := *Info
 
 	fmt.Println(userInfo)
+	u := model.User{}
+	u, flag, err = service.Authorization(userInfo)
+	if err != nil && err.Error()[4:] != " no rows in result set" {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	//如果没有绑定账号，直接返回初始账号和密码以及一个refreshToken和token
+	if err.Error()[4:] == " no rows in result set" {
+		tool.RespSuccessWithData(c, gin.H{
+			"name":     u.Name,
+			"password": u.Password,
+		})
+	}
 
+	//绑定了账号，直接登录
+
+	//创建一个存在一天的refreshToken
+	rt, err := service.CreateToken(u, 86400, "refreshToken")
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
+	//创建一个存在5min的token
+	t, err := service.CreateToken(u, 300, "token")
+	if err != nil {
+		fmt.Println(err)
+		tool.RespErrWithData(c, false, "服务器错误")
+		return
+	}
 	c.JSON(200, gin.H{
-		"Notice": "success",
-		"Hello":  userInfo.Name,
+		"status":       true,
+		"data":         "登录成功",
+		"token":        t,
+		"refreshToken": rt,
 	})
-
 	//c.Redirect(http.StatusMovedPermanently, "http://110.42.165.192:8080")
 }
 

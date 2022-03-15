@@ -1,15 +1,18 @@
 package model
 
 type User struct {
-	Id           int         `json:"id"`
-	UserName     string      `json:"user_name"`
-	Password     string      `json:"password"`
-	Phone        string      `json:"phone"`
-	Email        string      `json:"email"`
-	Favorite     string      `json:"favorite"`
-	ShoppingCart map[int]int `json:"shoppingCart"`
-	Money        int         `json:"money"`
-	HeadPic      string      `json:"headPic"`
+	Id            int         `json:"id"`
+	UserName      string      `json:"user_name"`
+	Password      string      `json:"password"`
+	Phone         string      `json:"phone"`
+	Email         string      `json:"email"`
+	Favorite      string      `json:"favorite"`
+	ShoppingCart  map[int]int `json:"shoppingCart"`
+	Money         int         `json:"money"`
+	HeadPic       string      `json:"headPic"`
+	GithubAccount int         `json:"githubAccount"`
+	Name          string      `json:"name"`
+	Avatar        string      `json:"avatar"`
 }
 
 type RegisterUser struct {
