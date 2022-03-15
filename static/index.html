@@ -757,6 +757,33 @@
             width: 800px;
             height: 400px;
         }
+
+        .help {
+            position: fixed;
+            top: 300px;
+            right: 50px;
+        }
+
+        .help-part {
+            padding-top: 10px;
+            width: 58px;
+            height: 48px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .help a {
+            margin: auto;
+            display: block;
+            width: 28px;
+            height: 37.6px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .help a:hover {
+            color: #e1251b;
+        }
     </style>
 </head>
 
@@ -1569,7 +1596,20 @@
             </li>
         </ul>
     </div>
-
+    <div class="help">
+        <div class="help-part">
+            <a href="javascript:void(0)">京东秒杀</a>
+        </div>
+        <div class="help-part">
+            <a href="javascript:void(0)">京东客服</a>
+        </div>
+        <div class="help-part">
+            <a href="javascript:void(0)">为你推荐</a>
+        </div>
+        <div class="help-part">
+            <a href="javascript:void(0)" id="top">返回顶部</a>
+        </div>
+    </div>
     <script type="text/javascript" src="./js/body.js"></script>
 </body>
 

@@ -69,3 +69,9 @@ slider.onmouseover = function () {
 slider.onmouseout = function () {
     timerPlay();
 }
+//侧边工具栏
+let backToTop = document.getElementById('top');
+
+backToTop.onclick = function () {
+
+}
