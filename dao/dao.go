@@ -34,6 +34,8 @@ func InitMySql() {
 
 	db = dB
 
+	err = db.AutoMigrate(&model.User{}, &model.Announcement{}, &model.ShoppingCart{}, &model.Order{}, &model.ConsigneeInfo{}, &model.Goods{}, &model.GoodsDetail{}, &model.Blouse{}, &model.CowboyPants{}, &model.GoodsColor{}, &model.GoodsFocus{}, &model.Size{}, &model.Comment{}, &model.CommentFile{})
+	panic(err)
 }
 
 func UpdateAnnouncement(uid int, announcement string) error {
