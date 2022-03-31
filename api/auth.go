@@ -43,12 +43,11 @@ func Authorization(c *gin.Context) {
 	fmt.Println("tokenType:", token.TokenType)
 	fmt.Println("scope:", token.Scope)
 	//通过accessToken拿取用户的信息
-	Info, err := tool.GetUserInfo(token.AccessToken)
+	userInfo, err := tool.GetUserInfo(token.AccessToken)
 	if err != nil {
 		fmt.Println("Get UserInfo error:", err)
 		return
 	}
-	userInfo := *Info
 
 	fmt.Println(userInfo)
 	u := model.User{}

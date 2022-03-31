@@ -1,30 +1,42 @@
 package dao
 
-import "JD/model"
+import (
+	"JD/model"
+	"gorm.io/gorm"
+)
 
-func GetGoods(str string, uid int) (map[int]model.GoodsInfo, error) {
-	m := make(map[int]model.GoodsInfo)
-	g := model.GoodsInfo{}
-	err := dB.QueryRow("select name from User where uid = ?", uid).Scan(&g.OwnerName)
-	if err != nil {
-		return m, err
+func GetGoods(str string, uid int) ([]model.Goods, error) {
+	var arr []model.Goods
+	g := model.Goods{}
+	u := model.User{}
+	resDB := db.Where("id = ?", uid).First(&u)
+	if resDB.Error != nil {
+		return arr, resDB.Error
 	}
-	stmt, err := dB.Prepare(str)
-	if err != nil {
-		return m, err
+	g.OwnerName = u.UserName
+	switch str {
+	case "0":
+		db.Order("FavorableRating desc,id").First(&arr)
+	case "1":
+		db.Order("FavorableRating asc").First(&arr)
+	case "2":
+		db.Order("saleAccount desc").First(&arr)
+	case "3":
+		db.Order("saleAccount asc").First(&arr)
+	case "4":
+		db.Order("commentAccount desc").First(&arr)
+	case "5":
+		db.Order("commentAccount asc").First(&arr)
+	case "6":
+		db.Order("saleTime desc").First(&arr)
+	case "7":
+		db.Order("saleTime asc").First(&arr)
+	case "8":
+		db.Order("price desc").First(&arr)
+	case "9":
+		db.Order("price asc").First(&arr)
+	default:
+		return arr, gorm.ErrRecordNotFound
 	}
-	defer stmt.Close()
-	row, err := stmt.Query(uid)
-	if err != nil {
-		return m, err
-	}
-	defer row.Close()
-	for i := 0; row.Next(); i++ {
-		err = row.Scan(&g.GId, &g.Price, &g.Cover, &g.Name, &g.CommentAccount)
-		if err != nil {
-			return m, err
-		}
-		m[i] = g
-	}
-	return m, nil
+	return arr, nil
 }

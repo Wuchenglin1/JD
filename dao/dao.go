@@ -1,62 +1,63 @@
 package dao
 
 import (
+	"JD/model"
 	"JD/tool"
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"time"
 )
 
-var dB *sql.DB
+var db *gorm.DB
 
 func InitMySql() {
-	config := tool.GetConfig()
-	db, err := sql.Open("mysql", config.MySql.User)
+	config := tool.GetConfig().MySql
+	dB, err := gorm.Open(mysql.Open(config.Gorm), &gorm.Config{
+		SkipDefaultTransaction:                   false,
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
-	dB = db
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	sqlDB.SetMaxIdleConns(10)           //连接池中最大的空闲连接数
+	sqlDB.SetMaxOpenConns(10)           //连接池最多容纳的链接数量
+	sqlDB.SetConnMaxLifetime(time.Hour) //连接池中链接的最大可复用时间
+
+	db = dB
+
 }
 
 func UpdateAnnouncement(uid int, announcement string) error {
-	var a string
-	err := dB.QueryRow("select announcement from store where uid = ?", uid).Scan(&a)
-	if err != nil {
-		if err.Error()[4:] == " no rows in result set" {
-			stmt, err := dB.Prepare("insert into store (uid, announcement) values (?,?)")
-			if err != nil {
-				return err
-			}
-			_, err = stmt.Exec(uid, announcement)
-			if err != nil {
-				return err
-			}
+	ann := model.Announcement{}
+	resDB := db.Where("id = ?", uid).First(&ann)
+	if err := resDB.Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			ann.ID = uint(uid)
+			ann.Announcements = announcement
+			db.Create(&ann)
 		}
 		return err
 	}
-	stmt, err := dB.Prepare("update store set announcement = ? where uid = ?")
-	if err != nil {
-		return err
+	ann.Announcements = announcement
+	resDB = db.Save(&ann)
 
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(announcement, uid)
-	if err != nil {
-		return err
-	}
-	return nil
-
+	return resDB.Error
 }
 
 func GetAnnouncement(uid int) (string, error) {
-	var announcement string
-	stmt, err := dB.Prepare("select announcement from store where uid = ? ")
-	if err != nil {
+	ann := model.Announcement{}
+	resDB := db.Where("id = ?", uid).First(ann)
+	if err := resDB.Error; err != nil {
 		return "", err
 	}
-	defer stmt.Close()
-	err = stmt.QueryRow(uid).Scan(&announcement)
-	if err != nil {
-		return "", err
-	}
-	return announcement, nil
+	return ann.Announcements, nil
 }

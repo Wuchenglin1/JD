@@ -5,7 +5,7 @@ import (
 	"JD/model"
 )
 
-func GetGoods(str string, uid int) (map[int]model.GoodsInfo, error) {
+func GetGoods(str string, uid int) (map[int]model.Goods, error) {
 	return dao.GetGoods(str, uid)
 }
 

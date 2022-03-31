@@ -27,8 +27,8 @@ func CreateRandomString(len int) (string, error) {
 	return container, nil
 }
 
-func GetUserInfo(accessToken string) (*model.UserInfo, error) {
-	info := new(model.UserInfo)
+func GetUserInfo(accessToken string) (model.UserInfo, error) {
+	info := model.UserInfo{}
 	client := &http.Client{}
 
 	request, err := http.NewRequest("GET", "https://api.github.com/user", nil)
@@ -56,7 +56,7 @@ func GetUserInfo(accessToken string) (*model.UserInfo, error) {
 			return info, err2
 		}
 		//直接绑定对象
-		err = json.Unmarshal(buf[:n], info)
+		err = json.Unmarshal(buf[:n], &info)
 		if err != nil {
 			return info, err
 		}

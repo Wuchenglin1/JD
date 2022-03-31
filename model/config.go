@@ -11,6 +11,7 @@ type Config struct {
 
 type MySql struct {
 	User string `json:"user"`
+	Gorm string `json:"gorm"`
 }
 
 type Email struct {

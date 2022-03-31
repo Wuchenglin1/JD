@@ -1,24 +1,26 @@
 package model
 
 import (
+	"gorm.io/gorm"
 	"mime/multipart"
 	"time"
 )
 
 type Comment struct {
-	UId       int    `json:"uid"`
-	Name      string `json:"name"`
-	GId       int    `json:"gid"`
-	CommentId int    `json:"commentId"`
-	Comment   string `json:"comment"`
-	//CommentInt int                    `json:"sonCommentInt"` //子评论数
-	//Praise        int                    `json:"praise"`        //点赞数
-	Grade       int                       `json:"grade"`
-	Video       multipart.File            `json:"video"`
-	VideoUrl    string                    `json:"videoUrl"`
-	Photo       map[string]multipart.File `json:"photo"`
-	PhotoUrl    map[int]string            `json:"photoUrl"`
-	IsAnonymous bool                      `json:"isAnonymous"`
-	Time        time.Time                 `json:"time"`
-	SComment    map[int]Comment           `json:"sComment"`
+	gorm.Model
+	UId         uint
+	Name        string
+	GId         int
+	Comment     string
+	Grade       int
+	VideoUrl    string         `gorm:"Column:videoUrl"`
+	PhotoUrl    map[int]string `gorm:"Column:photoUrl"`
+	IsAnonymous bool
+	Time        time.Time
+	FCommentId  uint
+}
+
+type CommentFile struct {
+	Video multipart.File
+	Photo map[string]multipart.File
 }

@@ -2,132 +2,86 @@ package dao
 
 import (
 	"JD/model"
-	"fmt"
-	"time"
+	"gorm.io/gorm"
 )
 
 func SaveComment(c model.Comment) (int64, error) {
-	//开启事务
-	tx, err := dB.Begin()
-	if err != nil {
-		fmt.Println("开启事务失败:", err)
-		return 0, err
-	}
-	//插入评论到mysql
-	stmt, err := tx.Prepare("insert into goodsComment(gid,uid,comment,grade,isAnonymous,time) values(?,?,?,?,?,?)")
-	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			fmt.Println("回滚失败:", err)
-			return 0, err
+
+	g := model.Goods{}
+	err := db.Transaction(func(tx *gorm.DB) error {
+		//先插入评论
+		resTX := tx.Create(&c)
+		if resTX.Error != nil {
+			return resTX.Error
 		}
-		return 0, err
-	}
-	defer stmt.Close()
-	row, err := stmt.Exec(c.GId, c.UId, c.Comment, c.Grade, c.IsAnonymous, c.Time)
+		//评论数+1
+		tx.Where("id = ?", c.GId).First(&g)
+		g.CommentAccount++
+		tx.Save(&g)
+		return nil
+	})
 	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			fmt.Println("回滚失败:", err)
-			return 0, err
-		}
 		return 0, err
 	}
-	_, err = dB.Exec("update goods set commentAmount = commentAmount +1")
-	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			fmt.Println("回滚失败:", err)
-			return 0, err
-		}
-		return 0, err
-	}
-	i, err := row.LastInsertId()
-	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			fmt.Println("回滚失败:", err)
-			return 0, err
-		}
-		return 0, err
-	}
-	err = tx.Commit()
-	if err != nil {
-		fmt.Println("提交失败:", err)
-		return 0, err
-	}
-	return i, nil
+	return int64(g.ID), nil
+
 }
 
 func SaveCommentPhoto(url string, i int64) error {
-	stmt, err := dB.Prepare("insert into commentPhoto(commentId, url) values(?,?)")
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(i, url)
-	return err
+	resDB := db.Model(&model.Comment{}).Select("photoUrl", "id").Updates(map[string]interface{}{"url": url, "id": i})
+	return resDB.Error
 }
 
 func SaveCommentVideo(url string, i int64) error {
-	stmt, err := dB.Prepare("insert into commentVideo(commentId, url) values(?,?)")
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(i, url)
-	return err
+	resDB := db.Model(&model.Comment{}).Select("videoUrl", "id").Updates(map[string]interface{}{"url": url, "id": i})
+	return resDB.Error
 }
 
 func ViewComment(c model.Comment) (map[int]model.Comment, error) {
 	m := make(map[int]model.Comment)
-	stmt, err := dB.Prepare("select commentId, gid, uid, comment, grade, IsAnonymous, time from goodsComment where gid = ? and fCommentId = -1")
-	if err != nil {
-		return m, err
+	var arr []model.Comment
+	db.Where("gid = ? and fCommentId = ?", c.GId, "-1").Find(arr)
+	for k := range arr {
+		if arr[k].IsAnonymous {
+			arr[k].Name = "匿名用户"
+		}
+		var arr1 []model.Comment
+		c = model.Comment{}
+		db.Where("fCommentId = ?", arr[k].ID).First(&arr1)
+		if db.Error != nil {
+			if db.Error == gorm.ErrRecordNotFound {
+				return m, nil
+			}
+			return m, db.Error
+		}
+		m[k] = arr[k]
 	}
-	defer stmt.Close()
-	row, err := stmt.Query(c.GId)
-	if err != nil {
-		return m, err
-	}
-	defer row.Close()
-	for i := 0; row.Next(); i++ {
+	return m, nil
+}
 
-		err = row.Scan(&c.CommentId, &c.GId, &c.UId, &c.Comment, &c.Grade, &c.IsAnonymous, &c.Time)
+func ReplyComment(c model.Comment) error {
+	db.Transaction(func(tx *gorm.DB) error {
+		tx.Create(&c)
+		g := model.Goods{}
+		resDB := tx.Where("commentId = ?", c.ID).First(&g)
+		if resDB.Error != nil {
+			return resDB.Error
+		}
+		g.CommentAccount++
+		tx.Save(&g)
+		return nil
+	})
+	return nil
+}
 
-		if c.IsAnonymous {
-			c.Name = "匿名用户"
-		}
-		err = dB.QueryRow("select url from commentVideo where commentId = ?", c.CommentId).Scan(&c.VideoUrl)
-		if err != nil {
-			if err.Error()[4:] != " no rows in result set" {
-				return m, err
-			}
-		}
-		rows, err1 := dB.Query("select url from commentPhoto where commentId = ?", c.CommentId)
-		if err1 != nil {
-			if err1.Error()[4:] != " no rows in result set" {
-				return m, err
-			}
-		}
-		if err1 == nil {
-			for k := 0; rows.Next(); k++ {
-				var url string
-				err = rows.Scan(&url)
-				if err != nil {
-					return m, err1
-				}
-				c.PhotoUrl[k] = url
-			}
-			rows.Close()
-		}
+var num = 0
 
-		err = dB.QueryRow("select name from User where uid = ?", c.UId).Scan(&c.Name)
-		if err != nil {
-			return m, err
-		}
-		m[i] = c
-
+func ViewSpecificComment(c model.Comment) (map[int]model.Comment, error) {
+	m := make(map[int]model.Comment)
+	var arr []model.Comment
+	db.Where("fCommentId = ?", c.ID).First(&arr)
+	for k := range arr {
+		err := ViewSonComment(m, arr[k])
 		if err != nil {
 			return m, err
 		}
@@ -135,105 +89,22 @@ func ViewComment(c model.Comment) (map[int]model.Comment, error) {
 	return m, nil
 }
 
-func ReplyComment(c model.Comment) error {
-	tx, err := dB.Begin()
-	if err != nil {
-		err1 := tx.Rollback()
-		if err1 != nil {
+func ViewSonComment(m map[int]model.Comment, c model.Comment) error {
+	var arr []model.Comment
+	resDB := db.Where("fCommentId = ?", c.ID).First(&arr)
+	if resDB.Error != nil {
+		if resDB.Error == gorm.ErrRecordNotFound {
+			return nil
+		}
+		return resDB.Error
+	}
+	for k := range arr {
+		m[num] = arr[k]
+		err := ViewSonComment(m, arr[k])
+		if err != nil {
 			return err
 		}
-		return err
+		num++
 	}
-	stmt, err := tx.Prepare("insert into goodsComment(gid,uid, comment, IsAnonymous, time, fCommentId) values(?,?,?,?,?,?)")
-	if err != nil {
-		err1 := tx.Rollback()
-		if err1 != nil {
-			return err
-		}
-		return err
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(c.GId, c.UId, c.Comment, c.IsAnonymous, time.Now(), c.CommentId)
-	if err != nil {
-		err1 := tx.Rollback()
-		if err1 != nil {
-			return err
-		}
-		return err
-	}
-	_, err = dB.Exec("update goodsComment set commentAmount = commentAmount +1 where commentId = ?", c.CommentId)
-	if err != nil {
-		err1 := tx.Rollback()
-		if err1 != nil {
-			return err
-		}
-		return err
-	}
-	err = tx.Commit()
-	return err
-}
-
-func ViewSpecificComment(c model.Comment) (model.Comment, error) {
-	stmt, err := dB.Prepare("select commentId from goodsComment where fCommentId = ?")
-	if err != nil {
-		return c, err
-	}
-	defer stmt.Close()
-
-	row, err := stmt.Query(c.CommentId)
-	if err != nil {
-		return c, err
-	}
-	defer row.Close()
-	for i := 0; row.Next(); i++ {
-		err = row.Scan(&c.CommentId)
-		if err != nil {
-			return c, err
-		}
-
-		//一个赋值了commentId的model.comment,和一个空的装评论的map
-		c, err = ViewSonComment(c, 0)
-		if err != nil {
-			if err.Error()[4:] == " no rows in result set" {
-				continue
-			}
-			return c, err
-		}
-	}
-	return c, nil
-}
-
-func ViewSonComment(c model.Comment, i int) (model.Comment, error) {
-	//创建一个新的SComment
-	sc := model.Comment{}
-	//查询所有的评论信息
-	stmt, err := dB.Prepare("select commentId, uid, comment, grade, IsAnonymous, time from goodsComment where fCommentId = ?")
-	if err != nil {
-		return sc, err
-	}
-	defer stmt.Close()
-	row, err := stmt.Query(c.CommentId)
-	if err != nil {
-		return sc, err
-	}
-	defer row.Close()
-	for row.Next() {
-		//赋值所有信息
-		err = row.Scan(&sc.CommentId, &sc.UId, &sc.Comment, &sc.Grade, &sc.IsAnonymous, &sc.Time)
-		if err != nil {
-			return sc, err
-		}
-		c.SComment[i] = sc
-
-		i++
-
-		sc, err = ViewSonComment(c, i)
-		if err != nil {
-			if err.Error()[4:] == " no rows in result set" {
-				continue
-			}
-			return c, err
-		}
-	}
-	return c, nil
+	return nil
 }

@@ -65,7 +65,14 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	price, err := strconv.Atoi(c.PostForm("price"))
+	//price, err := strconv.Atoi(c.PostForm("price"))
+	//if err != nil || price <= 0 {
+	//	fmt.Println(err)
+	//	tool.RespErrWithData(c, false, "价格填写不正确")
+	//	return
+	//}
+
+	price, err := strconv.ParseFloat(c.PostForm("price"), 64)
 	if err != nil || price <= 0 {
 		fmt.Println(err)
 		tool.RespErrWithData(c, false, "价格填写不正确")
@@ -73,7 +80,6 @@ func Create(c *gin.Context) {
 	}
 
 	g.Price = price
-
 	g.Inventory, err = strconv.Atoi(c.DefaultPostForm("inventory", "0"))
 	if err != nil {
 		fmt.Println(err)
@@ -175,7 +181,7 @@ func Create(c *gin.Context) {
 
 	//封面入oss
 	suffix := tool.GetFileSuffix(header.Filename)
-	url := ossCfg.CoverDir + strconv.FormatInt(g.GId, 10) + "." + suffix
+	url := ossCfg.CoverDir + strconv.FormatInt(int64(g.ID), 10) + "." + suffix
 	err = service.SaveFile(url, coverFile)
 	if err != nil {
 		fmt.Println("封面入oss错误:", err)
@@ -194,7 +200,7 @@ func Create(c *gin.Context) {
 	i := 0
 	for k, v := range p {
 		suffix = tool.GetFileSuffix(k)
-		url = ossCfg.DescribeDir + strconv.FormatInt(g.GId, 10) + strconv.Itoa(i) + "." + suffix
+		url = ossCfg.DescribeDir + strconv.FormatInt(int64(g.ID), 10) + strconv.Itoa(i) + "." + suffix
 		i++
 		err = service.SaveFile(url, v)
 		if err != nil {
